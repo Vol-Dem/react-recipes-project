@@ -1,0 +1,13 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 147px;
+  /* background-color: rgba(127, 255, 212, 0.019); */
+}
+
+.logo {
+  font-size: 4.8rem;
+  color: #fff;
+  font-family: "Grand Hotel", sans-serif;
+}

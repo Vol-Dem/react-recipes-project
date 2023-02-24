@@ -1,0 +1,88 @@
+.search-box {
+  margin-bottom: 4rem;
+}
+
+.search {
+  display: flex;
+
+  transition: all 3s;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 2rem;
+  /* background-color: rgba(255, 255, 255, 0.545);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px); */
+}
+
+.search-filled {
+  /* display: grid;
+  justify-content: start;
+  width: 500px; */
+}
+
+.input {
+  background-color: rgba(255, 255, 255, 0.745);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+
+  border-radius: 20px 0 0 20px;
+  border: none;
+  outline: none;
+  width: 100%;
+  height: 7rem;
+  font-size: 2.4rem;
+  padding: 0 3.2rem;
+  font-family: "Raleway", sans-serif;
+}
+
+.input::placeholder {
+  color: #ad6c12;
+}
+
+.search__btn-filter {
+  display: flex;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.745);
+  height: 7rem;
+  color: orange;
+  font-size: 2.8rem;
+  font-weight: 700;
+  padding: 1rem 2rem;
+  cursor: pointer;
+}
+
+.search__btn-submit {
+  font-size: 2.4rem;
+  background-color: #ff992b;
+  border: none;
+  width: 25rem;
+  height: 7rem;
+  padding: 1rem;
+  border-radius: 0 20px 20px 0;
+  color: #fff;
+  text-transform: uppercase;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: "Raleway", sans-serif;
+}
+
+.cuisine {
+  display: none;
+}
+
+.tags {
+  display: flex;
+  gap: 2rem;
+  font-size: 1.8rem;
+  padding: 0 3.2rem;
+  text-transform: uppercase;
+}
+
+.tags a {
+  color: #fff;
+  display: inline-block;
+  text-decoration: none;
+  border-bottom: 1px dashed #ff992b;
+  padding-bottom: 0.4rem;
+}

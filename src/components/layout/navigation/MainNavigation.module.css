@@ -1,0 +1,12 @@
+.nav {
+  display: flex;
+  gap: 2.4rem;
+  font-size: 1.8rem;
+  list-style: none;
+  text-transform: uppercase;
+}
+
+.nav a {
+  text-decoration: none;
+  color: #fff;
+}

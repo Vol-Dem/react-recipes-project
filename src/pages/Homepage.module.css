@@ -1,0 +1,52 @@
+.section-search {
+  display: flex;
+  gap: 2rem;
+  flex-direction: column;
+  /* align-items: center; */
+  justify-content: center;
+  margin-top: 1.2rem;
+}
+
+.logo {
+  font-size: 10rem;
+  color: #fff;
+  font-family: "Grand Hotel", sans-serif;
+  margin: 2rem auto;
+}
+
+.search-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* padding: 0 2rem; */
+  margin-bottom: 4.6rem;
+}
+
+.search-head__title {
+  font-size: 4.6rem;
+  font-family: "Grand Hotel", sans-serif;
+  text-transform: capitalize;
+}
+
+.search-head__sort {
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+
+.search-head__sort span {
+  display: inline-block;
+  margin-right: 1.5rem;
+}
+
+.search-head__sort--select {
+  font-size: 1.8rem;
+  border: 2px solid #818181;
+  padding: 0.6rem;
+  border-radius: 10px;
+  width: 16.2rem;
+}
+/* @media (max-width: 1200px) {
+  .section-search {
+    max-width: 98%;
+  }
+} */
