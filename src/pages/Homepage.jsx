@@ -3,6 +3,7 @@ import classes from "./Homepage.module.css";
 import { useState } from "react";
 import RecipeCardList from "../components/recipe-card-list/RecipeCardList";
 import RecipeCard from "../components/recipe-card/RecipeCard";
+import Card from "../components/ui/Card";
 
 const Homepage = (props) => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -46,7 +47,11 @@ const Homepage = (props) => {
   };
 
   return (
-    <section className={classes["section-search"]}>
+    <section
+      className={`${classes["section-search"]} ${
+        searchResult.length && classes.animate
+      }`}
+    >
       {searchResult.length === 0 && (
         <div className={classes.logo}>Your book of recipes</div>
       )}
@@ -57,7 +62,7 @@ const Homepage = (props) => {
         onSearchQueryChange={searchQueryHandler}
       />
       {searchResult.length !== 0 && (
-        <RecipeCardList>
+        <Card>
           <div className={classes["search-head"]}>
             <h1 className={classes["search-head__title"]}>{queryTitle}</h1>
             <div className={classes["search-head__sort"]}>
@@ -72,8 +77,10 @@ const Homepage = (props) => {
               </select>
             </div>
           </div>
-          <RecipeCard data={searchResult} />
-        </RecipeCardList>
+          <RecipeCardList>
+            <RecipeCard data={searchResult} />
+          </RecipeCardList>
+        </Card>
       )}
     </section>
   );

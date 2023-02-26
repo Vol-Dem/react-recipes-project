@@ -1,12 +1,22 @@
 .nav {
   display: flex;
   gap: 2.4rem;
-  font-size: 1.8rem;
   list-style: none;
   text-transform: uppercase;
+  align-items: center;
 }
 
-.nav a {
+.nav a:link,
+.nav a:visited {
+  display: inline-block;
   text-decoration: none;
   color: #fff;
+  font-weight: 500;
+  font-size: 1.8rem;
+  transition: all 0.3s;
+}
+
+.nav a:hover,
+.nav a:active {
+  color: #ad6c12;
 }
