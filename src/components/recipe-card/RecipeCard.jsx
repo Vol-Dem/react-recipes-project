@@ -15,11 +15,11 @@ function RecipeCard(props) {
             </div>
             <div className={classes.text}>
               <p className={classes["recipe-card__title"]}>{recipe.title}</p>
-              <a href="/" className={classes["recipe-card__btn-more"]}>
-                Read More
-              </a>
             </div>
           </div>
+          <a href="/" className={classes["recipe-card__btn-more"]}>
+            Read More
+          </a>
         </div>
       ))}
     </>

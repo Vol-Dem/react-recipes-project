@@ -13,8 +13,9 @@
   border-radius: 20px;
   box-shadow: 0 6px 6px rgba(0, 0, 0, 0.299);
   background-color: rgba(255, 255, 255, 0.75);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
+  /* -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px); */
+  position: relative;
 }
 
 .search-filled {
@@ -46,10 +47,10 @@
 .search__btn-filter {
   display: flex;
   align-items: center;
-  color: orange;
+  color: #d38417;
   font-size: 2.8rem;
   font-weight: 700;
-  padding: 1rem 2rem;
+  padding: 1rem 1.5rem;
   cursor: pointer;
   transition: all 0.3s;
 }
@@ -78,7 +79,6 @@
   color: #fff;
   text-transform: uppercase;
   font-weight: 600;
-  cursor: pointer;
   font-family: "Raleway", sans-serif;
   transition: all 0.3s;
 }
@@ -92,8 +92,42 @@
   background-color: #df8423;
 }
 
-.cuisine {
-  display: none;
+.filter {
+  position: absolute;
+  display: flex;
+  gap: 3rem;
+  justify-content: space-between;
+  top: 7rem;
+  height: 0;
+  overflow: hidden;
+  width: calc(100% - 3.5rem);
+  background-color: aqua;
+  box-shadow: 0 6px 6px rgba(0, 0, 0, 0.299);
+  background-color: rgba(255, 255, 255, 0.75);
+  border-radius: 0 0 20px 20px;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  transition: all 0.3s;
+}
+
+.filter.active {
+  height: 250px;
+  padding: 3.6rem 4.8rem;
+}
+
+.filter-element {
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+  font-size: 1.5rem;
+  border: none;
+}
+
+.filter-element h3 {
+  margin-bottom: 1rem;
+  font-family: "Grand Hotel", sans-serif;
+  font-weight: 500;
+  font-size: 3rem;
 }
 
 .tags {
@@ -104,17 +138,16 @@
   text-transform: uppercase;
 }
 
-.tags a:link,
-.tags a:visited {
+.tags span {
   color: #fff;
   display: inline-block;
   text-decoration: none;
   border-bottom: 1px dashed #ff992b;
   padding-bottom: 0.4rem;
+  cursor: pointer;
   transition: all 0.3s;
 }
 
-.tags a:hover,
-.tags a:active {
+.tags span:hover {
   color: #ad6c12;
 }

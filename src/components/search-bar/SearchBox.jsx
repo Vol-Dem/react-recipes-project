@@ -1,3 +1,6 @@
+// import { useState } from "react";
+import Input from "../ui/Input";
+import Checkbox from "../ui/Checkbox";
 import classes from "./SearchBox.module.css";
 
 function SearchBox(props) {
@@ -5,6 +8,7 @@ function SearchBox(props) {
   //   e.preventDefault();
   //   console.log(e.target.firstChild.value);
   // }
+
   return (
     <div className={classes["search-box"]}>
       <form
@@ -12,13 +16,56 @@ function SearchBox(props) {
         className={`${classes.search} ${classes[props.className]}`}
         onSubmit={props.getFormData}
       >
-        <select className={classes.cuisine} name="cuisine" id="">
-          <option value="italian">Italian</option>
-          <option value="french">French</option>
-          <option value="japanese">Japanese</option>
-          <option value="chinese">Chinese</option>
-          <option value="korean">Korean</option>
-        </select>
+        <div
+          className={`${classes.filter} ${props.filterState && classes.active}`}
+        >
+          {props.filterState && (
+            <>
+              <fieldset className={classes["filter-element"]}>
+                <h3>Cuisine</h3>
+                <Checkbox type="checkbox" name="cuisine" value="italian" />
+                <Checkbox type="checkbox" name="cuisine" value="french" />
+                <Checkbox type="checkbox" name="cuisine" value="japanese" />
+                <Checkbox type="checkbox" name="cuisine" value="chinese" />
+                <Checkbox type="checkbox" name="cuisine" value="korean" />
+              </fieldset>
+              <fieldset className={classes["filter-element"]}>
+                <h3>Diet</h3>
+                <Checkbox type="checkbox" name="diet" value="gluten-free" />
+                <Checkbox type="checkbox" name="diet" value="ketogenic" />
+                <Checkbox type="checkbox" name="diet" value="vegetarian" />
+                <Checkbox type="checkbox" name="diet" value="pescetarian" />
+              </fieldset>
+              <fieldset className={classes["filter-element"]}>
+                <h3>Intolerance</h3>
+                <Checkbox type="checkbox" name="intolerance" value="gluten" />
+                <Checkbox type="checkbox" name="intolerance" value="seafood" />
+                <Checkbox type="checkbox" name="intolerance" value="egg" />
+                <Checkbox type="checkbox" name="intolerance" value="tree-nut" />
+              </fieldset>
+              <fieldset className={classes["filter-element"]}>
+                <h3>Type</h3>
+                <Checkbox type="checkbox" name="type" value="desert" />
+                <Checkbox type="checkbox" name="type" value="salad" />
+                <Checkbox type="checkbox" name="type" value="breackfast" />
+                <Checkbox type="checkbox" name="type" value="soup" />
+              </fieldset>
+              <fieldset className={classes["filter-element"]}>
+                <h3>Max ready time</h3>
+                <Input
+                  input={{
+                    type: "number",
+                    id: "max-ready-time",
+                    name: "max-ready-time",
+                    min: "0",
+                    max: "999",
+                  }}
+                />
+              </fieldset>
+            </>
+          )}
+        </div>
+
         <input
           type="text"
           name="query"
@@ -27,7 +74,10 @@ function SearchBox(props) {
           placeholder="WHAT RECIPE DO YOU WANT TO FIND?"
           className={classes.input}
         />
-        <a href="/" className={classes["search__btn-filter"]}>
+        <span
+          className={classes["search__btn-filter"]}
+          onClick={props.onFilterChange}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -42,8 +92,8 @@ function SearchBox(props) {
               d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z"
             />
           </svg>
-        </a>
-        <button className={classes["search__btn-submit"]}>
+        </span>
+        <button type="submit" className={classes["search__btn-submit"]}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -63,9 +113,9 @@ function SearchBox(props) {
         </button>
       </form>
       <div className={classes.tags}>
-        <a href="/d">Dietary</a>
-        <a href="/d">Breakfast</a>
-        <a href="/d"> 300KCAL</a>
+        <span>Dietary</span>
+        <span>Breakfast</span>
+        <span> 300KCAL</span>
       </div>
     </div>
   );

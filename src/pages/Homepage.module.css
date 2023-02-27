@@ -1,6 +1,6 @@
 .section-search {
   display: flex;
-  gap: 2rem;
+  gap: 2.8rem;
   flex-direction: column;
   /* align-items: center; */
   justify-content: center;
@@ -9,7 +9,7 @@
 }
 
 .section-search.animate {
-  margin-top: 1vh;
+  margin-top: 1.5vh;
 }
 
 .logo {
@@ -29,27 +29,11 @@
 
 .search-head__title {
   font-size: 4.6rem;
+  font-weight: 500;
   font-family: "Grand Hotel", sans-serif;
   text-transform: capitalize;
 }
 
-.search-head__sort {
-  font-size: 1.6rem;
-  font-weight: 600;
-}
-
-.search-head__sort span {
-  display: inline-block;
-  margin-right: 1.5rem;
-}
-
-.search-head__sort--select {
-  font-size: 1.8rem;
-  border: 2px solid #818181;
-  padding: 0.6rem;
-  border-radius: 10px;
-  width: 16.2rem;
-}
 /* @media (max-width: 1200px) {
   .section-search {
     max-width: 98%;

@@ -4,24 +4,37 @@ import { useState } from "react";
 import RecipeCardList from "../components/recipe-card-list/RecipeCardList";
 import RecipeCard from "../components/recipe-card/RecipeCard";
 import Card from "../components/ui/Card";
+import Sort from "../components/sort/Sort";
 
 const Homepage = (props) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   const [queryTitle, setQueryTitle] = useState("");
+  const [filterIsOpen, setFilterIsOpen] = useState(false);
 
   function getRecipesHandler(e) {
     e.preventDefault();
     const data = new FormData(e.target);
+    const test = Object.fromEntries(data);
     const query = data.get("query");
-    const cuisine = data.get("cuisine");
+    const cuisine = data.getAll("cuisine").toString();
+    const diet = data.getAll("diet").toString();
+    const intolerance = data.getAll("intolerance").toString();
+    const type = data.getAll("type").toString();
+    const maxReadyTime = data.get("max-ready-time");
+    console.log(test);
     console.log(query);
+    console.log(cuisine);
+    console.log(typeof maxReadyTime);
     setQueryTitle(query);
     setSearchQuery("");
+    filterOpenHandler();
     // e.target.reset();
 
     fetch(
-      `https://api.spoonacular.com/recipes/complexSearch?apiKey=5303df5a010c4a06a1d6ac24c41091f9&query=${query}&cuisine=${cuisine}&number=2&addRecipeNutrition=true`
+      `https://api.spoonacular.com/recipes/complexSearch?apiKey=5303df5a010c4a06a1d6ac24c41091f9&query=${query}&cuisine=${cuisine}&diet=${diet}&intolerances=${intolerance}&type=${type}${
+        maxReadyTime && `&maxReadyTime=${maxReadyTime}`
+      }&number=2&addRecipeNutrition=true`
     )
       .then((response) => response.json())
       .then((data) => {
@@ -46,13 +59,17 @@ const Homepage = (props) => {
     setSearchQuery(e.target.value);
   };
 
+  const filterOpenHandler = () => {
+    setFilterIsOpen(!filterIsOpen);
+  };
+
   return (
     <section
       className={`${classes["section-search"]} ${
         searchResult.length && classes.animate
       }`}
     >
-      {searchResult.length === 0 && (
+      {!searchResult.length && (
         <div className={classes.logo}>Your book of recipes</div>
       )}
       <SearchBox
@@ -60,22 +77,14 @@ const Homepage = (props) => {
         className={searchResult.length ? "search-filled" : ""}
         searchQuery={searchQuery}
         onSearchQueryChange={searchQueryHandler}
+        filterState={filterIsOpen}
+        onFilterChange={filterOpenHandler}
       />
-      {searchResult.length !== 0 && (
+      {searchResult.length && (
         <Card>
           <div className={classes["search-head"]}>
             <h1 className={classes["search-head__title"]}>{queryTitle}</h1>
-            <div className={classes["search-head__sort"]}>
-              <span>Sort by</span>
-              <select
-                className={classes["search-head__sort--select"]}
-                name="sort"
-                id=""
-              >
-                <option value="italian">Calory</option>
-                <option value="french">Time</option>
-              </select>
-            </div>
+            <Sort />
           </div>
           <RecipeCardList>
             <RecipeCard data={searchResult} />
