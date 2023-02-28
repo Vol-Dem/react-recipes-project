@@ -9,13 +9,36 @@ function SearchBox(props) {
   //   e.preventDefault();
   //   console.log(e.target.firstChild.value);
   // }
+  const getQueryFromForm = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    // e.target.reset();
+
+    const formQuery = {
+      query: formData.get("query"),
+      cuisine: formData.getAll("cuisine").toString(),
+      diet: formData.getAll("diet").toString(),
+      intolerance: formData.getAll("intolerance").toString(),
+      type: formData.getAll("type").toString(),
+      maxReadyTime: formData.get("max-ready-time") || "",
+      minCalories: formData.get("min-calories") || "",
+      maxCalories: formData.get("max-calories") || "",
+    };
+    props.getFormData(formQuery);
+  };
+
+  const getQueryFromTag = (e) => {
+    const query = e.target.dataset.query;
+    const type = e.target.dataset.type;
+    props.getFormData({ [type]: query });
+  };
 
   return (
     <div className={classes["search-box"]}>
       <form
         id="search"
         className={`${classes.search} ${classes[props.className]}`}
-        onSubmit={props.getFormData}
+        onSubmit={getQueryFromForm}
       >
         <div
           className={`${classes.filter} ${props.filterState && classes.active}`}
@@ -93,7 +116,7 @@ function SearchBox(props) {
         <input
           type="text"
           name="query"
-          value={props.searchQuery}
+          value={props.searchInput}
           onChange={props.onSearchQueryChange}
           placeholder="WHAT RECIPE DO YOU WANT TO FIND?"
           className={classes.input}
@@ -137,11 +160,37 @@ function SearchBox(props) {
         </button>
       </form>
       <div className={classes.tags}>
-        <Tag>Vegetarian</Tag>
-        <Tag> - 300KCAL</Tag>
-        <Tag>Breakfast</Tag>
-        <Tag>15min</Tag>
-        <Tag>Gluten free</Tag>
+        <Tag
+          dataQuery="vegetarian"
+          dataType="diet"
+          onTagClick={getQueryFromTag}
+        >
+          Vegetarian
+        </Tag>
+        <Tag
+          dataQuery="300"
+          dataType="maxCalories"
+          onTagClick={getQueryFromTag}
+        >
+          &#60;300KCAL
+        </Tag>
+        <Tag dataQuery="breakfast" dataType="type" onTagClick={getQueryFromTag}>
+          Breakfast
+        </Tag>
+        <Tag
+          dataQuery="15"
+          dataType="maxReadyTime"
+          onTagClick={getQueryFromTag}
+        >
+          &#60;15min
+        </Tag>
+        <Tag
+          dataQuery="Gluten free"
+          dataType="diet"
+          onTagClick={getQueryFromTag}
+        >
+          Gluten free
+        </Tag>
       </div>
     </div>
   );

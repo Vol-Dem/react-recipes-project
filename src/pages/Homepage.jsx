@@ -1,43 +1,54 @@
 import SearchBox from "../components/search-bar/SearchBox";
 import classes from "./Homepage.module.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import RecipeCardList from "../components/recipe-card-list/RecipeCardList";
 import RecipeCard from "../components/recipe-card/RecipeCard";
 import Card from "../components/ui/Card";
 import Sort from "../components/sort/Sort";
 
-const Homepage = (props) => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [searchResult, setSearchResult] = useState([]);
-  const [queryTitle, setQueryTitle] = useState("");
+const Homepage = () => {
   const [filterIsOpen, setFilterIsOpen] = useState(false);
+  const [searchInput, setSearchInput] = useState("");
+  const [searchResult, setSearchResult] = useState([]);
+  const [formData, setFormData] = useState({
+    query: "",
+    cuisine: "",
+    diet: "",
+    intolerance: "",
+    type: "",
+    maxReadyTime: "",
+    minCalories: "",
+    maxCalories: "",
+  });
 
-  function getRecipesHandler(e) {
-    e.preventDefault();
-    const data = new FormData(e.target);
-    const test = Object.fromEntries(data);
-    const query = data.get("query");
-    const cuisine = data.getAll("cuisine").toString();
-    const diet = data.getAll("diet").toString();
-    const intolerance = data.getAll("intolerance").toString();
-    const type = data.getAll("type").toString();
-    const maxReadyTime = data.get("max-ready-time");
-    const minCalories = data.get("min-calories");
-    const maxCalories = data.get("max-calories");
-    console.log(test);
-    console.log(query);
-    console.log(cuisine);
-    console.log(typeof maxReadyTime);
-    setQueryTitle(query);
-    setSearchQuery("");
+  const getFormDataHandler = (data) => {
+    setFormData({
+      ...formData,
+      ...data,
+    });
+  };
+
+  const getRecipesHandler = () => {
+    // e.preventDefault();
+    // const data = new FormData(e.target);
+    if (Object.values(formData).join("") === "") {
+      return;
+    }
+
+    setSearchInput("");
     setFilterIsOpen(false);
     // e.target.reset();
+    console.log(formData);
 
     fetch(
-      `https://api.spoonacular.com/recipes/complexSearch?apiKey=5303df5a010c4a06a1d6ac24c41091f9&query=${query}&cuisine=${cuisine}&diet=${diet}&intolerances=${intolerance}&type=${type}${
-        maxReadyTime && `&maxReadyTime=${maxReadyTime}`
-      }${minCalories && `&minCalories=${minCalories}`}${
-        maxCalories && `&maxCalories=${maxCalories}`
+      `https://api.spoonacular.com/recipes/complexSearch?apiKey=5303df5a010c4a06a1d6ac24c41091f9&query=${
+        formData.query
+      }&cuisine=${formData.cuisine}&diet=${formData.diet}&intolerances=${
+        formData.intolerance
+      }&type=${formData.type}${
+        formData.maxReadyTime && `&maxReadyTime=${formData.maxReadyTime}`
+      }${formData.minCalories && `&minCalories=${formData.minCalories}`}${
+        formData.maxCalories && `&maxCalories=${formData.maxCalories}`
       }&number=2&addRecipeNutrition=true`
     )
       .then((response) => response.json())
@@ -57,10 +68,12 @@ const Homepage = (props) => {
         setSearchResult(recipies);
       })
       .then(() => console.log(searchResult));
-  }
+  };
+
+  useEffect(getRecipesHandler, [formData]);
 
   const searchQueryHandler = (e) => {
-    setSearchQuery(e.target.value);
+    setSearchInput(e.target.value);
   };
 
   const filterOpenHandler = () => {
@@ -77,9 +90,9 @@ const Homepage = (props) => {
         <div className={classes.logo}>Your book of recipes</div>
       )}
       <SearchBox
-        getFormData={getRecipesHandler}
+        getFormData={getFormDataHandler}
         className={searchResult.length ? "search-filled" : ""}
-        searchQuery={searchQuery}
+        searchInput={searchInput}
         onSearchQueryChange={searchQueryHandler}
         filterState={filterIsOpen}
         onFilterChange={filterOpenHandler}
@@ -88,7 +101,7 @@ const Homepage = (props) => {
         <Card>
           <div className={classes["search-head"]}>
             <h1 className={classes["search-head__title"]}>
-              {queryTitle ? queryTitle : "Search results"}
+              {formData.query ? formData.query : "Search results"}
             </h1>
             <Sort />
           </div>
