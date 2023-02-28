@@ -22,18 +22,22 @@ const Homepage = (props) => {
     const intolerance = data.getAll("intolerance").toString();
     const type = data.getAll("type").toString();
     const maxReadyTime = data.get("max-ready-time");
+    const minCalories = data.get("min-calories");
+    const maxCalories = data.get("max-calories");
     console.log(test);
     console.log(query);
     console.log(cuisine);
     console.log(typeof maxReadyTime);
     setQueryTitle(query);
     setSearchQuery("");
-    filterOpenHandler();
+    setFilterIsOpen(false);
     // e.target.reset();
 
     fetch(
       `https://api.spoonacular.com/recipes/complexSearch?apiKey=5303df5a010c4a06a1d6ac24c41091f9&query=${query}&cuisine=${cuisine}&diet=${diet}&intolerances=${intolerance}&type=${type}${
         maxReadyTime && `&maxReadyTime=${maxReadyTime}`
+      }${minCalories && `&minCalories=${minCalories}`}${
+        maxCalories && `&maxCalories=${maxCalories}`
       }&number=2&addRecipeNutrition=true`
     )
       .then((response) => response.json())
@@ -83,7 +87,9 @@ const Homepage = (props) => {
       {searchResult.length && (
         <Card>
           <div className={classes["search-head"]}>
-            <h1 className={classes["search-head__title"]}>{queryTitle}</h1>
+            <h1 className={classes["search-head__title"]}>
+              {queryTitle ? queryTitle : "Search results"}
+            </h1>
             <Sort />
           </div>
           <RecipeCardList>

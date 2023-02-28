@@ -1,0 +1,15 @@
+.tag {
+  display: inline-block;
+  font-size: 1.8rem;
+  color: #fff;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-bottom: 1px dashed #ff992b;
+  padding-bottom: 0.4rem;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.tag:hover {
+  color: #ad6c12;
+}

@@ -1,0 +1,10 @@
+.about {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  font-size: 3rem;
+  color: #fff;
+}
+
+.div {
+  grid-row: 1/4;
+}

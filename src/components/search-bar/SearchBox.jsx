@@ -2,6 +2,7 @@
 import Input from "../ui/Input";
 import Checkbox from "../ui/Checkbox";
 import classes from "./SearchBox.module.css";
+import Tag from "../ui/Tag";
 
 function SearchBox(props) {
   // function searchSubmitHandler(e) {
@@ -51,7 +52,7 @@ function SearchBox(props) {
                 <Checkbox type="checkbox" name="type" value="soup" />
               </fieldset>
               <fieldset className={classes["filter-element"]}>
-                <h3>Max ready time</h3>
+                <h3>Max ready time (min.)</h3>
                 <Input
                   input={{
                     type: "number",
@@ -61,6 +62,29 @@ function SearchBox(props) {
                     max: "999",
                   }}
                 />
+                <h3>Calories (kcal.)</h3>
+                <div className={classes.calories}>
+                  <Input
+                    input={{
+                      type: "number",
+                      id: "min-calories",
+                      name: "min-calories",
+                      min: "0",
+                      max: "9999",
+                      placeholder: "min",
+                    }}
+                  />
+                  <Input
+                    input={{
+                      type: "number",
+                      id: "max-calories",
+                      name: "max-calories",
+                      min: "0",
+                      max: "9999",
+                      placeholder: "max",
+                    }}
+                  />
+                </div>
               </fieldset>
             </>
           )}
@@ -113,9 +137,11 @@ function SearchBox(props) {
         </button>
       </form>
       <div className={classes.tags}>
-        <span>Dietary</span>
-        <span>Breakfast</span>
-        <span> 300KCAL</span>
+        <Tag>Vegetarian</Tag>
+        <Tag> - 300KCAL</Tag>
+        <Tag>Breakfast</Tag>
+        <Tag>15min</Tag>
+        <Tag>Gluten free</Tag>
       </div>
     </div>
   );

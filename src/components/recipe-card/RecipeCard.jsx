@@ -10,7 +10,9 @@ function RecipeCard(props) {
           <img src={recipe.img} alt={recipe.title} className={classes.img} />
           <div className={classes["recipe-card__text"]}>
             <div className={classes["recipe-card__info"]}>
-              <div>{recipe.calories[0].amount.toFixed()} cal</div>
+              <div>
+                {recipe.calories[0].amount.toFixed()} {recipe.calories[0].unit}
+              </div>
               <div>{recipe.time} min</div>
             </div>
             <div className={classes.text}>
