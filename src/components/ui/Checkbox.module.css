@@ -1,5 +1,6 @@
-.input {
+.checkbox {
   margin-right: 1.4rem;
+  border: 1px solid #467;
 }
 .label {
   text-transform: capitalize;

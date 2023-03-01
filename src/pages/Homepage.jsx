@@ -10,6 +10,7 @@ const Homepage = () => {
   const [filterIsOpen, setFilterIsOpen] = useState(false);
   const [searchInput, setSearchInput] = useState("");
   const [searchResult, setSearchResult] = useState([]);
+  const [sortedRecipes, setSortedRecipes] = useState([]);
   const [formData, setFormData] = useState({
     query: "",
     cuisine: "",
@@ -61,13 +62,32 @@ const Homepage = () => {
             title: recipe.title,
             img: recipe.image,
             time: recipe.readyInMinutes,
-            calories: recipe.nutrition.nutrients,
+            calories: recipe.nutrition.nutrients[0].amount,
             servings: recipe.servings,
           };
         });
         setSearchResult(recipies);
-      })
-      .then(() => console.log(searchResult));
+      });
+
+    // setSearchResult([
+    //   {
+    //     id: 22,
+    //     title: "Title 1",
+    //     img: "img1.jpg",
+    //     time: 15,
+    //     calories: 130,
+    //     servings: "3",
+    //   },
+    //   {
+    //     id: 23,
+    //     title: "Title 2",
+    //     img: "img2.jpg",
+    //     time: 20,
+    //     calories: 200,
+    //     servings: "5",
+    //   },
+    // ]);
+    console.log("useEfffff");
   };
 
   useEffect(getRecipesHandler, [formData]);
@@ -80,6 +100,21 @@ const Homepage = () => {
     setFilterIsOpen(!filterIsOpen);
   };
 
+  const sortHandler = (e) => {
+    const sortB = e ? e.target.value : "calories-asc";
+    const [sortBy, sortType] = sortB.split("-");
+    console.log(sortBy, sortType);
+    const res = searchResult
+      .sort((a, b) =>
+        sortType === "asc" ? b[sortBy] - a[sortBy] : a[sortBy] - b[sortBy]
+      )
+      .slice();
+    console.log(res);
+    setSortedRecipes(res);
+  };
+
+  useEffect(sortHandler, [searchResult]);
+  console.log(sortedRecipes);
   return (
     <section
       className={`${classes["section-search"]} ${
@@ -101,12 +136,13 @@ const Homepage = () => {
         <Card>
           <div className={classes["search-head"]}>
             <h1 className={classes["search-head__title"]}>
-              {formData.query ? formData.query : "Search results"}
+              {formData.query ? formData.query : "Search results"} (
+              {searchResult.length})
             </h1>
-            <Sort />
+            <Sort onSort={sortHandler} />
           </div>
           <RecipeCardList>
-            <RecipeCard data={searchResult} />
+            <RecipeCard data={sortedRecipes} />
           </RecipeCardList>
         </Card>
       )}

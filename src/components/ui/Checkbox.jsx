@@ -8,7 +8,7 @@ const Checkbox = (props) => {
         id={props.value}
         value={props.value}
         name={props.name}
-        className={classes.input}
+        className={classes.checkbox}
       />
       <label htmlFor={props.value} className={classes.label}>
         {props.value}

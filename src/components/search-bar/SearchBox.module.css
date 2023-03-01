@@ -140,4 +140,5 @@
   display: flex;
   gap: 2rem;
   padding: 0 3.2rem;
+  flex-wrap: wrap;
 }
