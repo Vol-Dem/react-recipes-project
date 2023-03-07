@@ -1,6 +1,8 @@
 .search-head__sort {
   font-size: 1.6rem;
   font-weight: 600;
+  display: flex;
+  align-items: center;
 }
 
 .search-head__sort span {
@@ -8,10 +10,19 @@
   margin-right: 1.5rem;
 }
 
+.search-head__sort svg {
+  color: #000;
+  height: 3.5rem;
+  width: 3.5rem;
+}
+
 .search-head__sort--select {
+  /* appearance: none; */
+  outline: none;
   font-size: 1.8rem;
   border: 2px solid #818181;
   padding: 0.6rem;
   border-radius: 10px;
-  width: 16.4rem;
+  width: 100%;
+  cursor: pointer;
 }

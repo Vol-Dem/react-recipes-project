@@ -1,8 +1,43 @@
 .checkbox {
-  margin-right: 1.4rem;
   border: 1px solid #467;
+  appearance: none;
+  background-color: #fff;
+  width: 1.8rem;
+  height: 1.8rem;
+  border-radius: 0.4rem;
+  display: grid;
+  place-content: center;
 }
+
+.checkbox:focus {
+  outline: max(2px, 0.2rem) solid #8f8e8e;
+  outline-offset: max(1.4px, 0.1rem);
+}
+
+.checkbox:disabled {
+  background-color: #8f8e8e;
+  cursor: not-allowed;
+}
+
+.checkbox::before {
+  content: "";
+  width: 1.4rem;
+  height: 1.4rem;
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 1em 1em #d38417;
+  clip-path: polygon(31% 44%, 46% 72%, 70% 12%, 100% 2%, 48% 98%, 2% 40%);
+}
+
+.checkbox:checked::before {
+  transform: scale(1);
+}
+
 .label {
+  display: flex;
+  /* grid-template-columns: 1em auto; */
+  gap: 1.4rem;
   text-transform: capitalize;
   font-size: 1.8rem;
+  align-items: center;
 }

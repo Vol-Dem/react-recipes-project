@@ -19,12 +19,21 @@
   margin: 2rem auto;
 }
 
+.search-result {
+}
+
 .search-head {
   display: flex;
-  align-items: center;
+
   justify-content: space-between;
   /* padding: 0 2rem; */
   margin-bottom: 4.6rem;
+  flex-wrap: wrap;
+  gap: 1.6rem;
+}
+
+.search-head.side {
+  flex-direction: column;
 }
 
 .search-head__title {
@@ -32,6 +41,21 @@
   font-weight: 500;
   font-family: "Grand Hotel", sans-serif;
   text-transform: capitalize;
+}
+
+/* .side-panel {
+  width: 20rem;
+} */
+
+.container {
+  display: grid;
+  grid-template-columns: 1fr 0fr;
+  transition: all 0.2s;
+}
+
+.recipe {
+  grid-template-columns: 280px 3fr;
+  gap: 2rem;
 }
 
 /* @media (max-width: 1200px) {

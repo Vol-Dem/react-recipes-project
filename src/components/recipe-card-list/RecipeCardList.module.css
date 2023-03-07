@@ -3,4 +3,11 @@
   gap: 5.4rem;
   grid-template-columns: repeat(4, 1fr);
   justify-items: center;
+  transition: all 0.5s;
+}
+
+.recipe-container.side {
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  justify-items: normal;
 }
