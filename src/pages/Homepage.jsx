@@ -6,6 +6,7 @@ import RecipeCard from "../components/recipe-card/RecipeCard";
 import Card from "../components/ui/Card";
 import Sort from "../components/sort/Sort";
 import Recipe from "../components/recipe/Recipe";
+import Spinner from "../components/ui/Spinner";
 
 const Homepage = () => {
   const [filterIsOpen, setFilterIsOpen] = useState(false);
@@ -14,6 +15,9 @@ const Homepage = () => {
   const [sortedRecipes, setSortedRecipes] = useState([]);
   const [recipeIsOpen, setRecipeIsOpen] = useState(false);
   const [currentRecipeId, setCurrentRecipeId] = useState(null);
+  const [searchResultIsOpen, setSearchResultIsOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [recipesIsLoading, setRecipesIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     query: "",
     cuisine: "",
@@ -49,6 +53,9 @@ const Homepage = () => {
     setFilterIsOpen(false);
     setRecipeIsOpen(false);
     setCurrentRecipeId(null);
+    setErrorMessage("");
+    setSearchResultIsOpen(true);
+    setRecipesIsLoading(true);
 
     fetch(
       `https://api.spoonacular.com/recipes/complexSearch?apiKey=5303df5a010c4a06a1d6ac24c41091f9&query=${
@@ -61,10 +68,17 @@ const Homepage = () => {
         formData.maxCalories && `&maxCalories=${formData.maxCalories}`
       }&number=2&addRecipeNutrition=true`
     )
-      .then((response) => response.json())
+      .then((response) => {
+        console.log(response);
+        // if (!response.ok) throw new Error(response.status);
+        return response.json();
+      })
       .then((data) => {
         console.log(data);
-        const recipies = data.results.map((recipe) => {
+        if (data.status === "failure")
+          throw new Error(`${data.message} (${data.code})`);
+        if (data.totalResults === 0) throw new Error("0 results");
+        const recipies = data.results?.map((recipe) => {
           return {
             id: recipe.id,
             title: recipe.title,
@@ -77,6 +91,11 @@ const Homepage = () => {
           };
         });
         setSearchResult(recipies);
+        setRecipesIsLoading(false);
+      })
+      .catch((error) => {
+        setRecipesIsLoading(false);
+        setErrorMessage(error.message);
       });
 
     // setSearchResult([
@@ -179,10 +198,10 @@ const Homepage = () => {
   return (
     <section
       className={`${classes["section-search"]} ${
-        searchResult.length && classes.animate
+        searchResultIsOpen && classes.animate
       }`}
     >
-      {!searchResult.length && (
+      {!searchResultIsOpen && (
         <div className={classes.logo}>Your book of recipes</div>
       )}
       <SearchBox
@@ -195,31 +214,38 @@ const Homepage = () => {
       />
       <div className={`${classes.container} ${recipeIsOpen && classes.recipe}`}>
         <div>
-          {searchResult.length && (windowWidth > 768 || !recipeIsOpen) && (
+          {searchResultIsOpen && (windowWidth > 768 || !recipeIsOpen) && (
             <Card>
-              <div className={classes["search-result"]}>
-                <div
-                  className={`${classes["search-head"]} ${
-                    recipeIsOpen && classes.side
-                  }`}
-                >
-                  {!recipeIsOpen && (
-                    <h1 className={classes["search-head__title"]}>
-                      {(formData.query ||= "Search results")} (
-                      {searchResult.length})
-                    </h1>
-                  )}
-                  <Sort onSort={sortHandler} />
-                </div>
-                <RecipeCardList open={recipeIsOpen}>
-                  <RecipeCard
-                    data={sortedRecipes}
-                    onRecipeOpen={recipeOpenHandler}
-                    recipeIsOpen={recipeIsOpen}
-                    currentRecipeId={currentRecipeId}
-                  />
-                </RecipeCardList>
-              </div>
+              {recipesIsLoading && <Spinner />}
+              <div className={classes.error}>{errorMessage}</div>
+              {searchResult.length !== 0 &&
+                (windowWidth > 768 || !recipeIsOpen) && (
+                  <>
+                    <div className={classes["search-result"]}>
+                      <div
+                        className={`${classes["search-head"]} ${
+                          recipeIsOpen && classes.side
+                        }`}
+                      >
+                        {!recipeIsOpen && (
+                          <h1 className={classes["search-head__title"]}>
+                            {(formData.query ||= "Search results")} (
+                            {searchResult.length})
+                          </h1>
+                        )}
+                        <Sort onSort={sortHandler} />
+                      </div>
+                      <RecipeCardList open={recipeIsOpen}>
+                        <RecipeCard
+                          data={sortedRecipes}
+                          onRecipeOpen={recipeOpenHandler}
+                          recipeIsOpen={recipeIsOpen}
+                          currentRecipeId={currentRecipeId}
+                        />
+                      </RecipeCardList>
+                    </div>
+                  </>
+                )}
             </Card>
           )}
         </div>

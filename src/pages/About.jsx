@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Spinner from "../components/ui/Spinner";
 import classes from "./About.module.css";
 
 const About = () => {
@@ -14,6 +15,7 @@ const About = () => {
         <div>c</div>
         <div>d</div>
       </div>
+      <Spinner />
       <button onClick={exe}>push</button>
     </>
   );

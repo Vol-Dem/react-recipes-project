@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { ReactComponent as ClockIcon } from "./../../assets/clock.svg";
 import { ReactComponent as ServingsIcon } from "./../../assets/servings.svg";
 import { ReactComponent as ArrowBackIcon } from "./../../assets/arrow-back.svg";
+import Spinner from "../ui/Spinner";
 
 const Recipe = (props) => {
   const [recipe, setRecipe] = useState({});
@@ -24,14 +25,7 @@ const Recipe = (props) => {
   useEffect(getRecipe, [props.recipeId]);
 
   if (recipeIsLoading) {
-    return (
-      <div className={classes.spinner}>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
-    );
+    return <Spinner />;
   }
 
   return (
