@@ -18,6 +18,7 @@ const Homepage = () => {
   const [searchResultIsOpen, setSearchResultIsOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [recipesIsLoading, setRecipesIsLoading] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [formData, setFormData] = useState({
     query: "",
     cuisine: "",
@@ -181,7 +182,7 @@ const Homepage = () => {
     setRecipeIsOpen(false);
   };
 
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  
 
   useEffect(() => {
     const windowSizeHandler = () => {
