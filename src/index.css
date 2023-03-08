@@ -4,7 +4,7 @@
   box-sizing: border-box;
 }
 html {
-  background: #263237 url("./assets/bg.jpg") no-repeat center/cover;
+  background: #263237 url("./assets/bg1.jpg") no-repeat top/cover;
   /* font-size: 10px; */
   /* 10px / 16px = 0.625 = 62.5% */
   /* Percentage of user's browser font-size setting */
@@ -25,7 +25,7 @@ body {
   -moz-osx-font-smoothing: grayscale; */
   line-height: 1;
   font-weight: 400;
-  color: #28353a;
+  color: #304750;
 }
 
 /* code {
@@ -38,4 +38,16 @@ body {
   max-width: 120rem;
   padding: 0 3.2rem;
   margin: 0 auto;
+}
+
+@media (max-width: 1440px) {
+  html {
+    font-size: 52.5%;
+  }
+}
+
+@media (max-width: 1024px) {
+  html {
+    font-size: 42.5%;
+  }
 }

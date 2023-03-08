@@ -11,3 +11,19 @@
   color: #fff;
   font-family: "Grand Hotel", sans-serif;
 }
+
+@media (max-width: 1024px) {
+  .header {
+    height: 100px;
+  }
+}
+
+@media (max-width: 375px) {
+  .header {
+    height: 70px;
+  }
+
+  .logo {
+    font-size: 3.4rem;
+  }
+}

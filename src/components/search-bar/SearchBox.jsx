@@ -135,7 +135,7 @@ function SearchBox(props) {
         </span>
         <button type="submit" className={classes["search__btn-submit"]}>
           <SearchIcon />
-          <span>Search</span>
+          <span className={classes["search__btn-submit--text"]}>Search</span>
         </button>
       </form>
       <div className={classes.tags}>

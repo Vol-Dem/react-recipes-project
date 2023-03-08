@@ -155,8 +155,26 @@ const Homepage = () => {
   const recipeOpenHandler = (e) => {
     const recipeId = e.target.closest("#recipe").dataset.id;
     setRecipeIsOpen(true);
-    setCurrentRecipeId(recipeId);
+    setCurrentRecipeId(+recipeId);
   };
+
+  const closeRecipeHandler = () => {
+    setRecipeIsOpen(false);
+  };
+
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const windowSizeHandler = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", windowSizeHandler);
+
+    return () => {
+      window.removeEventListener("resize", windowSizeHandler);
+    };
+  });
 
   return (
     <section
@@ -176,36 +194,41 @@ const Homepage = () => {
         onFilterChange={filterOpenHandler}
       />
       <div className={`${classes.container} ${recipeIsOpen && classes.recipe}`}>
-        {searchResult.length && (
-          <Card>
-            <div className={classes["search-result"]}>
-              <div
-                className={`${classes["search-head"]} ${
-                  recipeIsOpen && classes.side
-                }`}
-              >
-                {!recipeIsOpen && (
-                  <h1 className={classes["search-head__title"]}>
-                    {(formData.query ||= "Search results")} (
-                    {searchResult.length})
-                  </h1>
-                )}
-                <Sort onSort={sortHandler} />
+        <div>
+          {searchResult.length && (windowWidth > 768 || !recipeIsOpen) && (
+            <Card>
+              <div className={classes["search-result"]}>
+                <div
+                  className={`${classes["search-head"]} ${
+                    recipeIsOpen && classes.side
+                  }`}
+                >
+                  {!recipeIsOpen && (
+                    <h1 className={classes["search-head__title"]}>
+                      {(formData.query ||= "Search results")} (
+                      {searchResult.length})
+                    </h1>
+                  )}
+                  <Sort onSort={sortHandler} />
+                </div>
+                <RecipeCardList open={recipeIsOpen}>
+                  <RecipeCard
+                    data={sortedRecipes}
+                    onRecipeOpen={recipeOpenHandler}
+                    recipeIsOpen={recipeIsOpen}
+                    currentRecipeId={currentRecipeId}
+                  />
+                </RecipeCardList>
               </div>
-              <RecipeCardList open={recipeIsOpen}>
-                <RecipeCard
-                  data={sortedRecipes}
-                  onRecipeOpen={recipeOpenHandler}
-                  recipeIsOpen={recipeIsOpen}
-                  currentRecipeId={currentRecipeId}
-                />
-              </RecipeCardList>
-            </div>
-          </Card>
-        )}
+            </Card>
+          )}
+        </div>
         {recipeIsOpen && (
           <Card>
-            <Recipe recipeId={currentRecipeId} />
+            <Recipe
+              recipeId={currentRecipeId}
+              onRecipeClose={closeRecipeHandler}
+            />
           </Card>
         )}
       </div>

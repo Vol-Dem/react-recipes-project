@@ -43,7 +43,7 @@
 .recipe-card__text {
   width: 100%;
   padding: 0.9rem 2rem 2rem;
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   line-height: 1.3;
 }
 
@@ -84,6 +84,10 @@
   margin: auto 2rem 2rem;
   padding-bottom: 0.3rem;
   width: max-content;
+}
+
+.active .recipe-card__btn-more {
+  color: #fff;
 }
 
 .text {

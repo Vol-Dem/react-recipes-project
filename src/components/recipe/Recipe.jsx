@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { ReactComponent as ClockIcon } from "./../../assets/clock.svg";
 import { ReactComponent as ServingsIcon } from "./../../assets/servings.svg";
+import { ReactComponent as ArrowBackIcon } from "./../../assets/arrow-back.svg";
 
 const Recipe = (props) => {
   const [recipe, setRecipe] = useState({});
@@ -22,9 +23,12 @@ const Recipe = (props) => {
   return (
     <div className={classes.recipe}>
       <div className={classes.header}>
+        <button className={classes["btn-back"]} onClick={props.onRecipeClose}>
+          <ArrowBackIcon /> Back
+        </button>
         <div className={classes.diets}>
           {recipe.diets?.map((diet) => (
-            <p key={diet}>{diet} /&nbsp;</p>
+            <p key={diet}>{diet}&nbsp;/&nbsp;</p>
           ))}
         </div>
         <h2>{recipe.title}</h2>
