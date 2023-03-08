@@ -7,8 +7,10 @@ import { ReactComponent as ArrowBackIcon } from "./../../assets/arrow-back.svg";
 
 const Recipe = (props) => {
   const [recipe, setRecipe] = useState({});
+  const [recipeIsLoading, setRecipeIsLoading] = useState(true);
 
   const getRecipe = () => {
+    setRecipeIsLoading(true);
     fetch(
       `https://api.spoonacular.com/recipes/${props.recipeId}/information?apiKey=5303df5a010c4a06a1d6ac24c41091f9&includeNutrition=false`
     )
@@ -16,9 +18,21 @@ const Recipe = (props) => {
       .then((data) => {
         console.log(data);
         setRecipe(data);
+        setRecipeIsLoading(false);
       });
   };
   useEffect(getRecipe, [props.recipeId]);
+
+  if (recipeIsLoading) {
+    return (
+      <div className={classes.spinner}>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    );
+  }
 
   return (
     <div className={classes.recipe}>
