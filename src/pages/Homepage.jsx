@@ -7,6 +7,7 @@ import Card from "../components/ui/Card";
 import Sort from "../components/sort/Sort";
 import Recipe from "../components/recipe/Recipe";
 import Spinner from "../components/ui/Spinner";
+// import testImg from "./../assets/test.jpg";
 
 const Homepage = () => {
   const [filterIsOpen, setFilterIsOpen] = useState(false);
@@ -103,7 +104,7 @@ const Homepage = () => {
     //   {
     //     id: 22,
     //     title: "Title 1",
-    //     img: "img1.jpg",
+    //     img: testImg,
     //     time: 15,
     //     calories: 130,
     //     servings: "3",
@@ -111,7 +112,7 @@ const Homepage = () => {
     //   {
     //     id: 23,
     //     title: "Title 2",
-    //     img: "img2.jpg",
+    //     img: testImg,
     //     time: 20,
     //     calories: 200,
     //     servings: "5",
@@ -119,7 +120,7 @@ const Homepage = () => {
     //   {
     //     id: 24,
     //     title: "Title 2",
-    //     img: "img2.jpg",
+    //     img: testImg,
     //     time: 20,
     //     calories: 200,
     //     servings: "5",
@@ -127,7 +128,7 @@ const Homepage = () => {
     //   {
     //     id: 25,
     //     title: "Title 2",
-    //     img: "img2.jpg",
+    //     img: testImg,
     //     time: 20,
     //     calories: 200,
     //     servings: "5",
@@ -135,7 +136,7 @@ const Homepage = () => {
     //   {
     //     id: 26,
     //     title: "Title 2",
-    //     img: "img2.jpg",
+    //     img: testImg,
     //     time: 20,
     //     calories: 2060,
     //     servings: "5",
@@ -181,8 +182,6 @@ const Homepage = () => {
   const closeRecipeHandler = () => {
     setRecipeIsOpen(false);
   };
-
-  
 
   useEffect(() => {
     const windowSizeHandler = () => {
@@ -230,7 +229,7 @@ const Homepage = () => {
                       >
                         {!recipeIsOpen && (
                           <h1 className={classes["search-head__title"]}>
-                            {(formData.query ||= "Search results")} (
+                            {formData.query || "Search results"} (
                             {searchResult.length})
                           </h1>
                         )}

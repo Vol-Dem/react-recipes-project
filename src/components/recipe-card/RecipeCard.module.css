@@ -96,3 +96,13 @@
   align-items: flex-start;
   justify-content: space-between;
 }
+
+@media (max-width: 425px) {
+  .recipe-card {
+    grid-template-columns: 2fr 4fr;
+  }
+
+  .img {
+    grid-row: 1 / 3;
+  }
+}

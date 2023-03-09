@@ -27,5 +27,7 @@
 @media (max-width: 425px) {
   .recipe-container {
     grid-template-columns: 1fr;
+    gap: 2rem;
+    justify-items: normal;
   }
 }
