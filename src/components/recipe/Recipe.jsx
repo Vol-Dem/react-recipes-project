@@ -34,11 +34,11 @@ const Recipe = (props) => {
         <button className={classes["btn-back"]} onClick={props.onRecipeClose}>
           <ArrowBackIcon /> Back
         </button>
-        <div className={classes.diets}>
+        <ul className={classes.diets}>
           {recipe.diets?.map((diet) => (
-            <p key={diet}>{diet}&nbsp;/&nbsp;</p>
+            <li key={diet}>{diet}&nbsp;/&nbsp;</li>
           ))}
-        </div>
+        </ul>
         <h2>{recipe.title}</h2>
         <div className={classes["recipe-img"]}>
           <img src={recipe.image} alt={recipe.title} />

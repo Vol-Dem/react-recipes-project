@@ -51,7 +51,8 @@
 .container {
   display: grid;
   grid-template-columns: 1fr 0fr;
-  transition: all 0.2s;
+  /* min-height: 425px; */
+  transition: all 0.5s;
 }
 
 .recipe {

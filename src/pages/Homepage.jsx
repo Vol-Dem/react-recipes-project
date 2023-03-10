@@ -52,6 +52,7 @@ const Homepage = () => {
     }
 
     setSearchInput("");
+    setSearchResult([]);
     setFilterIsOpen(false);
     setRecipeIsOpen(false);
     setCurrentRecipeId(null);
@@ -79,7 +80,8 @@ const Homepage = () => {
         console.log(data);
         if (data.status === "failure")
           throw new Error(`${data.message} (${data.code})`);
-        if (data.totalResults === 0) throw new Error("0 results");
+        if (data.totalResults === 0)
+          throw new Error(`No results. Try checking your spelling`);
         const recipies = data.results?.map((recipe) => {
           return {
             id: recipe.id,
@@ -100,6 +102,7 @@ const Homepage = () => {
         setErrorMessage(error.message);
       });
 
+    // setRecipesIsLoading(false);
     // setSearchResult([
     //   {
     //     id: 22,

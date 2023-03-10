@@ -4,8 +4,6 @@
 
 .search {
   display: flex;
-
-  transition: all 3s;
   align-items: center;
   justify-content: center;
   width: 100%;
@@ -17,6 +15,7 @@
   /* -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px); */
   position: relative;
+  /* transition: all 3s; */
 }
 
 .search-filled {
