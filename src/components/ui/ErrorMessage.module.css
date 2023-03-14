@@ -1,0 +1,7 @@
+.error {
+  font-size: 2.4rem;
+  line-height: 1.5;
+  padding: 1rem;
+  border: 1px solid red;
+  border-radius: 10px;
+}

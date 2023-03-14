@@ -24,7 +24,7 @@
   /* transition: all 0.3s; */
 }
 
-.recipe-card-side {
+.recipe-card--side {
   grid-template-columns: 2fr 4fr;
 }
 

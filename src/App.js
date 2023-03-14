@@ -8,6 +8,7 @@ import {
   Route,
 } from "react-router-dom";
 import About from "./pages/About";
+import RecipeProvider from "./store/RecipeProvider";
 
 function App() {
   const router = createBrowserRouter(
@@ -19,9 +20,9 @@ function App() {
     )
   );
   return (
-    <>
+    <RecipeProvider>
       <RouterProvider router={router} />
-    </>
+    </RecipeProvider>
   );
 }
 

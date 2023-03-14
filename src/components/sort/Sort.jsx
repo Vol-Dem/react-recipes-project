@@ -1,5 +1,4 @@
 import classes from "./Sort.module.css";
-// import { ReactComponent as BarsArrowDownIcon } from "./../../assets/bars-arrow-down.svg";
 
 const Sort = (props) => {
   return (

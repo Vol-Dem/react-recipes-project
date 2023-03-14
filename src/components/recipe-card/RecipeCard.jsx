@@ -1,9 +1,23 @@
 import classes from "./RecipeCard.module.css";
 import { ReactComponent as ClockIcon } from "./../../assets/clock.svg";
 import { ReactComponent as CaloriesIcon } from "./../../assets/calories.svg";
+import { useContext } from "react";
+import RecipeContext from "../../store/recipe-context";
 
 function RecipeCard(props) {
   const recipeInfo = props.data;
+
+  const recipeCtx = useContext(RecipeContext);
+  const recipeIsOpen = recipeCtx.recipeIsOpen;
+  const recipeId = recipeCtx.recipeId;
+  const openRecipe = recipeCtx.setRecipeIsOpenHandler;
+
+  const classSide = recipeIsOpen ? classes["recipe-card--side"] : "";
+
+  const openRecipeHandler = (e) => {
+    const recipeId = e.target.closest("#recipe")?.dataset.id;
+    openRecipe(+recipeId);
+  };
 
   return (
     <>
@@ -12,10 +26,10 @@ function RecipeCard(props) {
           key={recipe.id}
           id="recipe"
           data-id={recipe.id}
-          className={`${classes["recipe-card"]} ${
-            props.recipeIsOpen && classes["recipe-card-side"]
-          } ${recipe.id === +props.currentRecipeId && classes.active}`}
-          onClick={props.onRecipeOpen}
+          className={`${classes["recipe-card"]} ${classSide} ${
+            recipe.id === +recipeId ? classes.active : ""
+          }`}
+          onClick={openRecipeHandler}
         >
           <img src={recipe.img} alt={recipe.title} className={classes.img} />
           <div className={classes["recipe-card__text"]}>
@@ -31,7 +45,7 @@ function RecipeCard(props) {
               <p className={classes["recipe-card__title"]}>{recipe.title}</p>
             </div>
           </div>
-          {!props.recipeIsOpen && (
+          {!recipeIsOpen && (
             <a href="/" className={classes["recipe-card__btn-more"]}>
               Read More
             </a>

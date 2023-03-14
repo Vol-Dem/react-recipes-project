@@ -13,37 +13,6 @@
   margin-top: 1.5vh;
 }
 
-.logo {
-  font-size: 10rem;
-  color: #fff;
-  font-family: "Grand Hotel", sans-serif;
-  margin: 2rem auto;
-}
-
-.search-result {
-}
-
-.search-head {
-  display: flex;
-
-  justify-content: space-between;
-  /* padding: 0 2rem; */
-  margin-bottom: 4.6rem;
-  flex-wrap: wrap;
-  gap: 1.6rem;
-}
-
-.search-head.side {
-  flex-direction: column;
-}
-
-.search-head__title {
-  font-size: 4.6rem;
-  font-weight: 500;
-  font-family: "Grand Hotel", sans-serif;
-  text-transform: capitalize;
-}
-
 /* .side-panel {
   width: 20rem;
 } */
@@ -58,12 +27,6 @@
 .recipe {
   grid-template-columns: 280px 3fr;
   gap: 2rem;
-}
-
-.error {
-  font-size: 2.4rem;
-  line-height: 1.5;
-  /* background-color: #fff; */
 }
 
 @media (max-width: 520px) {
@@ -100,8 +63,5 @@
 
   .logo {
     font-size: 5.6rem;
-    /* color: #fff;
-    font-family: "Grand Hotel", sans-serif;
-    margin: 2rem auto; */
   }
 }

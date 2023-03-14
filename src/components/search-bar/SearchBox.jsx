@@ -1,19 +1,25 @@
-// import { useState } from "react";
 import Input from "../ui/Input";
 import Checkbox from "../ui/Checkbox";
+import { useState } from "react";
 import classes from "./SearchBox.module.css";
 import Tag from "../ui/Tag";
 import { ReactComponent as FilterIcon } from "./../../assets/filter.svg";
 import { ReactComponent as SearchIcon } from "./../../assets/search.svg";
 function SearchBox(props) {
-  // function searchSubmitHandler(e) {
-  //   e.preventDefault();
-  //   console.log(e.target.firstChild.value);
-  // }
+  const [searchInput, setSearchInput] = useState("");
+  const [filterIsOpen, setFilterIsOpen] = useState(false);
+
+  const filterOpenHandler = () => {
+    setFilterIsOpen(!filterIsOpen);
+  };
+
+  const searchQueryHandler = (e) => {
+    setSearchInput(e.target.value);
+  };
+
   const getQueryFromForm = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
-    // e.target.reset();
 
     const formQuery = {
       query: formData
@@ -31,6 +37,8 @@ function SearchBox(props) {
       maxCalories: formData.get("max-calories")?.replace(/[^0-9 ]/g, "") || "",
     };
     props.getFormData(formQuery);
+    setSearchInput("");
+    setFilterIsOpen(false);
   };
 
   const getQueryFromTag = (e) => {
@@ -41,15 +49,11 @@ function SearchBox(props) {
 
   return (
     <div className={classes["search-box"]}>
-      <form
-        id="search"
-        className={`${classes.search} ${classes[props.className]}`}
-        onSubmit={getQueryFromForm}
-      >
+      <form id="search" className={classes.search} onSubmit={getQueryFromForm}>
         <div
-          className={`${classes.filter} ${props.filterState && classes.active}`}
+          className={`${classes.filter} ${filterIsOpen ? classes.active : ""}`}
         >
-          {props.filterState && (
+          {filterIsOpen && (
             <>
               <fieldset className={classes["filter-element"]}>
                 <h3>Cuisine</h3>
@@ -122,14 +126,14 @@ function SearchBox(props) {
         <input
           type="text"
           name="query"
-          value={props.searchInput}
-          onChange={props.onSearchQueryChange}
+          value={searchInput}
+          onChange={searchQueryHandler}
           placeholder="WHAT RECIPE DO YOU WANT TO FIND?"
           className={classes.input}
         />
         <span
           className={classes["search__btn-filter"]}
-          onClick={props.onFilterChange}
+          onClick={filterOpenHandler}
         >
           <FilterIcon />
         </span>

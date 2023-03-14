@@ -8,7 +8,7 @@ const About = () => {
   };
   return (
     <>
-      <div className={`${classes.about} ${test && classes.anim}`}>
+      <div className={`${classes.about} ${test ? classes.anim : ""}`}>
         <div className={classes.div}>a</div>
         {test && <div>b</div>}
         <div>c</div>
