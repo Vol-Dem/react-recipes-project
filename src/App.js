@@ -1,5 +1,5 @@
 import "./App.css";
-import Layout from "./components/layout/Layout";
+import Layout from "./components/layout/layout/Layout";
 import Homepage from "./pages/Homepage";
 import {
   createBrowserRouter,

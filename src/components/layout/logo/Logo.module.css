@@ -1,0 +1,21 @@
+.logo {
+  font-size: 10rem;
+  color: #fff;
+  font-family: "Grand Hotel", sans-serif;
+  margin: 2rem auto;
+}
+
+@media (max-width: 520px) {
+  .logo {
+    font-size: 7.6rem;
+    /* color: #fff;
+    font-family: "Grand Hotel", sans-serif;
+    margin: 2rem auto; */
+  }
+}
+
+@media (max-width: 415px) {
+  .logo {
+    font-size: 5.6rem;
+  }
+}

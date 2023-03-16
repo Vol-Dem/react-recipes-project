@@ -1,14 +1,13 @@
 import classes from "./Recipe.module.css";
-import { useState } from "react";
-import { useEffect, useContext } from "react";
-import { ReactComponent as ClockIcon } from "./../../assets/clock.svg";
-import { ReactComponent as ServingsIcon } from "./../../assets/servings.svg";
-import { ReactComponent as ArrowBackIcon } from "./../../assets/arrow-back.svg";
-import Spinner from "../ui/Spinner";
-import Card from "../ui/Card";
-import ErrorContext from "../../store/error-context";
-import RecipeContext from "../../store/recipe-context";
-import ErrorMessage from "../ui/ErrorMessage";
+import { useState, useEffect, useContext } from "react";
+import { ReactComponent as ClockIcon } from "./../../../assets/clock.svg";
+import { ReactComponent as ServingsIcon } from "./../../../assets/servings.svg";
+import { ReactComponent as ArrowBackIcon } from "./../../../assets/arrow-back.svg";
+import Spinner from "../../ui/Spinner";
+import Card from "../../ui/Card";
+import ErrorContext from "../../../store/error-context";
+import RecipeContext from "../../../store/recipe-context";
+import ErrorMessage from "../../ui/ErrorMessage";
 
 const Recipe = (props) => {
   const [recipe, setRecipe] = useState({});
@@ -25,6 +24,7 @@ const Recipe = (props) => {
   const getRecipe = () => {
     setRecipeIsLoading(true);
     setError("");
+    console.log("wtf");
 
     fetch(
       `https://api.spoonacular.com/recipes/${recipeId}/information?apiKey=5303df5a010c4a06a1d6ac24c41091f9&includeNutrition=false`
@@ -44,43 +44,50 @@ const Recipe = (props) => {
   };
   useEffect(getRecipe, [recipeId]);
 
+  console.log(errorMessage);
+
   return (
     <Card>
       {recipeIsLoading && <Spinner />}
       {errorMessage && <ErrorMessage />}
       {errorMessage !== "" || recipeIsLoading || (
         <div className={classes.recipe}>
-          <div className={classes.header}>
-            <button className={classes["btn-back"]} onClick={closeRecipe}>
+          <div className={classes["recipe__head"]}>
+            <button
+              className={classes["recipe__btn-back"]}
+              onClick={closeRecipe}
+            >
               <ArrowBackIcon /> Back
             </button>
-            <ul className={classes.diets}>
+            <ul className={classes["recipe__diets"]}>
               {recipe.diets?.map((diet) => (
                 <li key={diet}>{diet}&nbsp;/&nbsp;</li>
               ))}
             </ul>
-            <h2>{recipe.title}</h2>
-            <div className={classes["recipe-img"]}>
+            <h1 className={classes["recipe__title"]}>{recipe.title}</h1>
+            <div className={classes["recipe__img"]}>
               <img src={recipe.image} alt={recipe.title} />
             </div>
           </div>
-          <div className={classes.description}>
-            <div className={classes.info}>
-              <div>
+          <div className={classes["recipe__description"]}>
+            <div className={classes["recipe__info"]}>
+              <div className={classes["recipe__param"]}>
                 <ClockIcon /> {recipe.readyInMinutes} min
               </div>
-              <div>
+              <div className={classes["recipe__param"]}>
                 <ServingsIcon /> {recipe.servings} servings
               </div>
             </div>
             <div>
-              <h3>Ingridients</h3>
+              <h3 className={classes["recipe__subtitle"]}>Ingridients</h3>
               <div>
-                <ul className={classes["ingridients-list"]}>
+                <ul className={classes["recipe__ingridients"]}>
                   {recipe.extendedIngredients?.map((ingridient) => (
                     <li key={ingridient.id}>
                       <span>{ingridient.name}</span>
-                      <span className={classes.dots}></span>
+                      <span
+                        className={classes["recipe__ingridients-dots"]}
+                      ></span>
                       <span>
                         {ingridient.amount} {ingridient.unit}
                       </span>
@@ -90,49 +97,57 @@ const Recipe = (props) => {
               </div>
             </div>
             <div>
-              <h3>Instruction</h3>
-              <p className={classes.instructions}>
+              <h3 className={classes["recipe__subtitle"]}>Instructions</h3>
+              <p className={classes["recipe__instructions"]}>
                 {recipe.instructions?.replace(/(<([^>]+)>)/gi, "")}
               </p>
             </div>
             <div>
-              <h3>Nutrition</h3>
-              <ul className={classes.nutrition}>
+              <h3 className={classes["recipe__subtitle"]}>Nutrition</h3>
+              <ul className={classes["recipe__nutrition"]}>
                 <li key="calories">
-                  <span className={classes["nutrition__amount"]}>
+                  <span className={classes["recipe__nutrition-amount"]}>
                     {recipe.nutrition?.nutrients
                       .find(({ name }) => name === "Calories")
                       .amount.toFixed() || "??"}
                   </span>
-                  <span className={classes["nutrition__unit"]}>kcal</span>
+                  <span className={classes["recipe__nutrition-unit"]}>
+                    kcal
+                  </span>
                 </li>
                 <li key="fat">
-                  <span className={classes["nutrition__amount"]}>
+                  <span className={classes["recipe__nutrition-amount"]}>
                     {recipe.nutrition?.nutrients
                       .find(({ name }) => name === "Fat")
                       .amount.toFixed() || "??"}
                   </span>
-                  <span className={classes["nutrition__unit"]}>fats</span>
+                  <span className={classes["recipe__nutrition-unit"]}>
+                    fats
+                  </span>
                 </li>
                 <li key="carbohydrates">
-                  <span className={classes["nutrition__amount"]}>
+                  <span className={classes["recipe__nutrition-amount"]}>
                     {recipe.nutrition?.nutrients
                       .find(({ name }) => name === "Carbohydrates")
                       .amount.toFixed() || "??"}
                   </span>
-                  <span className={classes["nutrition__unit"]}>carbs</span>
+                  <span className={classes["recipe__nutrition-unit"]}>
+                    carbs
+                  </span>
                 </li>
                 <li key="protein">
-                  <span className={classes["nutrition__amount"]}>
+                  <span className={classes["recipe__nutrition-amount"]}>
                     {recipe.nutrition?.nutrients
                       .find(({ name }) => name === "Protein")
                       .amount.toFixed() || "??"}
                   </span>
-                  <span className={classes["nutrition__unit"]}>proteins</span>
+                  <span className={classes["recipe__nutrition-unit"]}>
+                    proteins
+                  </span>
                 </li>
               </ul>
             </div>
-            <div className={classes.credits}>
+            <div className={classes["recipe__credits"]}>
               <p>
                 Source: {recipe.creditsText} -{" "}
                 <a href={recipe.sourceUrl}>{recipe.sourceName}</a>

@@ -9,7 +9,8 @@ function SearchBox(props) {
   const [searchInput, setSearchInput] = useState("");
   const [filterIsOpen, setFilterIsOpen] = useState(false);
 
-  const filterOpenHandler = () => {
+  const filterOpenHandler = (e) => {
+    e.preventDefault();
     setFilterIsOpen(!filterIsOpen);
   };
 
@@ -48,44 +49,61 @@ function SearchBox(props) {
   };
 
   return (
-    <div className={classes["search-box"]}>
-      <form id="search" className={classes.search} onSubmit={getQueryFromForm}>
+    <div className={classes.search}>
+      <form
+        id="search"
+        className={classes["search__form"]}
+        onSubmit={getQueryFromForm}
+      >
+        <input
+          type="text"
+          name="query"
+          value={searchInput}
+          onChange={searchQueryHandler}
+          placeholder="WHAT RECIPE DO YOU WANT TO FIND?"
+          className={classes["search__form-input"]}
+        />
+
         <div
-          className={`${classes.filter} ${filterIsOpen ? classes.active : ""}`}
+          className={`${classes["search__filter"]} ${
+            filterIsOpen ? classes.active : ""
+          }`}
         >
           {filterIsOpen && (
             <>
-              <fieldset className={classes["filter-element"]}>
-                <h3>Cuisine</h3>
+              <fieldset className={classes["search__filter-item"]}>
+                <h3 className={classes["search__filter-title"]}>Cuisine</h3>
                 <Checkbox type="checkbox" name="cuisine" value="italian" />
                 <Checkbox type="checkbox" name="cuisine" value="french" />
                 <Checkbox type="checkbox" name="cuisine" value="japanese" />
                 <Checkbox type="checkbox" name="cuisine" value="chinese" />
                 <Checkbox type="checkbox" name="cuisine" value="korean" />
               </fieldset>
-              <fieldset className={classes["filter-element"]}>
-                <h3>Diet</h3>
+              <fieldset className={classes["search__filter-item"]}>
+                <h3 className={classes["search__filter-title"]}>Diet</h3>
                 <Checkbox type="checkbox" name="diet" value="gluten-free" />
                 <Checkbox type="checkbox" name="diet" value="ketogenic" />
                 <Checkbox type="checkbox" name="diet" value="vegetarian" />
                 <Checkbox type="checkbox" name="diet" value="pescetarian" />
               </fieldset>
-              <fieldset className={classes["filter-element"]}>
-                <h3>Intolerance</h3>
+              <fieldset className={classes["search__filter-item"]}>
+                <h3 className={classes["search__filter-title"]}>Intolerance</h3>
                 <Checkbox type="checkbox" name="intolerance" value="gluten" />
                 <Checkbox type="checkbox" name="intolerance" value="seafood" />
                 <Checkbox type="checkbox" name="intolerance" value="egg" />
                 <Checkbox type="checkbox" name="intolerance" value="tree-nut" />
               </fieldset>
-              <fieldset className={classes["filter-element"]}>
-                <h3>Type</h3>
+              <fieldset className={classes["search__filter-item"]}>
+                <h3 className={classes["search__filter-title"]}>Type</h3>
                 <Checkbox type="checkbox" name="type" value="desert" />
                 <Checkbox type="checkbox" name="type" value="salad" />
                 <Checkbox type="checkbox" name="type" value="breackfast" />
                 <Checkbox type="checkbox" name="type" value="soup" />
               </fieldset>
-              <fieldset className={classes["filter-element"]}>
-                <h3>Max ready time (min.)</h3>
+              <fieldset className={classes["search__filter-item"]}>
+                <h3 className={classes["search__filter-title"]}>
+                  Max ready time (min.)
+                </h3>
                 <Input
                   input={{
                     type: "number",
@@ -95,8 +113,10 @@ function SearchBox(props) {
                     max: "999",
                   }}
                 />
-                <h3>Calories (kcal.)</h3>
-                <div className={classes.calories}>
+                <h3 className={classes["search__filter-title"]}>
+                  Calories (kcal.)
+                </h3>
+                <div className={classes["search__filter-calories"]}>
                   <Input
                     input={{
                       type: "number",
@@ -123,26 +143,18 @@ function SearchBox(props) {
           )}
         </div>
 
-        <input
-          type="text"
-          name="query"
-          value={searchInput}
-          onChange={searchQueryHandler}
-          placeholder="WHAT RECIPE DO YOU WANT TO FIND?"
-          className={classes.input}
-        />
-        <span
-          className={classes["search__btn-filter"]}
+        <button
+          className={classes["search__filter-btn"]}
           onClick={filterOpenHandler}
         >
           <FilterIcon />
-        </span>
-        <button type="submit" className={classes["search__btn-submit"]}>
+        </button>
+        <button type="submit" className={classes["search__form-btn"]}>
           <SearchIcon />
-          <span className={classes["search__btn-submit--text"]}>Search</span>
+          <span className={classes["hidden-xs"]}>Search</span>
         </button>
       </form>
-      <div className={classes.tags}>
+      <div className={classes["search__tags"]}>
         <Tag
           dataQuery="vegetarian"
           dataType="diet"

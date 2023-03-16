@@ -1,15 +1,14 @@
-import SearchBox from "../components/search-bar/SearchBox";
+import SearchBox from "../components/search/SearchBox";
 import classes from "./Homepage.module.css";
-import { useState, useEffect, useContext } from "react";
-import RecipeCardList from "../components/recipe-card-list/RecipeCardList";
-import Recipe from "../components/recipe/Recipe";
-import Logo from "../components/layout/Logo";
+import { useState, useContext } from "react";
+import RecipeItemList from "../components/recipe/recipe-item-list/RecipeItemList";
+import Recipe from "../components/recipe/recipe/Recipe";
+import Logo from "../components/layout/logo/Logo";
 import ErrorProvider from "../store/ErrorProvider";
 import RecipeContext from "../store/recipe-context";
 
 const Homepage = () => {
   const [searchResultIsOpen, setSearchResultIsOpen] = useState(false);
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [formData, setFormData] = useState({
     query: "",
     cuisine: "",
@@ -42,39 +41,23 @@ const Homepage = () => {
     closeRecipe();
   };
 
-  useEffect(() => {
-    const windowSizeHandler = () => {
-      setWindowWidth(window.innerWidth);
-    };
-
-    window.addEventListener("resize", windowSizeHandler);
-
-    return () => {
-      window.removeEventListener("resize", windowSizeHandler);
-    };
-  });
-
   return (
     <ErrorProvider>
       <section
         className={`${classes["section-search"]} ${
-          searchResultIsOpen ? classes.animate : ""
+          searchResultIsOpen ? classes.mt0 : ""
         }`}
       >
         {!searchResultIsOpen && <Logo />}
         <SearchBox getFormData={getFormDataHandler} />
-        <div
-          className={`${classes.container} ${
-            recipeIsOpen ? classes.recipe : ""
-          }`}
-        >
-          <div>
-            {searchResultIsOpen && (windowWidth > 768 || !recipeIsOpen) && (
-              <RecipeCardList data={formData} windowWidth={windowWidth} />
-            )}
-          </div>
-          {recipeIsOpen && <Recipe />}
-        </div>
+      </section>
+      <section
+        className={`${classes["section-content"]} ${
+          recipeIsOpen ? classes["recipe-columns"] : ""
+        }`}
+      >
+        <div>{searchResultIsOpen && <RecipeItemList data={formData} />}</div>
+        {recipeIsOpen && <Recipe />}
       </section>
     </ErrorProvider>
   );

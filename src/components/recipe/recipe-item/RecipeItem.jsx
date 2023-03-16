@@ -1,10 +1,10 @@
-import classes from "./RecipeCard.module.css";
-import { ReactComponent as ClockIcon } from "./../../assets/clock.svg";
-import { ReactComponent as CaloriesIcon } from "./../../assets/calories.svg";
+import classes from "./RecipeItem.module.css";
+import { ReactComponent as ClockIcon } from "./../../../assets/clock.svg";
+import { ReactComponent as CaloriesIcon } from "./../../../assets/calories.svg";
 import { useContext } from "react";
-import RecipeContext from "../../store/recipe-context";
+import RecipeContext from "../../../store/recipe-context";
 
-function RecipeCard(props) {
+function RecipeItem(props) {
   const recipeInfo = props.data;
 
   const recipeCtx = useContext(RecipeContext);
@@ -31,22 +31,26 @@ function RecipeCard(props) {
           }`}
           onClick={openRecipeHandler}
         >
-          <img src={recipe.img} alt={recipe.title} className={classes.img} />
-          <div className={classes["recipe-card__text"]}>
+          <img
+            src={recipe.img}
+            alt={recipe.title}
+            className={classes["recipe-card__img"]}
+          />
+          <div className={classes["recipe-card__description"]}>
             <div className={classes["recipe-card__info"]}>
-              <div className={classes["recipe-card__item"]}>
+              <span className={classes["recipe-card__param"]}>
                 <CaloriesIcon /> {recipe.calories.toFixed()} kcal
-              </div>
-              <div className={classes["recipe-card__item"]}>
+              </span>
+              <span className={classes["recipe-card__param"]}>
                 <ClockIcon /> {recipe.time} min
-              </div>
+              </span>
             </div>
-            <div className={classes.text}>
-              <p className={classes["recipe-card__title"]}>{recipe.title}</p>
+            <div className={classes["recipe-card__title"]}>
+              <p>{recipe.title}</p>
             </div>
           </div>
           {!recipeIsOpen && (
-            <a href="/" className={classes["recipe-card__btn-more"]}>
+            <a href="/" className={classes["recipe-card__btn"]}>
               Read More
             </a>
           )}
@@ -56,4 +60,4 @@ function RecipeCard(props) {
   );
 }
 
-export default RecipeCard;
+export default RecipeItem;

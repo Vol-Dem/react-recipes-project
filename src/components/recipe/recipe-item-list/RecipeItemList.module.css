@@ -1,0 +1,55 @@
+.search-result {
+  height: 100%;
+}
+
+.search-result__head {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4.6rem;
+  flex-wrap: wrap;
+  gap: 1.6rem;
+}
+
+.search-result__title {
+  font-size: 4.6rem;
+  font-weight: 500;
+  font-family: "Grand Hotel", sans-serif;
+  text-transform: capitalize;
+}
+
+.cards-container {
+  display: grid;
+  gap: 5.4rem;
+  grid-template-columns: repeat(4, 1fr);
+  justify-items: center;
+}
+
+.cards-container--side {
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  justify-items: normal;
+}
+
+@media (max-width: 768px) {
+  .cards-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .hidden-md {
+    display: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .cards-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 425px) {
+  .cards-container {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    justify-items: normal;
+  }
+}

@@ -1,23 +1,18 @@
-.search-head__sort {
+.search-result__sort {
   font-size: 1.6rem;
   font-weight: 600;
   display: flex;
   align-items: center;
+  width: 100%;
+  max-width: 190px;
 }
 
-.search-head__sort span {
+.search-result__sort span {
   display: inline-block;
   margin-right: 1.5rem;
 }
 
-.search-head__sort svg {
-  color: #000;
-  height: 3.5rem;
-  width: 3.5rem;
-}
-
-.search-head__sort--select {
-  /* appearance: none; */
+.search-result__select {
   outline: none;
   font-size: 1.8rem;
   border: 2px solid #818181;

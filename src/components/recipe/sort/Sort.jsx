@@ -2,10 +2,10 @@ import classes from "./Sort.module.css";
 
 const Sort = (props) => {
   return (
-    <div className={classes["search-head__sort"]}>
+    <div className={classes["search-result__sort"]}>
       <span>Sort&nbsp;by</span>
       <select
-        className={classes["search-head__sort--select"]}
+        className={classes["search-result__select"]}
         name="sort"
         id="sort"
         onChange={props.onSort}

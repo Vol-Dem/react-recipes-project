@@ -1,18 +1,17 @@
-import classes from "./RecipeCardList.module.css";
+import classes from "./RecipeItemList.module.css";
 import { useState, useEffect, useContext } from "react";
-import ErrorContext from "../../store/error-context";
-import Card from "../ui/Card";
-import RecipeCard from "../recipe-card/RecipeCard";
+import ErrorContext from "../../../store/error-context";
+import Card from "../../ui/Card";
+import RecipeItem from "../recipe-item/RecipeItem";
 import Sort from "../sort/Sort";
-import Spinner from "../ui/Spinner";
-// import testImg from "./../../assets/test.jpg";
-import RecipeContext from "../../store/recipe-context";
-import ErrorMessage from "../ui/ErrorMessage";
+import Spinner from "../../ui/Spinner";
+import testImg from "./../../../assets/test.jpg";
+import RecipeContext from "../../../store/recipe-context";
+import ErrorMessage from "../../ui/ErrorMessage";
 
-function RecipeCardList(props) {
+function RecipeItemList(props) {
   const [searchResult, setSearchResult] = useState([]);
   const [sortedRecipes, setSortedRecipes] = useState([]);
-
   const [recipesIsLoading, setRecipesIsLoading] = useState(false);
 
   const errorCtx = useContext(ErrorContext);
@@ -23,6 +22,7 @@ function RecipeCardList(props) {
   const recipeIsOpen = recipeCtx.recipeIsOpen;
 
   const requestData = props.data;
+  const title = requestData.query || "Search results";
 
   const getRecipesHandler = () => {
     setSearchResult([]);
@@ -142,37 +142,36 @@ function RecipeCardList(props) {
   useEffect(sortHandler, [searchResult]);
 
   return (
-    <Card>
-      {recipesIsLoading && <Spinner />}
-      {!recipeIsOpen && errorMessage !== "" && <ErrorMessage />}
-      {searchResult.length !== 0 && (
-        <>
-          <div className={classes["search-result"]}>
-            <div
-              className={`${classes["search-head"]} ${
-                recipeIsOpen ? classes.side : ""
-              }`}
-            >
+    <div
+      className={`${classes["search-result"]} ${
+        recipeIsOpen ? classes["hidden-md"] : ""
+      }`}
+    >
+      <Card>
+        {recipesIsLoading && <Spinner />}
+        {!recipeIsOpen && errorMessage !== "" && <ErrorMessage />}
+        {searchResult.length !== 0 && (
+          <>
+            <div className={classes["search-result__head"]}>
               {!recipeIsOpen && (
-                <h1 className={classes["search-head__title"]}>
-                  {requestData.query || "Search results"} ({searchResult.length}
-                  )
+                <h1 className={classes["search-result__title"]}>
+                  {title} ({searchResult.length})
                 </h1>
               )}
               <Sort onSort={sortHandler} />
             </div>
             <div
-              className={`${classes["recipe-container"]} ${
-                recipeIsOpen ? classes.side : ""
+              className={`${classes["cards-container"]} ${
+                recipeIsOpen ? classes["cards-container--side"] : ""
               }`}
             >
-              <RecipeCard data={sortedRecipes} />
+              <RecipeItem data={sortedRecipes} />
             </div>
-          </div>
-        </>
-      )}
-    </Card>
+          </>
+        )}
+      </Card>
+    </div>
   );
 }
 
-export default RecipeCardList;
+export default RecipeItemList;
