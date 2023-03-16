@@ -9,7 +9,7 @@ import ErrorContext from "../../../store/error-context";
 import RecipeContext from "../../../store/recipe-context";
 import ErrorMessage from "../../ui/ErrorMessage";
 
-const Recipe = (props) => {
+const Recipe = () => {
   const [recipe, setRecipe] = useState({});
   const [recipeIsLoading, setRecipeIsLoading] = useState(true);
 
@@ -24,7 +24,6 @@ const Recipe = (props) => {
   const getRecipe = () => {
     setRecipeIsLoading(true);
     setError("");
-    console.log("wtf");
 
     fetch(
       `https://api.spoonacular.com/recipes/${recipeId}/information?apiKey=5303df5a010c4a06a1d6ac24c41091f9&includeNutrition=false`
@@ -43,8 +42,6 @@ const Recipe = (props) => {
       });
   };
   useEffect(getRecipe, [recipeId]);
-
-  console.log(errorMessage);
 
   return (
     <Card>

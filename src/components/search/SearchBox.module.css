@@ -32,6 +32,20 @@
   color: #ad6c12;
 }
 
+.search__form-input:-webkit-autofill,
+.search__form-input:-webkit-autofill:hover,
+.search__form-input:-webkit-autofill:focus {
+  -webkit-text-fill-color: rgb(128, 77, 0);
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.search__form-input:autofill,
+.search__form-input:autofill:hover,
+.search__form-input:autofill:focus {
+  -webkit-text-fill-color: rgb(128, 77, 0);
+  transition: background-color 5000s ease-in-out 0s;
+}
+
 .search__filter {
   position: absolute;
   display: grid;
