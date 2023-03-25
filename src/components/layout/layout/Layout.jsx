@@ -1,5 +1,5 @@
 import Header from "../header/Header";
-import classes from "./Layout.module.css";
+import classes from "./Layout.module.scss";
 import MainNavigation from "../navigation/MainNavigation";
 import { Outlet } from "react-router-dom";
 

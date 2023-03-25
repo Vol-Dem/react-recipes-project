@@ -1,15 +1,17 @@
+@use "./../../variables/variables.scss" as var;
+
 .tag {
   display: inline-block;
   font-size: 1.8rem;
-  color: #fff;
+  color: var.$color-text-light;
   text-transform: uppercase;
   text-decoration: none;
-  border-bottom: 1px dashed #ff992b;
+  border-bottom: 1px dashed var.$color-primary;
   padding-bottom: 0.4rem;
   cursor: pointer;
   transition: all 0.3s;
 }
 
 .tag:hover {
-  color: #ad6c12;
+  color: var.$color-text-orange;
 }

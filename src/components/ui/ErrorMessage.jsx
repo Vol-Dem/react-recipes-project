@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import classes from "./ErrorMessage.module.css";
+import classes from "./ErrorMessage.module.scss";
 import ErrorContext from "../../store/error-context";
 
 const ErrorMessage = () => {

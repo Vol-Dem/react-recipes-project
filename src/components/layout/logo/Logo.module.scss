@@ -1,16 +1,16 @@
+@use "./../../../variables/variables.scss" as var;
+
 .logo {
   font-size: 10rem;
-  color: #fff;
-  font-family: "Grand Hotel", sans-serif;
+  color: var.$color-text-light;
+  font-weight: 400;
+  font-family: var.$font-family-secondary;
   margin: 2rem auto;
 }
 
 @media (max-width: 520px) {
   .logo {
     font-size: 7.6rem;
-    /* color: #fff;
-    font-family: "Grand Hotel", sans-serif;
-    margin: 2rem auto; */
   }
 }
 

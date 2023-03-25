@@ -1,21 +1,23 @@
+@use "./../../../variables/variables.scss" as var;
+
 .search-result__sort {
   font-size: 1.6rem;
   font-weight: 600;
   display: flex;
   align-items: center;
   width: 100%;
-  max-width: 190px;
-}
+  max-width: 25rem;
 
-.search-result__sort span {
-  display: inline-block;
-  margin-right: 1.5rem;
+  & span {
+    display: inline-block;
+    margin-right: 1.5rem;
+  }
 }
 
 .search-result__select {
   outline: none;
   font-size: 1.8rem;
-  border: 2px solid #818181;
+  border: 2px solid var.$color-grey;
   padding: 0.6rem;
   border-radius: 10px;
   width: 100%;

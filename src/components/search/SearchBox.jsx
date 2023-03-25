@@ -1,7 +1,7 @@
 import Input from "../ui/Input";
 import Checkbox from "../ui/Checkbox";
 import { useState } from "react";
-import classes from "./SearchBox.module.css";
+import classes from "./SearchBox.module.scss";
 import Tag from "../ui/Tag";
 import { ReactComponent as FilterIcon } from "./../../assets/filter.svg";
 import { ReactComponent as SearchIcon } from "./../../assets/search.svg";
@@ -55,15 +55,6 @@ function SearchBox(props) {
         className={classes["search__form"]}
         onSubmit={getQueryFromForm}
       >
-        <input
-          type="text"
-          name="query"
-          value={searchInput}
-          onChange={searchQueryHandler}
-          placeholder="WHAT RECIPE DO YOU WANT TO FIND?"
-          className={classes["search__form-input"]}
-        />
-
         <div
           className={`${classes["search__filter"]} ${
             filterIsOpen ? classes.active : ""
@@ -143,12 +134,21 @@ function SearchBox(props) {
           )}
         </div>
 
-        <button
+        <input
+          type="text"
+          name="query"
+          value={searchInput}
+          onChange={searchQueryHandler}
+          placeholder="WHAT RECIPE DO YOU WANT TO FIND?"
+          className={classes["search__form-input"]}
+        />
+
+        <span
           className={classes["search__filter-btn"]}
           onClick={filterOpenHandler}
         >
           <FilterIcon />
-        </button>
+        </span>
         <button type="submit" className={classes["search__form-btn"]}>
           <SearchIcon />
           <span className={classes["hidden-xs"]}>Search</span>

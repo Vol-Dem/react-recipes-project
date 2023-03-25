@@ -1,4 +1,4 @@
-import classes from "./RecipeItem.module.css";
+import classes from "./RecipeItem.module.scss";
 import { ReactComponent as ClockIcon } from "./../../../assets/clock.svg";
 import { ReactComponent as CaloriesIcon } from "./../../../assets/calories.svg";
 import { useContext } from "react";

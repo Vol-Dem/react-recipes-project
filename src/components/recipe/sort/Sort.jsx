@@ -1,4 +1,4 @@
-import classes from "./Sort.module.css";
+import classes from "./Sort.module.scss";
 
 const Sort = (props) => {
   return (

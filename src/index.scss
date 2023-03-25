@@ -1,0 +1,31 @@
+*,
+*::after,
+*::before {
+  padding: 0;
+  margin: 0;
+  box-sizing: inherit;
+}
+html {
+  font-size: 52%;
+}
+
+body {
+  font-family: "Raleway", sans-serif;
+  line-height: 1;
+  font-weight: 400;
+  min-height: 100vh;
+  color: #304750;
+  box-sizing: border-box;
+  background: linear-gradient(
+      to right bottom,
+      rgba(38, 50, 55, 0.7),
+      rgba(48, 71, 80, 0.7)
+    ),
+    url("./assets/bg.webp") no-repeat top/cover fixed;
+}
+
+@media (max-width: 1024px) {
+  html {
+    font-size: 48%;
+  }
+}

@@ -1,0 +1,9 @@
+@use "./../../variables/variables.scss" as var;
+
+.card {
+  background-color: var.$color-background-primary;
+  border-radius: 20px;
+  overflow: hidden;
+  padding: 4.8rem 2.8rem;
+  height: 100%;
+}

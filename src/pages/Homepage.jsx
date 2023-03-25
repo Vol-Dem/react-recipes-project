@@ -1,5 +1,5 @@
+import classes from "./Homepage.module.scss";
 import SearchBox from "../components/search/SearchBox";
-import classes from "./Homepage.module.css";
 import { useState, useContext } from "react";
 import RecipeItemList from "../components/recipe/recipe-item-list/RecipeItemList";
 import Recipe from "../components/recipe/recipe/Recipe";

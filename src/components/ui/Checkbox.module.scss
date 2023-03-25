@@ -1,7 +1,9 @@
+@use "./../../variables/variables.scss" as var;
+
 .checkbox {
-  border: 1px solid #467;
+  border: 1px solid var.$color-text-primary;
   appearance: none;
-  background-color: #fff;
+  background-color: var.$color-background-light;
   width: 1.8rem;
   height: 1.8rem;
   border-radius: 0.4rem;
@@ -10,12 +12,12 @@
 }
 
 .checkbox:focus {
-  outline: max(2px, 0.2rem) solid #8f8e8e;
+  outline: max(2px, 0.2rem) solid var.$color-grey;
   outline-offset: max(1.4px, 0.1rem);
 }
 
 .checkbox:disabled {
-  background-color: #8f8e8e;
+  background-color: var.$color-grey;
   cursor: not-allowed;
 }
 
@@ -25,7 +27,7 @@
   height: 1.4rem;
   transform: scale(0);
   transition: 120ms transform ease-in-out;
-  box-shadow: inset 1em 1em #d38417;
+  box-shadow: inset 1em 1em var.$color-text-orange;
   clip-path: polygon(31% 44%, 46% 72%, 70% 12%, 100% 2%, 48% 98%, 2% 40%);
 }
 

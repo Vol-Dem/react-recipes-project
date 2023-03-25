@@ -1,4 +1,4 @@
-import classes from "./Recipe.module.css";
+import classes from "./Recipe.module.scss";
 import { useState, useEffect, useContext } from "react";
 import { ReactComponent as ClockIcon } from "./../../../assets/clock.svg";
 import { ReactComponent as ServingsIcon } from "./../../../assets/servings.svg";
@@ -57,8 +57,11 @@ const Recipe = () => {
               <ArrowBackIcon /> Back
             </button>
             <ul className={classes["recipe__diets"]}>
-              {recipe.diets?.map((diet) => (
-                <li key={diet}>{diet}&nbsp;/&nbsp;</li>
+              {recipe.diets?.map((diet, i) => (
+                <li key={diet}>
+                  {i !== 0 ? "/  " : ""}
+                  {diet}
+                </li>
               ))}
             </ul>
             <h1 className={classes["recipe__title"]}>{recipe.title}</h1>

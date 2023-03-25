@@ -1,20 +1,22 @@
+@use "./../../../variables/variables.scss" as var;
+
 .search-result {
   height: 100%;
-}
 
-.search-result__head {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 4.6rem;
-  flex-wrap: wrap;
-  gap: 1.6rem;
-}
+  &__head {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 4.6rem;
+    flex-wrap: wrap;
+    gap: 1.6rem;
+  }
 
-.search-result__title {
-  font-size: 4.6rem;
-  font-weight: 500;
-  font-family: "Grand Hotel", sans-serif;
-  text-transform: capitalize;
+  &__title {
+    font-size: 4.6rem;
+    font-weight: 500;
+    font-family: var.$font-family-secondary;
+    text-transform: capitalize;
+  }
 }
 
 .cards-container {
@@ -22,12 +24,12 @@
   gap: 5.4rem;
   grid-template-columns: repeat(4, 1fr);
   justify-items: center;
-}
 
-.cards-container--side {
-  grid-template-columns: 1fr;
-  gap: 2rem;
-  justify-items: normal;
+  &--side {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    justify-items: normal;
+  }
 }
 
 @media (max-width: 768px) {
@@ -43,6 +45,12 @@
 @media (max-width: 600px) {
   .cards-container {
     grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 495px) {
+  .search-result__head {
+    justify-content: center;
   }
 }
 

@@ -1,11 +1,11 @@
-import classes from "./RecipeItemList.module.css";
+import classes from "./RecipeItemList.module.scss";
 import { useState, useEffect, useContext } from "react";
 import ErrorContext from "../../../store/error-context";
 import Card from "../../ui/Card";
 import RecipeItem from "../recipe-item/RecipeItem";
 import Sort from "../sort/Sort";
 import Spinner from "../../ui/Spinner";
-import testImg from "./../../../assets/test.jpg";
+// import testImg from "./../../../assets/test.jpg";
 import RecipeContext from "../../../store/recipe-context";
 import ErrorMessage from "../../ui/ErrorMessage";
 

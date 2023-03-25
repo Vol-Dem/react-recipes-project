@@ -1,5 +1,6 @@
 import { useState } from "react";
-import classes from "./About.module.css";
+import classes from "./About.module.scss";
+// import testImg from "./../assets/test.jpg";
 
 const About = () => {
   const [test, setTest] = useState(false);
@@ -14,7 +15,9 @@ const About = () => {
         <div>c</div>
         <div>d</div>
       </div>
-      <button onClick={exe}>push</button>
+      <button onClick={exe} className={classes.btn}>
+        push
+      </button>
     </>
   );
 };

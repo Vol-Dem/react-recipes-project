@@ -3,12 +3,12 @@
   gap: 2.8rem;
   flex-direction: column;
   justify-content: center;
-  margin-top: calc(50vh - 300px);
+  margin-top: calc(50vh - 39rem);
   transition: all 0.3s;
-}
 
-.section-search.mt0 {
-  margin-top: 0;
+  &.mt0 {
+    margin-top: 0;
+  }
 }
 
 .section-content {
@@ -18,13 +18,13 @@
 }
 
 .recipe-columns {
-  grid-template-columns: 280px 3fr;
+  grid-template-columns: 33rem 3fr;
   gap: 2rem;
 }
 
 @media (max-width: 1024px) {
   .recipe-columns {
-    grid-template-columns: 230px 3fr;
+    grid-template-columns: 31rem 3fr;
     gap: 2rem;
   }
 }
@@ -32,6 +32,6 @@
 @media (max-width: 768px) {
   .recipe-columns {
     grid-template-columns: 0fr 1fr;
-    gap: 2rem;
+    gap: 0rem;
   }
 }

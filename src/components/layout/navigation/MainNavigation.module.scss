@@ -1,0 +1,24 @@
+@use "./../../../variables/variables.scss" as var;
+
+.nav {
+  display: flex;
+  gap: 2.4rem;
+  list-style: none;
+  text-transform: uppercase;
+  align-items: center;
+
+  & a:link,
+  & a:visited {
+    display: inline-block;
+    text-decoration: none;
+    color: var.$color-text-light;
+    font-weight: 500;
+    font-size: 1.8rem;
+    transition: all 0.3s;
+  }
+
+  & a:hover,
+  & a:active {
+    color: var.$color-text-orange;
+  }
+}

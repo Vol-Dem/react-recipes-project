@@ -1,4 +1,4 @@
-import classes from "./Checkbox.module.css";
+import classes from "./Checkbox.module.scss";
 
 const Checkbox = (props) => {
   return (
