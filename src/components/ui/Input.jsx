@@ -1,14 +1,14 @@
 import classes from "./Input.module.scss";
 
-const Input = (props) => {
+const Input = ({ label, input }) => {
   return (
     <>
-      {props.label && (
-        <label htmlFor={props.input.id} className={classes.label}>
-          {props.label}
+      {label && (
+        <label htmlFor={input.id} className={classes.label}>
+          {label}
         </label>
       )}
-      <input {...props.input} className={classes.input} />
+      <input {...input} className={classes.input} />
     </>
   );
 };

@@ -5,11 +5,17 @@ import Card from "../../ui/Card";
 import RecipeItem from "../recipe-item/RecipeItem";
 import Sort from "../sort/Sort";
 import Spinner from "../../ui/Spinner";
-// import testImg from "./../../../assets/test.jpg";
 import RecipeContext from "../../../store/recipe-context";
 import ErrorMessage from "../../ui/ErrorMessage";
+import {
+  API_URL,
+  API_KEY,
+  TIMEOUT_SEC,
+  RESULT_NUM,
+} from "../../../variables/constants";
+import { timeout } from "../../../variables/utils";
 
-function RecipeItemList(props) {
+function RecipeItemList({ data }) {
   const [searchResult, setSearchResult] = useState([]);
   const [sortedRecipes, setSortedRecipes] = useState([]);
   const [recipesIsLoading, setRecipesIsLoading] = useState(false);
@@ -21,40 +27,42 @@ function RecipeItemList(props) {
   const recipeCtx = useContext(RecipeContext);
   const recipeIsOpen = recipeCtx.recipeIsOpen;
 
-  const requestData = props.data;
+  const requestData = data;
   const title = requestData.query || "Search results";
 
-  const getRecipesHandler = () => {
+  useEffect(() => {
     setSearchResult([]);
     setError("");
     setRecipesIsLoading(true);
 
-    fetch(
-      `https://api.spoonacular.com/recipes/complexSearch?apiKey=5303df5a010c4a06a1d6ac24c41091f9&query=${
-        requestData.query
-      }&cuisine=${requestData.cuisine}&diet=${requestData.diet}&intolerances=${
-        requestData.intolerance
-      }&type=${requestData.type}${
-        requestData.maxReadyTime && `&maxReadyTime=${requestData.maxReadyTime}`
-      }${requestData.minCalories && `&minCalories=${requestData.minCalories}`}${
-        requestData.maxCalories && `&maxCalories=${requestData.maxCalories}`
-      }&number=2&addRecipeNutrition=true`
-    )
-      .then((response) => {
-        console.log(response);
-        // if (response.status >= 400) {
-        //   throw new Error("Server responds with error!");
-        // }
-        return response.json();
-      })
-      .then((data) => {
+    const getRecipesHandler = async () => {
+      try {
+        const fetchRecs = fetch(
+          `${API_URL}/recipes/complexSearch?apiKey=${API_KEY}&query=${
+            requestData.query
+          }&cuisine=${requestData.cuisine}&diet=${
+            requestData.diet
+          }&intolerances=${requestData.intolerance}&type=${requestData.type}${
+            requestData.maxReadyTime &&
+            `&maxReadyTime=${requestData.maxReadyTime}`
+          }${
+            requestData.minCalories && `&minCalories=${requestData.minCalories}`
+          }${
+            requestData.maxCalories && `&maxCalories=${requestData.maxCalories}`
+          }&number=${RESULT_NUM}&addRecipeNutrition=true`
+        );
+
+        const res = await Promise.race([fetchRecs, timeout(TIMEOUT_SEC)]);
+        const data = await res.json();
         console.log(data);
+
         if (data.status === "failure")
           throw new Error(`${data.message} (${data.code})`);
         if (data.totalResults === 0)
           throw new Error(
             `No results for "${requestData.query}". Try checking your spelling`
           );
+
         const recipies = data.results?.map((recipe) => {
           return {
             id: recipe.id,
@@ -67,60 +75,16 @@ function RecipeItemList(props) {
             servings: recipe.servings,
           };
         });
+
         setSearchResult(recipies);
         setRecipesIsLoading(false);
-      })
-      .catch((error) => {
+      } catch (error) {
         setRecipesIsLoading(false);
         setError(error.message);
-      });
-
-    // setRecipesIsLoading(false);
-    // setSearchResult([
-    //   {
-    //     id: 22,
-    //     title: "Title 1",
-    //     img: testImg,
-    //     time: 15,
-    //     calories: 130,
-    //     servings: "3",
-    //   },
-    //   {
-    //     id: 23,
-    //     title: "Title 2",
-    //     img: testImg,
-    //     time: 20,
-    //     calories: 200,
-    //     servings: "5",
-    //   },
-    //   {
-    //     id: 24,
-    //     title: "Title 2",
-    //     img: testImg,
-    //     time: 20,
-    //     calories: 200,
-    //     servings: "5",
-    //   },
-    //   {
-    //     id: 25,
-    //     title: "Title 2",
-    //     img: testImg,
-    //     time: 20,
-    //     calories: 200,
-    //     servings: "5",
-    //   },
-    //   {
-    //     id: 26,
-    //     title: "Title 2",
-    //     img: testImg,
-    //     time: 20,
-    //     calories: 2060,
-    //     servings: "5",
-    //   },
-    // ]);
-  };
-
-  useEffect(getRecipesHandler, [requestData]);
+      }
+    };
+    getRecipesHandler();
+  }, [requestData]);
 
   const sortHandler = (e) => {
     if (!searchResult.length) {

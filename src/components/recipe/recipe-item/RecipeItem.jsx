@@ -4,8 +4,8 @@ import { ReactComponent as CaloriesIcon } from "./../../../assets/calories.svg";
 import { useContext } from "react";
 import RecipeContext from "../../../store/recipe-context";
 
-function RecipeItem(props) {
-  const recipeInfo = props.data;
+function RecipeItem({ data }) {
+  const recipeInfo = data;
 
   const recipeCtx = useContext(RecipeContext);
   const recipeIsOpen = recipeCtx.recipeIsOpen;

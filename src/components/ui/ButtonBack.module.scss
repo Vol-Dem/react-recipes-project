@@ -1,0 +1,24 @@
+@use "./../../variables/variables.scss" as var;
+
+.recipe__btn-back {
+  display: flex;
+  position: absolute;
+  align-items: center;
+  background-color: transparent;
+  border: none;
+  font-size: 1.8rem;
+  font-weight: 500;
+  color: var.$color-text-light;
+  top: 0;
+  left: 0;
+  padding: 2.6rem;
+  gap: 1rem;
+  cursor: pointer;
+  text-transform: uppercase;
+
+  & svg {
+    width: 2.8rem;
+    height: 2.8rem;
+    margin-top: -3px;
+  }
+}

@@ -1,0 +1,18 @@
+@use "./../../../../variables/variables.scss" as var;
+
+.recipe__diets {
+  display: flex;
+  gap: 0.6rem;
+  color: var.$color-text-light;
+  font-size: 1.6rem;
+  line-height: 1.5;
+  text-transform: capitalize;
+  flex-wrap: wrap;
+  list-style: none;
+}
+
+@media (max-width: 475px) {
+  .recipe__diets {
+    grid-column: 1 / -1;
+  }
+}

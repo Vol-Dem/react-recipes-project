@@ -1,6 +1,6 @@
 import classes from "./Sort.module.scss";
 
-const Sort = (props) => {
+const Sort = ({ onSort }) => {
   return (
     <div className={classes["search-result__sort"]}>
       <span>Sort&nbsp;by</span>
@@ -8,7 +8,7 @@ const Sort = (props) => {
         className={classes["search-result__select"]}
         name="sort"
         id="sort"
-        onChange={props.onSort}
+        onChange={onSort}
       >
         <option value="calories-asc">Calories &uarr;</option>
         <option value="calories-desc">Calories &darr;</option>

@@ -1,17 +1,17 @@
 import classes from "./Checkbox.module.scss";
 
-const Checkbox = (props) => {
+const Checkbox = ({ value, name }) => {
   return (
     <div>
-      <label htmlFor={props.value} className={classes.label}>
+      <label htmlFor={value} className={classes.label}>
         <input
           type="checkbox"
-          id={props.value}
-          value={props.value}
-          name={props.name}
+          id={value}
+          value={value}
+          name={name}
           className={classes.checkbox}
         />
-        {props.value}
+        {value}
       </label>
     </div>
   );

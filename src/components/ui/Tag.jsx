@@ -1,12 +1,13 @@
 import classes from "./Tag.module.scss";
 
 const Tag = (props) => {
+  const { dataQuery, dataType, onTagClick } = props.tagCfg;
   return (
     <span
-      data-query={props.dataQuery}
-      data-type={props.dataType}
+      data-query={dataQuery}
+      data-type={dataType}
       className={classes.tag}
-      onClick={props.onTagClick}
+      onClick={onTagClick}
     >
       {props.children}
     </span>

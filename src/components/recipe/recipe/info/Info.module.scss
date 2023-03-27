@@ -1,0 +1,23 @@
+.recipe__info {
+  display: flex;
+  align-items: center;
+  gap: 8rem;
+  font-size: 2rem;
+}
+
+.recipe__param {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+
+  & svg {
+    width: 2rem;
+    height: 2rem;
+  }
+}
+
+@media (max-width: 425px) {
+  .recipe__info {
+    gap: 3rem;
+  }
+}

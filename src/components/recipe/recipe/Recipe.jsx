@@ -1,13 +1,24 @@
 import classes from "./Recipe.module.scss";
 import { useState, useEffect, useContext } from "react";
-import { ReactComponent as ClockIcon } from "./../../../assets/clock.svg";
-import { ReactComponent as ServingsIcon } from "./../../../assets/servings.svg";
-import { ReactComponent as ArrowBackIcon } from "./../../../assets/arrow-back.svg";
 import Spinner from "../../ui/Spinner";
 import Card from "../../ui/Card";
 import ErrorContext from "../../../store/error-context";
 import RecipeContext from "../../../store/recipe-context";
 import ErrorMessage from "../../ui/ErrorMessage";
+import Nutrition from "./nutrition/Nutrition";
+import Ingridients from "./ingridients/Ingridients";
+import Instructions from "./instructions/Instructions";
+import Credits from "./credits/Credits";
+import Info from "./info/Info";
+import Diets from "./diets/Diets";
+import {
+  API_URL,
+  API_KEY,
+  TIMEOUT_SEC,
+  INCLUDE_NUTRITION,
+} from "../../../variables/constants";
+import { timeout } from "../../../variables/utils";
+import ButtonBack from "../../ui/ButtonBack";
 
 const Recipe = () => {
   const [recipe, setRecipe] = useState({});
@@ -21,27 +32,34 @@ const Recipe = () => {
   const recipeId = recipeCtx.recipeId;
   const closeRecipe = recipeCtx.setRecipeIsClosedHandler;
 
-  const getRecipe = () => {
+  const nutrients = ["calories", "fat", "carbohydrates", "protein"];
+
+  useEffect(() => {
     setRecipeIsLoading(true);
     setError("");
 
-    fetch(
-      `https://api.spoonacular.com/recipes/${recipeId}/information?apiKey=5303df5a010c4a06a1d6ac24c41091f9&includeNutrition=false`
-    )
-      .then((response) => response.json())
-      .then((data) => {
+    const getRecipe = async () => {
+      try {
+        const fetchRec = fetch(
+          `${API_URL}/recipes/${recipeId}/information?apiKey=${API_KEY}&includeNutrition=${INCLUDE_NUTRITION}`
+        );
+        const res = await Promise.race([fetchRec, timeout(TIMEOUT_SEC)]);
+        const data = await res.json();
+
         if (data.status === "failure")
           throw new Error(`${data.message} (${data.code})`);
+
         console.log(data);
+
         setRecipe(data);
         setRecipeIsLoading(false);
-      })
-      .catch((error) => {
+      } catch (error) {
         setError(error.message);
         setRecipeIsLoading(false);
-      });
-  };
-  useEffect(getRecipe, [recipeId]);
+      }
+    };
+    getRecipe();
+  }, [recipeId]);
 
   return (
     <Card>
@@ -50,109 +68,37 @@ const Recipe = () => {
       {errorMessage !== "" || recipeIsLoading || (
         <div className={classes.recipe}>
           <div className={classes["recipe__head"]}>
-            <button
-              className={classes["recipe__btn-back"]}
-              onClick={closeRecipe}
-            >
-              <ArrowBackIcon /> Back
-            </button>
-            <ul className={classes["recipe__diets"]}>
-              {recipe.diets?.map((diet, i) => (
-                <li key={diet}>
-                  {i !== 0 ? "/  " : ""}
-                  {diet}
-                </li>
-              ))}
-            </ul>
+            <ButtonBack onClick={closeRecipe} />
+            <Diets diets={recipe.diets} />
             <h1 className={classes["recipe__title"]}>{recipe.title}</h1>
             <div className={classes["recipe__img"]}>
               <img src={recipe.image} alt={recipe.title} />
             </div>
           </div>
           <div className={classes["recipe__description"]}>
-            <div className={classes["recipe__info"]}>
-              <div className={classes["recipe__param"]}>
-                <ClockIcon /> {recipe.readyInMinutes} min
-              </div>
-              <div className={classes["recipe__param"]}>
-                <ServingsIcon /> {recipe.servings} servings
-              </div>
-            </div>
+            <Info
+              readyInMinutes={recipe.readyInMinutes}
+              servings={recipe.servings}
+            />
             <div>
               <h3 className={classes["recipe__subtitle"]}>Ingridients</h3>
-              <div>
-                <ul className={classes["recipe__ingridients"]}>
-                  {recipe.extendedIngredients?.map((ingridient) => (
-                    <li key={ingridient.id}>
-                      <span>{ingridient.name}</span>
-                      <span
-                        className={classes["recipe__ingridients-dots"]}
-                      ></span>
-                      <span>
-                        {ingridient.amount} {ingridient.unit}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              <Ingridients ingridients={recipe.extendedIngredients} />
             </div>
             <div>
               <h3 className={classes["recipe__subtitle"]}>Instructions</h3>
-              <p className={classes["recipe__instructions"]}>
-                {recipe.instructions?.replace(/(<([^>]+)>)/gi, "")}
-              </p>
+              <Instructions instructions={recipe.instructions} />
             </div>
             <div>
               <h3 className={classes["recipe__subtitle"]}>Nutrition</h3>
-              <ul className={classes["recipe__nutrition"]}>
-                <li key="calories">
-                  <span className={classes["recipe__nutrition-amount"]}>
-                    {recipe.nutrition?.nutrients
-                      .find(({ name }) => name === "Calories")
-                      .amount.toFixed() || "??"}
-                  </span>
-                  <span className={classes["recipe__nutrition-unit"]}>
-                    kcal
-                  </span>
-                </li>
-                <li key="fat">
-                  <span className={classes["recipe__nutrition-amount"]}>
-                    {recipe.nutrition?.nutrients
-                      .find(({ name }) => name === "Fat")
-                      .amount.toFixed() || "??"}
-                  </span>
-                  <span className={classes["recipe__nutrition-unit"]}>
-                    fats
-                  </span>
-                </li>
-                <li key="carbohydrates">
-                  <span className={classes["recipe__nutrition-amount"]}>
-                    {recipe.nutrition?.nutrients
-                      .find(({ name }) => name === "Carbohydrates")
-                      .amount.toFixed() || "??"}
-                  </span>
-                  <span className={classes["recipe__nutrition-unit"]}>
-                    carbs
-                  </span>
-                </li>
-                <li key="protein">
-                  <span className={classes["recipe__nutrition-amount"]}>
-                    {recipe.nutrition?.nutrients
-                      .find(({ name }) => name === "Protein")
-                      .amount.toFixed() || "??"}
-                  </span>
-                  <span className={classes["recipe__nutrition-unit"]}>
-                    proteins
-                  </span>
-                </li>
-              </ul>
+              <Nutrition nutrition={recipe.nutrition} nutrients={nutrients} />
             </div>
-            <div className={classes["recipe__credits"]}>
-              <p>
-                Source: {recipe.creditsText} -{" "}
-                <a href={recipe.sourceUrl}>{recipe.sourceName}</a>
-              </p>
-            </div>
+            <Credits
+              credits={{
+                creditsText: recipe.creditsText,
+                sourceUrl: recipe.sourceUrl,
+                sourceName: recipe.sourceName,
+              }}
+            />
           </div>
         </div>
       )}
