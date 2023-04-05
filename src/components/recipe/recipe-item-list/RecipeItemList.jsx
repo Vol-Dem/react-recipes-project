@@ -1,12 +1,10 @@
 import classes from "./RecipeItemList.module.scss";
 import { useState, useEffect, useContext } from "react";
-import ErrorContext from "../../../store/error-context";
 import Card from "../../ui/Card";
 import RecipeItem from "../recipe-item/RecipeItem";
 import Sort from "../sort/Sort";
 import Spinner from "../../ui/Spinner";
 import RecipeContext from "../../../store/recipe-context";
-import ErrorMessage from "../../ui/ErrorMessage";
 import {
   API_URL,
   API_KEY,
@@ -14,15 +12,14 @@ import {
   RESULT_NUM,
 } from "../../../variables/constants";
 import { timeout } from "../../../variables/utils";
+import { useThrowAsyncError } from "../../../hooks/use-throw-async-error";
 
 function RecipeItemList({ data }) {
   const [searchResult, setSearchResult] = useState([]);
   const [sortedRecipes, setSortedRecipes] = useState([]);
   const [recipesIsLoading, setRecipesIsLoading] = useState(false);
 
-  const errorCtx = useContext(ErrorContext);
-  const setError = errorCtx.setErrorMessage;
-  const errorMessage = errorCtx.errorMessage;
+  const throwAsyncError = useThrowAsyncError();
 
   const recipeCtx = useContext(RecipeContext);
   const recipeIsOpen = recipeCtx.recipeIsOpen;
@@ -32,7 +29,6 @@ function RecipeItemList({ data }) {
 
   useEffect(() => {
     setSearchResult([]);
-    setError("");
     setRecipesIsLoading(true);
 
     const getRecipesHandler = async () => {
@@ -79,8 +75,8 @@ function RecipeItemList({ data }) {
         setSearchResult(recipies);
         setRecipesIsLoading(false);
       } catch (error) {
+        throwAsyncError(error);
         setRecipesIsLoading(false);
-        setError(error.message);
       }
     };
     getRecipesHandler();
@@ -113,7 +109,6 @@ function RecipeItemList({ data }) {
     >
       <Card>
         {recipesIsLoading && <Spinner />}
-        {!recipeIsOpen && errorMessage !== "" && <ErrorMessage />}
         {searchResult.length !== 0 && (
           <>
             <div className={classes["search-result__head"]}>

@@ -2,9 +2,7 @@ import classes from "./Recipe.module.scss";
 import { useState, useEffect, useContext } from "react";
 import Spinner from "../../ui/Spinner";
 import Card from "../../ui/Card";
-import ErrorContext from "../../../store/error-context";
 import RecipeContext from "../../../store/recipe-context";
-import ErrorMessage from "../../ui/ErrorMessage";
 import Nutrition from "./nutrition/Nutrition";
 import Ingridients from "./ingridients/Ingridients";
 import Instructions from "./instructions/Instructions";
@@ -19,14 +17,12 @@ import {
 } from "../../../variables/constants";
 import { timeout } from "../../../variables/utils";
 import ButtonBack from "../../ui/ButtonBack";
+import { useThrowAsyncError } from "../../../hooks/use-throw-async-error";
 
 const Recipe = () => {
   const [recipe, setRecipe] = useState({});
   const [recipeIsLoading, setRecipeIsLoading] = useState(true);
-
-  const errorCtx = useContext(ErrorContext);
-  const setError = errorCtx.setErrorMessage;
-  const errorMessage = errorCtx.errorMessage;
+  const throwAsyncError = useThrowAsyncError();
 
   const recipeCtx = useContext(RecipeContext);
   const recipeId = recipeCtx.recipeId;
@@ -36,7 +32,6 @@ const Recipe = () => {
 
   useEffect(() => {
     setRecipeIsLoading(true);
-    setError("");
 
     const getRecipe = async () => {
       try {
@@ -54,7 +49,7 @@ const Recipe = () => {
         setRecipe(data);
         setRecipeIsLoading(false);
       } catch (error) {
-        setError(error.message);
+        throwAsyncError(error);
         setRecipeIsLoading(false);
       }
     };
@@ -64,8 +59,7 @@ const Recipe = () => {
   return (
     <Card>
       {recipeIsLoading && <Spinner />}
-      {errorMessage && <ErrorMessage />}
-      {errorMessage !== "" || recipeIsLoading || (
+      {recipeIsLoading || (
         <div className={classes.recipe}>
           <div className={classes["recipe__head"]}>
             <ButtonBack onClick={closeRecipe} />

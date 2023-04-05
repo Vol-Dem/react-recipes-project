@@ -4,8 +4,8 @@ import { useState, useContext } from "react";
 import RecipeItemList from "../components/recipe/recipe-item-list/RecipeItemList";
 import Recipe from "../components/recipe/recipe/Recipe";
 import Logo from "../components/layout/logo/Logo";
-import ErrorProvider from "../store/ErrorProvider";
 import RecipeContext from "../store/recipe-context";
+import ErrorBoundary from "../components/error-boundary/ErrorBoundary";
 
 const Homepage = () => {
   const [searchResultIsOpen, setSearchResultIsOpen] = useState(false);
@@ -21,6 +21,7 @@ const Homepage = () => {
   });
 
   const recipeCtx = useContext(RecipeContext);
+  const recipeId = recipeCtx.recipeId;
   const recipeIsOpen = recipeCtx.recipeIsOpen;
   const closeRecipe = recipeCtx.setRecipeIsClosedHandler;
 
@@ -42,7 +43,7 @@ const Homepage = () => {
   };
 
   return (
-    <ErrorProvider>
+    <>
       <section
         className={`${classes["section-search"]} ${
           searchResultIsOpen ? classes.mt0 : ""
@@ -56,10 +57,21 @@ const Homepage = () => {
           recipeIsOpen ? classes["recipe-columns"] : ""
         }`}
       >
-        <div>{searchResultIsOpen && <RecipeItemList data={formData} />}</div>
-        {recipeIsOpen && <Recipe />}
+        <div>
+          {searchResultIsOpen && (
+            <ErrorBoundary key={formData.query}>
+              <RecipeItemList data={formData} />
+            </ErrorBoundary>
+          )}
+        </div>
+
+        {recipeIsOpen && (
+          <ErrorBoundary key={recipeId}>
+            <Recipe />
+          </ErrorBoundary>
+        )}
       </section>
-    </ErrorProvider>
+    </>
   );
 };
 

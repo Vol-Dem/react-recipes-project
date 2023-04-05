@@ -2,7 +2,7 @@ import classes from "./Credits.module.scss";
 
 const Credits = ({ credits }) => {
   const { creditsText, sourceUrl, sourceName } = credits;
-  console.log(creditsText);
+
   return (
     <div className={classes["recipe__credits"]}>
       <p>
