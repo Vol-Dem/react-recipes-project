@@ -28,13 +28,12 @@ function RecipeItemList({ data }) {
   const title = requestData.query || "Search results";
 
   useEffect(() => {
-    setSearchResult([]);
     setRecipesIsLoading(true);
 
     const getRecipesHandler = async () => {
       try {
         const fetchRecs = fetch(
-          `${API_URL}/recipes/complexSearch?apiKey=${API_KEY}&query=${
+          `${API_URL}/recipes/complexSearch?apiKey=d${API_KEY}&query=${
             requestData.query
           }&cuisine=${requestData.cuisine}&diet=${
             requestData.diet
@@ -54,10 +53,6 @@ function RecipeItemList({ data }) {
 
         if (data.status === "failure")
           throw new Error(`${data.message} (${data.code})`);
-        if (data.totalResults === 0)
-          throw new Error(
-            `No results for "${requestData.query}". Try checking your spelling`
-          );
 
         const recipies = data.results?.map((recipe) => {
           return {
@@ -80,15 +75,15 @@ function RecipeItemList({ data }) {
       }
     };
     getRecipesHandler();
-  }, [requestData]);
+  }, [requestData, throwAsyncError]);
 
   const sortHandler = (e) => {
     if (!searchResult.length) {
       return;
     }
 
-    const sortB = e ? e.target.value : "calories-asc";
-    const [sortBy, sortType] = sortB.split("-");
+    const sort = e ? e.target.value : "calories-asc";
+    const [sortBy, sortType] = sort.split("-");
 
     const res = searchResult
       .slice()
@@ -109,6 +104,11 @@ function RecipeItemList({ data }) {
     >
       <Card>
         {recipesIsLoading && <Spinner />}
+        {!recipesIsLoading && searchResult.length === 0 && (
+          <p className={classes.fallback}>
+            {`No results for "${requestData.query}". Try checking your spelling`}
+          </p>
+        )}
         {searchResult.length !== 0 && (
           <>
             <div className={classes["search-result__head"]}>

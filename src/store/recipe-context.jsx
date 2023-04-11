@@ -3,8 +3,8 @@ import React from "react";
 const RecipeContext = React.createContext({
   recipeId: null,
   recipeIsOpen: false,
-  setRecipeIsClosedHandler: () => {},
-  setRecipeIsOpenHandler: () => {},
+  closeRecipe: () => {},
+  openRecipe: () => {},
 });
 
 export default RecipeContext;

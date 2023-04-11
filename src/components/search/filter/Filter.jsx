@@ -6,7 +6,7 @@ const Filter = () => {
   return (
     <>
       <fieldset className={classes["search__filter-item"]}>
-        <h3 className={classes["search__filter-title"]}>Cuisine</h3>
+        <legend className={classes["search__filter-title"]}>Cuisine</legend>
         <Checkbox type="checkbox" name="cuisine" value="italian" />
         <Checkbox type="checkbox" name="cuisine" value="french" />
         <Checkbox type="checkbox" name="cuisine" value="japanese" />
@@ -14,30 +14,33 @@ const Filter = () => {
         <Checkbox type="checkbox" name="cuisine" value="korean" />
       </fieldset>
       <fieldset className={classes["search__filter-item"]}>
-        <h3 className={classes["search__filter-title"]}>Diet</h3>
+        <legend className={classes["search__filter-title"]}>Diet</legend>
         <Checkbox type="checkbox" name="diet" value="gluten-free" />
         <Checkbox type="checkbox" name="diet" value="ketogenic" />
         <Checkbox type="checkbox" name="diet" value="vegetarian" />
         <Checkbox type="checkbox" name="diet" value="pescetarian" />
       </fieldset>
       <fieldset className={classes["search__filter-item"]}>
-        <h3 className={classes["search__filter-title"]}>Intolerance</h3>
+        <legend className={classes["search__filter-title"]}>Intolerance</legend>
         <Checkbox type="checkbox" name="intolerance" value="gluten" />
         <Checkbox type="checkbox" name="intolerance" value="seafood" />
         <Checkbox type="checkbox" name="intolerance" value="egg" />
         <Checkbox type="checkbox" name="intolerance" value="tree-nut" />
       </fieldset>
       <fieldset className={classes["search__filter-item"]}>
-        <h3 className={classes["search__filter-title"]}>Type</h3>
+        <legend className={classes["search__filter-title"]}>Type</legend>
         <Checkbox type="checkbox" name="type" value="desert" />
         <Checkbox type="checkbox" name="type" value="salad" />
         <Checkbox type="checkbox" name="type" value="breackfast" />
         <Checkbox type="checkbox" name="type" value="soup" />
       </fieldset>
       <fieldset className={classes["search__filter-item"]}>
-        <h3 className={classes["search__filter-title"]}>
+        <label
+          htmlFor="max-ready-time"
+          className={classes["search__filter-title"]}
+        >
           Max ready time (min.)
-        </h3>
+        </label>
         <Input
           input={{
             type: "number",
@@ -47,7 +50,12 @@ const Filter = () => {
             max: "999",
           }}
         />
-        <h3 className={classes["search__filter-title"]}>Calories (kcal.)</h3>
+        <label
+          htmlFor="min-calories"
+          className={classes["search__filter-title"]}
+        >
+          Calories (kcal.)
+        </label>
         <div className={classes["search__filter-calories"]}>
           <Input
             input={{

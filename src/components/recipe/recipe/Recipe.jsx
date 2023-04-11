@@ -26,7 +26,7 @@ const Recipe = () => {
 
   const recipeCtx = useContext(RecipeContext);
   const recipeId = recipeCtx.recipeId;
-  const closeRecipe = recipeCtx.setRecipeIsClosedHandler;
+  const closeRecipe = recipeCtx.closeRecipe;
 
   const nutrients = ["calories", "fat", "carbohydrates", "protein"];
 
@@ -54,7 +54,7 @@ const Recipe = () => {
       }
     };
     getRecipe();
-  }, [recipeId]);
+  }, [recipeId, throwAsyncError]);
 
   return (
     <Card>

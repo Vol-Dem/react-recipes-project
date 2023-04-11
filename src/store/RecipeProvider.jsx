@@ -21,8 +21,8 @@ const RecipeProvider = (props) => {
   const recipeContext = {
     recipeId: currentRecipeId,
     recipeIsOpen: recipeIsOpen,
-    setRecipeIsClosedHandler,
-    setRecipeIsOpenHandler,
+    closeRecipe: setRecipeIsClosedHandler,
+    openRecipe: setRecipeIsOpenHandler,
   };
 
   return (

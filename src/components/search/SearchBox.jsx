@@ -24,20 +24,31 @@ function SearchBox({ getFormData }) {
     e.preventDefault();
     const formData = new FormData(e.target);
 
+    const query = formData
+      .get("query")
+      .replace(/<[^>]*>|[^a-zA-Z0-9,;\-.!?<> ]/g, "")
+      .toLowerCase()
+      .trim();
+    const cuisine = formData.getAll("cuisine").toString();
+    const diet = formData.getAll("diet").toString();
+    const intolerance = formData.getAll("intolerance").toString();
+    const type = formData.getAll("type").toString();
+    const maxReadyTime =
+      formData.get("max-ready-time")?.replace(/[^0-9 ]/g, "") || "";
+    const minCalories =
+      formData.get("min-calories")?.replace(/[^0-9 ]/g, "") || "";
+    const maxCalories =
+      formData.get("max-calories")?.replace(/[^0-9 ]/g, "") || "";
+
     const formQuery = {
-      query: formData
-        .get("query")
-        .replace(/<[^>]*>|[^a-zA-Z0-9,;\-.!?<> ]/g, "")
-        .toLowerCase()
-        .trim(),
-      cuisine: formData.getAll("cuisine").toString(),
-      diet: formData.getAll("diet").toString(),
-      intolerance: formData.getAll("intolerance").toString(),
-      type: formData.getAll("type").toString(),
-      maxReadyTime:
-        formData.get("max-ready-time")?.replace(/[^0-9 ]/g, "") || "",
-      minCalories: formData.get("min-calories")?.replace(/[^0-9 ]/g, "") || "",
-      maxCalories: formData.get("max-calories")?.replace(/[^0-9 ]/g, "") || "",
+      query,
+      cuisine,
+      diet,
+      intolerance,
+      type,
+      maxReadyTime,
+      minCalories,
+      maxCalories,
     };
     getFormData(formQuery);
     setSearchInput("");
@@ -74,12 +85,13 @@ function SearchBox({ getFormData }) {
           className={classes["search__form-input"]}
         />
 
-        <span
+        <button
+          type="button"
           className={classes["search__filter-btn"]}
           onClick={filterOpenHandler}
         >
           <FilterIcon />
-        </span>
+        </button>
         <button type="submit" className={classes["search__form-btn"]}>
           <SearchIcon />
           <span className={classes["hidden-xs"]}>Search</span>

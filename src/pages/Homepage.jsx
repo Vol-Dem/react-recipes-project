@@ -23,7 +23,7 @@ const Homepage = () => {
   const recipeCtx = useContext(RecipeContext);
   const recipeId = recipeCtx.recipeId;
   const recipeIsOpen = recipeCtx.recipeIsOpen;
-  const closeRecipe = recipeCtx.setRecipeIsClosedHandler;
+  const closeRecipe = recipeCtx.closeRecipe;
 
   const getFormDataHandler = (data) => {
     setFormData({

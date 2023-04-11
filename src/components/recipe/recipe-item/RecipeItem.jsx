@@ -10,7 +10,7 @@ function RecipeItem({ data }) {
   const recipeCtx = useContext(RecipeContext);
   const recipeIsOpen = recipeCtx.recipeIsOpen;
   const recipeId = recipeCtx.recipeId;
-  const openRecipe = recipeCtx.setRecipeIsOpenHandler;
+  const openRecipe = recipeCtx.openRecipe;
 
   const classSide = recipeIsOpen ? classes["recipe-card--side"] : "";
 
