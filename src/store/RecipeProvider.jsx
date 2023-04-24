@@ -1,5 +1,6 @@
 import { useState } from "react";
 import RecipeContext from "./recipe-context";
+import { useCallback } from "react";
 
 const RecipeProvider = (props) => {
   const [recipeIsOpen, setRecipeIsOpen] = useState(false);
@@ -14,9 +15,9 @@ const RecipeProvider = (props) => {
     if (currentRecipeId !== id) setCurrentRecipeId(id);
   };
 
-  const setRecipeIsClosedHandler = () => {
+  const setRecipeIsClosedHandler = useCallback(() => {
     setRecipeIsOpen(false);
-  };
+  }, []);
 
   const recipeContext = {
     recipeId: currentRecipeId,

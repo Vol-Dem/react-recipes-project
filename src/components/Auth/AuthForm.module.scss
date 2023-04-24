@@ -1,0 +1,63 @@
+@use "./../../variables/variables.scss" as var;
+
+.auth {
+  margin: 0 3.6rem;
+
+  &__title {
+    font-size: 4.6rem;
+    margin-bottom: 2.4rem;
+    text-align: center;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    min-width: 36rem;
+  }
+
+  &__input {
+    padding: 1.4rem;
+    font-size: 1.8rem;
+  }
+
+  &__controls {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+  }
+
+  &__error {
+    font-size: 2rem !important;
+  }
+
+  &__btn--switch {
+    background-color: transparent;
+    border: none;
+    // color: #d68023;
+    color: darken(var.$color-primary, 10%);
+    font-weight: 600;
+
+    &:hover {
+      color: darken(var.$color-primary, 15%);
+    }
+
+    &:disabled {
+      color: var.$color-grey;
+    }
+  }
+
+  &__btn--submit {
+    position: relative;
+
+    &:disabled {
+      color: transparent;
+      background-color: var.$color-grey;
+      box-shadow: none;
+    }
+  }
+}
+
+.invalid {
+  background-color: lighten(var.$color-red, 55%);
+  border-color: var.$color-red;
+}

@@ -1,11 +1,10 @@
 import classes from "./ErrorMessage.module.scss";
-import Card from "./Card";
 
-const ErrorMessage = ({ message }) => {
+const ErrorMessage = (props) => {
   return (
-    <Card>
-      <div className={classes.error}>{message}</div>
-    </Card>
+    <div className={`${classes.error} ${props.className || ""}`}>
+      {props.children}
+    </div>
   );
 };
 

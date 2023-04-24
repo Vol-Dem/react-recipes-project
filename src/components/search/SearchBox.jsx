@@ -13,7 +13,7 @@ function SearchBox({ getFormData }) {
 
   const filterOpenHandler = (e) => {
     e.preventDefault();
-    setFilterIsOpen(!filterIsOpen);
+    setFilterIsOpen((prevfilterIsOpen) => !prevfilterIsOpen);
   };
 
   const searchQueryHandler = (e) => {

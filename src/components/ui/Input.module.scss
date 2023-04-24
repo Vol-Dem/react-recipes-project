@@ -1,9 +1,21 @@
+@use "./../../variables/variables.scss" as var;
+
 .input {
   border-radius: 20px;
   padding: 0.5rem;
   width: 100%;
-  padding-left: 1.2rem;
+  padding-left: 1.6rem;
+  margin-bottom: 1rem;
 }
 .label {
-  /* font-size: 2rem; */
+  display: inline-block;
+  font-size: 1.8rem;
+  margin: 1rem;
+  text-transform: capitalize;
+}
+
+.error {
+  font-size: 1.6rem;
+  color: var.$color-red;
+  margin: 0 1.8rem;
 }

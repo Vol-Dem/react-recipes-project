@@ -6,6 +6,7 @@ import Recipe from "../components/recipe/recipe/Recipe";
 import Logo from "../components/layout/logo/Logo";
 import RecipeContext from "../store/recipe-context";
 import ErrorBoundary from "../components/error-boundary/ErrorBoundary";
+import { useEffect } from "react";
 
 const Homepage = () => {
   const [searchResultIsOpen, setSearchResultIsOpen] = useState(false);
@@ -41,6 +42,11 @@ const Homepage = () => {
     setSearchResultIsOpen(true);
     closeRecipe();
   };
+  useEffect(() => {
+    return () => {
+      closeRecipe();
+    };
+  }, [closeRecipe]);
 
   return (
     <>

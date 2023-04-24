@@ -1,0 +1,19 @@
+@use "./../../variables/variables.scss" as var;
+
+.btn-secondary {
+  background-color: transparent;
+  border: none;
+  // color: #d68023;
+  color: darken(var.$color-primary, 10%);
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+
+  &:hover {
+    color: darken(var.$color-primary, 15%);
+  }
+
+  &:disabled {
+    color: var.$color-grey;
+  }
+}

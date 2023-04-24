@@ -5,12 +5,7 @@ import RecipeItem from "../recipe-item/RecipeItem";
 import Sort from "../sort/Sort";
 import Spinner from "../../ui/Spinner";
 import RecipeContext from "../../../store/recipe-context";
-import {
-  API_URL,
-  API_KEY,
-  TIMEOUT_SEC,
-  RESULT_NUM,
-} from "../../../variables/constants";
+import { TIMEOUT_SEC, RESULT_NUM } from "../../../variables/constants";
 import { timeout } from "../../../variables/utils";
 import { useThrowAsyncError } from "../../../hooks/use-throw-async-error";
 
@@ -33,9 +28,11 @@ function RecipeItemList({ data }) {
     const getRecipesHandler = async () => {
       try {
         const fetchRecs = fetch(
-          `${API_URL}/recipes/complexSearch?apiKey=d${API_KEY}&query=${
-            requestData.query
-          }&cuisine=${requestData.cuisine}&diet=${
+          `${
+            process.env.REACT_APP_SPOONACULAR_API_URL
+          }/recipes/complexSearch?apiKey=${
+            process.env.REACT_APP_SPOONACULAR_API_KEY
+          }&query=${requestData.query}&cuisine=${requestData.cuisine}&diet=${
             requestData.diet
           }&intolerances=${requestData.intolerance}&type=${requestData.type}${
             requestData.maxReadyTime &&
@@ -85,11 +82,15 @@ function RecipeItemList({ data }) {
     const sort = e ? e.target.value : "calories-asc";
     const [sortBy, sortType] = sort.split("-");
 
-    const res = searchResult
-      .slice()
-      .sort((a, b) =>
-        sortType === "asc" ? a[sortBy] - b[sortBy] : b[sortBy] - a[sortBy]
-      );
+    const res = searchResult.slice().sort((a, b) => {
+      if (sortType === "asc") {
+        return a[sortBy] - b[sortBy];
+      }
+      if (sortType === "desc") {
+        return b[sortBy] - a[sortBy];
+      }
+      return true;
+    });
 
     setSortedRecipes(res);
   };
@@ -124,7 +125,9 @@ function RecipeItemList({ data }) {
                 recipeIsOpen ? classes["cards-container--side"] : ""
               }`}
             >
-              <RecipeItem data={sortedRecipes} />
+              {sortedRecipes.map((recipe) => (
+                <RecipeItem key={recipe.id} recipe={recipe} />
+              ))}
             </div>
           </>
         )}

@@ -9,12 +9,7 @@ import Instructions from "./instructions/Instructions";
 import Credits from "./credits/Credits";
 import Info from "./info/Info";
 import Diets from "./diets/Diets";
-import {
-  API_URL,
-  API_KEY,
-  TIMEOUT_SEC,
-  INCLUDE_NUTRITION,
-} from "../../../variables/constants";
+import { TIMEOUT_SEC, INCLUDE_NUTRITION } from "../../../variables/constants";
 import { timeout } from "../../../variables/utils";
 import ButtonBack from "../../ui/ButtonBack";
 import { useThrowAsyncError } from "../../../hooks/use-throw-async-error";
@@ -36,7 +31,7 @@ const Recipe = () => {
     const getRecipe = async () => {
       try {
         const fetchRec = fetch(
-          `${API_URL}/recipes/${recipeId}/information?apiKey=${API_KEY}&includeNutrition=${INCLUDE_NUTRITION}`
+          `${process.env.REACT_APP_SPOONACULAR_API_URL}/recipes/${recipeId}/information?apiKey=${process.env.REACT_APP_SPOONACULAR_API_KEY}&includeNutrition=${INCLUDE_NUTRITION}`
         );
         const res = await Promise.race([fetchRec, timeout(TIMEOUT_SEC)]);
         const data = await res.json();
@@ -73,6 +68,7 @@ const Recipe = () => {
             <Info
               readyInMinutes={recipe.readyInMinutes}
               servings={recipe.servings}
+              recipeId={recipeId}
             />
             <div>
               <h3 className={classes["recipe__subtitle"]}>Ingridients</h3>

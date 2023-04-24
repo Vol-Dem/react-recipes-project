@@ -19,15 +19,36 @@
     grid-template-columns: 2fr 4fr;
   }
 
+  &--side .recipe-card__img--fav {
+    height: 2.6rem;
+    width: 2.6rem;
+    left: 10%;
+    right: auto;
+  }
+
   &.active {
     background-color: var.$color-background-dark;
     color: var.$color-text-light;
   }
 
   &__img {
-    max-width: 100%;
-    height: 100%;
-    object-fit: cover;
+    position: relative;
+
+    & img {
+      max-width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    &--fav {
+      position: absolute;
+      top: 4%;
+      right: 6%;
+      height: 3.6rem;
+      width: 3.6rem;
+      color: rgb(142, 142, 142);
+      fill: var.$color-primary;
+    }
   }
 
   &__description {

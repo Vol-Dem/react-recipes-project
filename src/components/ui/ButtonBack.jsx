@@ -3,7 +3,7 @@ import { ReactComponent as ArrowBackIcon } from "./../../assets/arrow-back.svg";
 
 const ButtonBack = ({ onClick }) => {
   return (
-    <button className={classes["recipe__btn-back"]} onClick={onClick}>
+    <button className={classes["btn-back"]} onClick={onClick}>
       <ArrowBackIcon /> Back
     </button>
   );

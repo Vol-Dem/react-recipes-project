@@ -1,3 +1,5 @@
+@use "./../src/variables/variables.scss" as var;
+
 *,
 *::after,
 *::before {
@@ -7,6 +9,7 @@
 }
 html {
   font-size: 52%;
+  background-color: var.$color-text-primary;
 }
 
 body {
@@ -14,14 +17,23 @@ body {
   line-height: 1;
   font-weight: 400;
   min-height: 100vh;
-  color: #304750;
+  color: var.$color-text-primary;
   box-sizing: border-box;
+}
+
+body:before {
+  content: "";
+  display: block;
   background: linear-gradient(
       to right bottom,
       rgba(38, 50, 55, 0.7),
       rgba(48, 71, 80, 0.7)
     ),
-    url("./assets/bg.webp") no-repeat top/cover fixed;
+    url("./assets/bg.webp") no-repeat top/cover;
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  z-index: -30;
 }
 
 @media (max-width: 1024px) {

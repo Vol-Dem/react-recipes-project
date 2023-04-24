@@ -1,7 +1,6 @@
 import { Component } from "react";
-import classes from "./ErrorBoundary.module.scss";
-import Card from "../ui/Card";
 import ErrorMessage from "../ui/ErrorMessage";
+import Card from "../ui/Card";
 
 class ErrorBoundary extends Component {
   constructor(props) {
@@ -18,7 +17,11 @@ class ErrorBoundary extends Component {
 
   render() {
     if (this.state.hasError) {
-      return <ErrorMessage message={this.state.errorMessage} />;
+      return (
+        <Card>
+          <ErrorMessage>{this.state.errorMessage}</ErrorMessage>
+        </Card>
+      );
     }
     return this.props.children;
   }
