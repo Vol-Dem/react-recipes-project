@@ -4,6 +4,7 @@ const ButttonSecondary = (props) => {
   return (
     <button
       className={`${classes["btn-secondary"]} ${props.className || ""}`}
+      type={props.type}
       onClick={props.onClick}
       disabled={props.disabled}
     >

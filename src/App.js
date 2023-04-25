@@ -14,6 +14,7 @@ import Profile from "./pages/Profile";
 import ErrorMessage from "./components/ui/ErrorMessage";
 import { useEffect } from "react";
 import { initAuth } from "./store/auth";
+import Favorites from "./pages/Favorites";
 
 function App() {
   const isAuth = useSelector((state) => state.auth.isLoggedIn);
@@ -33,6 +34,7 @@ function App() {
         <Route index element={<Homepage />} />
         <Route path="about" element={<About />} />
         {isAuth && <Route path="profile" element={<Profile />} />}
+        {isAuth && <Route path="favorites" element={<Favorites />} />}
       </Route>
     )
   );

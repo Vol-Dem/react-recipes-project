@@ -3,11 +3,13 @@
 .btn-secondary {
   background-color: transparent;
   border: none;
-  // color: #d68023;
+  font-size: 1.8rem;
   color: darken(var.$color-primary, 10%);
   font-weight: 600;
   font-family: inherit;
+  padding: 1rem;
   cursor: pointer;
+  transition: all 0.3s;
 
   &:hover {
     color: darken(var.$color-primary, 15%);

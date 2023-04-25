@@ -8,6 +8,7 @@ import { authActions, authRequest } from "../../store/auth";
 import Buttton from "../ui/Button";
 import { useValidation } from "../../hooks/use-validation";
 import { useEffect } from "react";
+import ButttonSecondary from "../ui/ButtonSecondary";
 
 const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -101,15 +102,13 @@ const AuthForm = () => {
           </ErrorMessage>
         )}
         <div className={classes["auth__controls"]}>
-          <button
+          <ButttonSecondary
             type="button"
             onClick={signUp}
             disabled={isLoading}
-            className={classes["auth__btn--switch"]}
           >
             {isLogin ? "Create Account" : "Log in"}
-          </button>
-
+          </ButttonSecondary>
           <Buttton
             disabled={isLoading}
             className={classes["auth__btn--submit"]}
