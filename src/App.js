@@ -15,6 +15,7 @@ import ErrorMessage from "./components/ui/ErrorMessage";
 import { useEffect } from "react";
 import { initAuth } from "./store/auth";
 import Favorites from "./pages/Favorites";
+import Card from "./components/ui/Card";
 
 function App() {
   const isAuth = useSelector((state) => state.auth.isLoggedIn);
@@ -27,7 +28,11 @@ function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route
-        errorElement={<ErrorMessage message="404" />}
+        errorElement={
+          <Card>
+            <ErrorMessage>404</ErrorMessage>
+          </Card>
+        }
         path="/"
         element={<Layout />}
       >

@@ -4,18 +4,22 @@ const Nutrition = ({ nutrition, nutrients }) => {
   return (
     <>
       <ul className={classes["recipe__nutrition"]}>
-        {nutrients.map((nutrient) => {
+        {nutrients.map((element) => {
           return (
-            <li key={nutrient}>
+            <li key={element.nutrient}>
               <span className={classes["recipe__nutrition-amount"]}>
                 {nutrition?.nutrients
                   .find(
                     ({ name }) =>
-                      name === nutrient[0].toUpperCase() + nutrient.slice(1)
+                      name ===
+                      element.nutrient[0].toUpperCase() +
+                        element.nutrient.slice(1)
                   )
                   ?.amount.toFixed() || "??"}
               </span>
-              <span className={classes["recipe__nutrition-unit"]}>kcal</span>
+              <span className={classes["recipe__nutrition-unit"]}>
+                {element.unit}
+              </span>
             </li>
           );
         })}

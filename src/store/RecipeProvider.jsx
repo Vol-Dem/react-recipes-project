@@ -5,10 +5,11 @@ import { useCallback } from "react";
 const RecipeProvider = (props) => {
   const [recipeIsOpen, setRecipeIsOpen] = useState(false);
   const [currentRecipeId, setCurrentRecipeId] = useState(null);
+  const [dailyLimitReached, setDailyLimitReached] = useState(false);
 
-  //   const setRecipeIdHandler = (id) => {
-  //     setCurrentRecipeId(id);
-  //   };
+  const dailyLimitReachedHandler = useCallback(() => {
+    setDailyLimitReached(true);
+  }, []);
 
   const setRecipeIsOpenHandler = (id) => {
     setRecipeIsOpen(true);
@@ -22,6 +23,8 @@ const RecipeProvider = (props) => {
   const recipeContext = {
     recipeId: currentRecipeId,
     recipeIsOpen: recipeIsOpen,
+    dailyLimitReached: dailyLimitReached,
+    onDailyLimitReached: dailyLimitReachedHandler,
     closeRecipe: setRecipeIsClosedHandler,
     openRecipe: setRecipeIsOpenHandler,
   };

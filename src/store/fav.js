@@ -6,7 +6,7 @@ const firestore = getFirestore(firebaseApp);
 
 const favSlice = createSlice({
   name: "fav",
-  initialState: { favList: [] },
+  initialState: { favList: [], recipes: [] },
   reducers: {
     addToFav(state, actions) {
       if (!state.favList.includes(actions.payload)) {

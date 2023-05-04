@@ -5,6 +5,8 @@ import {
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
+  updatePassword,
+  updateProfile,
 } from "firebase/auth";
 import firebaseApp from "../config";
 import { loadFav } from "./fav";
@@ -31,10 +33,12 @@ const authSlice = createSlice({
   reducers: {
     login(state, actions) {
       state.isLoggedIn = true;
-      state.user.idToken = actions.payload.accessToken;
-      state.user.uid = actions.payload.uid;
-      state.user.email = actions.payload.email;
-      state.user.userName = actions.payload.displayName;
+      state.user = {
+        idToken: actions.payload.accessToken,
+        uid: actions.payload.uid,
+        email: actions.payload.email,
+        userName: actions.payload.displayName,
+      };
     },
     logout(state) {
       state.isLoggedIn = false;
@@ -110,6 +114,37 @@ export const authRequest = (isLogin, email, password) => {
       dispatch(authActions.setErrorMessage(error.message));
     }
     dispatch(authActions.setIsLoading(false));
+  };
+};
+
+export const changeUserPassword = (password) => {
+  return async (dispatch) => {
+    try {
+      const user = auth.currentUser;
+      await updatePassword(user, password);
+    } catch (error) {
+      dispatch(authActions.setErrorMessage(error.message));
+    }
+  };
+};
+
+export const changeUserName = (name) => {
+  return async (dispatch) => {
+    try {
+      const user = auth.currentUser;
+      await updateProfile(user, { displayName: name });
+      dispatch(
+        authActions.login({
+          accessToken: user.accessToken,
+          uid: user.uid,
+          email: user.email,
+          displayName: user.displayName,
+        })
+      );
+      console.log(user);
+    } catch (error) {
+      dispatch(authActions.setErrorMessage(error.message));
+    }
   };
 };
 

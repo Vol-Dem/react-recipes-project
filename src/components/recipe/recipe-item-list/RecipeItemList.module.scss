@@ -11,16 +11,46 @@
     gap: 1.6rem;
   }
 
+  &__empty {
+    font-size: 2.4rem;
+  }
+
   &__title {
     font-size: 4.6rem;
     font-weight: 500;
     font-family: var.$font-family-secondary;
     text-transform: capitalize;
   }
-}
 
-.fallback {
-  font-size: 2.4rem;
+  &__pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 5rem;
+  }
+
+  &__btn {
+    width: 2rem;
+    background-color: transparent;
+    border: none;
+
+    & button {
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+    }
+
+    & svg {
+      width: 2rem;
+      height: 2rem;
+    }
+  }
+
+  &__page {
+    font-size: 2rem;
+    font-family: var.$font-family-secondary;
+  }
 }
 
 .cards-container {

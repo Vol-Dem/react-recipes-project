@@ -9,10 +9,14 @@ import Instructions from "./instructions/Instructions";
 import Credits from "./credits/Credits";
 import Info from "./info/Info";
 import Diets from "./diets/Diets";
-import { TIMEOUT_SEC, INCLUDE_NUTRITION } from "../../../variables/constants";
-import { timeout } from "../../../variables/utils";
+import { INCLUDE_NUTRITION } from "../../../variables/constants";
 import ButtonBack from "../../ui/ButtonBack";
 import { useThrowAsyncError } from "../../../hooks/use-throw-async-error";
+import { getDoc, getFirestore, doc } from "firebase/firestore";
+import firebaseApp from "../../../config";
+import { useGetDataFromHttp } from "../../../hooks/use-get-data-from-http";
+
+const firestore = getFirestore(firebaseApp);
 
 const Recipe = () => {
   const [recipe, setRecipe] = useState({});
@@ -22,34 +26,44 @@ const Recipe = () => {
   const recipeCtx = useContext(RecipeContext);
   const recipeId = recipeCtx.recipeId;
   const closeRecipe = recipeCtx.closeRecipe;
+  const dailyLimitReached = recipeCtx.dailyLimitReached;
 
-  const nutrients = ["calories", "fat", "carbohydrates", "protein"];
+  const getDataFromHttp = useGetDataFromHttp();
+
+  const nutrients = [
+    { nutrient: "calories", unit: "kcal" },
+    { nutrient: "fat", unit: "fat" },
+    { nutrient: "carbohydrates", unit: "carbs" },
+    { nutrient: "protein", unit: "prot" },
+  ];
 
   useEffect(() => {
     setRecipeIsLoading(true);
+    if (!dailyLimitReached) {
+      const url = `${process.env.REACT_APP_SPOONACULAR_API_URL}/recipes/${recipeId}/information?apiKey=${process.env.REACT_APP_SPOONACULAR_API_KEY}&includeNutrition=${INCLUDE_NUTRITION}`;
 
-    const getRecipe = async () => {
-      try {
-        const fetchRec = fetch(
-          `${process.env.REACT_APP_SPOONACULAR_API_URL}/recipes/${recipeId}/information?apiKey=${process.env.REACT_APP_SPOONACULAR_API_KEY}&includeNutrition=${INCLUDE_NUTRITION}`
-        );
-        const res = await Promise.race([fetchRec, timeout(TIMEOUT_SEC)]);
-        const data = await res.json();
-
-        if (data.status === "failure")
-          throw new Error(`${data.message} (${data.code})`);
-
-        console.log(data);
-
+      const getRecipe = (data) => {
         setRecipe(data);
         setRecipeIsLoading(false);
-      } catch (error) {
-        throwAsyncError(error);
-        setRecipeIsLoading(false);
-      }
-    };
-    getRecipe();
-  }, [recipeId, throwAsyncError]);
+      };
+
+      getDataFromHttp({ url: url }, getRecipe);
+    } else {
+      const getRecipe = async () => {
+        try {
+          const recipeRef = doc(firestore, "recipes", `${recipeId}`);
+          const recipeDoc = await getDoc(recipeRef);
+          const recipe = recipeDoc.data();
+
+          setRecipe(recipe);
+          setRecipeIsLoading(false);
+        } catch (error) {
+          throwAsyncError(error);
+        }
+      };
+      getRecipe();
+    }
+  }, [recipeId, throwAsyncError, dailyLimitReached, getDataFromHttp]);
 
   return (
     <Card>

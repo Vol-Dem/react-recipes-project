@@ -3,76 +3,29 @@ import { useState, useEffect, useContext } from "react";
 import Card from "../../ui/Card";
 import RecipeItem from "../recipe-item/RecipeItem";
 import Sort from "../sort/Sort";
-import Spinner from "../../ui/Spinner";
 import RecipeContext from "../../../store/recipe-context";
-import { TIMEOUT_SEC, RESULT_NUM } from "../../../variables/constants";
-import { timeout } from "../../../variables/utils";
-import { useThrowAsyncError } from "../../../hooks/use-throw-async-error";
+import Spinner from "../../ui/Spinner";
+import { ReactComponent as ArrowLeftIcon } from "./../../../assets/arrow-left.svg";
+import { ReactComponent as ArrowRightIcon } from "./../../../assets/arrow-right.svg";
 
-function RecipeItemList({ data }) {
-  const [searchResult, setSearchResult] = useState([]);
+function RecipeItemList({
+  data,
+  title,
+  query,
+  epmtyMessage,
+  nextPage,
+  prevPage,
+  isLastPage,
+  currentPage,
+  recipesIsLoading,
+}) {
   const [sortedRecipes, setSortedRecipes] = useState([]);
-  const [recipesIsLoading, setRecipesIsLoading] = useState(false);
-
-  const throwAsyncError = useThrowAsyncError();
 
   const recipeCtx = useContext(RecipeContext);
   const recipeIsOpen = recipeCtx.recipeIsOpen;
 
-  const requestData = data;
-  const title = requestData.query || "Search results";
-
-  useEffect(() => {
-    setRecipesIsLoading(true);
-
-    const getRecipesHandler = async () => {
-      try {
-        const fetchRecs = fetch(
-          `${
-            process.env.REACT_APP_SPOONACULAR_API_URL
-          }/recipes/complexSearch?apiKey=${
-            process.env.REACT_APP_SPOONACULAR_API_KEY
-          }&query=${requestData.query}&cuisine=${requestData.cuisine}&diet=${
-            requestData.diet
-          }&intolerances=${requestData.intolerance}&type=${requestData.type}${
-            requestData.maxReadyTime &&
-            `&maxReadyTime=${requestData.maxReadyTime}`
-          }${
-            requestData.minCalories && `&minCalories=${requestData.minCalories}`
-          }${
-            requestData.maxCalories && `&maxCalories=${requestData.maxCalories}`
-          }&number=${RESULT_NUM}&addRecipeNutrition=true`
-        );
-
-        const res = await Promise.race([fetchRecs, timeout(TIMEOUT_SEC)]);
-        const data = await res.json();
-        console.log(data);
-
-        if (data.status === "failure")
-          throw new Error(`${data.message} (${data.code})`);
-
-        const recipies = data.results?.map((recipe) => {
-          return {
-            id: recipe.id,
-            title: recipe.title,
-            img: recipe.image,
-            time: recipe.readyInMinutes,
-            calories: recipe.nutrition.nutrients.find(
-              ({ name }) => name === "Calories"
-            ).amount,
-            servings: recipe.servings,
-          };
-        });
-
-        setSearchResult(recipies);
-        setRecipesIsLoading(false);
-      } catch (error) {
-        throwAsyncError(error);
-        setRecipesIsLoading(false);
-      }
-    };
-    getRecipesHandler();
-  }, [requestData, throwAsyncError]);
+  const searchResult = data;
+  const sectionTitle = title || query || "Search results";
 
   const sortHandler = (e) => {
     if (!searchResult.length) {
@@ -105,17 +58,15 @@ function RecipeItemList({ data }) {
     >
       <Card>
         {recipesIsLoading && <Spinner />}
-        {!recipesIsLoading && searchResult.length === 0 && (
-          <p className={classes.fallback}>
-            {`No results for "${requestData.query}". Try checking your spelling`}
-          </p>
+        {searchResult.length === 0 && !recipesIsLoading && (
+          <p className={classes["search-result__empty"]}>{epmtyMessage}</p>
         )}
         {searchResult.length !== 0 && (
           <>
             <div className={classes["search-result__head"]}>
               {!recipeIsOpen && (
                 <h1 className={classes["search-result__title"]}>
-                  {title} ({searchResult.length})
+                  {sectionTitle}
                 </h1>
               )}
               <Sort onSort={sortHandler} />
@@ -130,6 +81,27 @@ function RecipeItemList({ data }) {
               ))}
             </div>
           </>
+        )}
+        {!recipesIsLoading && searchResult.length !== 0 && (
+          <div className={classes["search-result__pagination"]}>
+            {currentPage > 1 && (
+              <div className={classes["search-result__btn"]}>
+                <button onClick={prevPage}>
+                  <ArrowLeftIcon />
+                </button>
+              </div>
+            )}
+            <span className={classes["search-result__page"]}>
+              {currentPage}
+            </span>
+            {!isLastPage && (
+              <div className={classes["search-result__btn"]}>
+                <button onClick={nextPage}>
+                  <ArrowRightIcon />
+                </button>
+              </div>
+            )}
+          </div>
         )}
       </Card>
     </div>

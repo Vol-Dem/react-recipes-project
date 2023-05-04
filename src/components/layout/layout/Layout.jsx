@@ -9,11 +9,21 @@ import UserNavigation from "../navigation/UserNavigation";
 import Buttton from "../../ui/Button";
 import Modal from "../../ui/Modal";
 import AuthForm from "../../Auth/AuthForm";
+import ErrorBoundary from "../../error-boundary/ErrorBoundary";
+import { useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 const Layout = () => {
   const isAuth = useSelector((state) => state.auth.isLoggedIn);
   const authIsOpen = useSelector((state) => state.auth.authFormIsOpen);
   const dispatch = useDispatch();
+
+  const location = useLocation();
+  const [locationPath, setLocationPath] = useState(0);
+
+  useEffect(() => {
+    setLocationPath(location.pathname);
+  }, [location]);
 
   const openAuth = () => {
     dispatch(authActions.openAuthForm());
@@ -37,7 +47,9 @@ const Layout = () => {
       </Header>
 
       <main>
-        <Outlet />
+        <ErrorBoundary key={locationPath}>
+          <Outlet />
+        </ErrorBoundary>
       </main>
       {authIsOpen && (
         <Modal onClose={closeAuth}>

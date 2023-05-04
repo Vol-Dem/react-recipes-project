@@ -1,22 +1,12 @@
 import classes from "./Input.module.scss";
-// import { forwardRef } from "react";
 
 const Input = (props) => {
-  const {
-    label,
-    input,
-    // disabled,
-    className,
-    onBlur,
-    onChange,
-    error,
-    autoFocus,
-  } = props;
+  const { label, input, className, onBlur, onChange, error, autoFocus } = props;
   const onBlurIvent = (e) => {
-    onBlur(e.target.value);
+    onBlur && onBlur(e.target.value);
   };
   const onChangeIvent = (e) => {
-    onChange(e.target.value);
+    onChange && onChange(e.target.value);
   };
 
   return (
@@ -27,11 +17,8 @@ const Input = (props) => {
         </label>
       )}
       <input
-        // ref={ref}
-        // onChange={initialValue}
         onBlur={onBlurIvent}
         onChange={onChangeIvent}
-        // disabled={disabled}
         {...input}
         className={`${classes.input} ${className || ""}`}
         autoFocus={autoFocus}
