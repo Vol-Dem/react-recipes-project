@@ -1,21 +1,23 @@
-import "./App.css";
+// import classes from "./App.module.scss";
 import Layout from "./components/layout/layout/Layout";
-import Homepage from "./pages/Homepage";
 import {
   createBrowserRouter,
   RouterProvider,
   createRoutesFromElements,
   Route,
 } from "react-router-dom";
-import About from "./pages/About";
 import RecipeProvider from "./store/RecipeProvider";
 import { useDispatch, useSelector } from "react-redux";
-import Profile from "./pages/Profile";
 import ErrorMessage from "./components/ui/ErrorMessage";
 import { useEffect } from "react";
 import { initAuth } from "./store/auth";
-import Favorites from "./pages/Favorites";
 import Card from "./components/ui/Card";
+import { lazy } from "react";
+
+const Homepage = lazy(() => import("./pages/Homepage"));
+const About = lazy(() => import("./pages/About"));
+const Profile = lazy(() => import("./pages/Profile"));
+const Favorites = lazy(() => import("./pages/Favorites"));
 
 function App() {
   const isAuth = useSelector((state) => state.auth.isLoggedIn);

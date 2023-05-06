@@ -12,10 +12,20 @@ import AuthForm from "../../Auth/AuthForm";
 import ErrorBoundary from "../../error-boundary/ErrorBoundary";
 import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { Suspense } from "react";
+import Spinner from "../../ui/Spinner";
+import Notification from "../../ui/Notification";
 
 const Layout = () => {
   const isAuth = useSelector((state) => state.auth.isLoggedIn);
   const authIsOpen = useSelector((state) => state.auth.authFormIsOpen);
+  const notificationIsShown = useSelector(
+    (state) => state.notification.isShown
+  );
+  const notificationTitle = useSelector((state) => state.notification.title);
+  const notificationMessage = useSelector(
+    (state) => state.notification.message
+  );
   const dispatch = useDispatch();
 
   const location = useLocation();
@@ -47,14 +57,19 @@ const Layout = () => {
       </Header>
 
       <main>
-        <ErrorBoundary key={locationPath}>
-          <Outlet />
-        </ErrorBoundary>
+        <Suspense fallback={<Spinner />}>
+          <ErrorBoundary key={locationPath}>
+            <Outlet />
+          </ErrorBoundary>
+        </Suspense>
       </main>
       {authIsOpen && (
         <Modal onClose={closeAuth}>
           <AuthForm />
         </Modal>
+      )}
+      {notificationIsShown && (
+        <Notification title={notificationTitle} message={notificationMessage} />
       )}
     </div>
   );

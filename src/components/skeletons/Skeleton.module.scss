@@ -1,0 +1,62 @@
+.skeleton {
+  background-color: #dfdfdf;
+  // margin: 1rem 0;
+  border-radius: 0.6rem;
+
+  &.title {
+    height: 1.4rem;
+    // width: 100%;
+    margin-bottom: 1rem;
+  }
+
+  &.btn {
+    height: 1.2rem;
+    width: 25%;
+    margin: 1.5rem 1rem 0.6rem 1rem;
+  }
+
+  &.text {
+    height: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  &.img {
+    width: 100%;
+    height: 100%;
+  }
+  &.circle {
+    height: 6.5rem;
+    width: 6.5rem;
+    border-radius: 50%;
+  }
+}
+
+.width-100 {
+  width: 100%;
+}
+
+.width-80 {
+  width: 80%;
+}
+
+.width-50 {
+  width: 50%;
+}
+
+.width-40 {
+  width: 40%;
+}
+
+.width-20 {
+  width: 20%;
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}

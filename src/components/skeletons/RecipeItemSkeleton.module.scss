@@ -1,0 +1,67 @@
+@use "./../../variables/variables.scss" as var;
+
+.recipe-card {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 1fr;
+  background-color: var.$color-background-light;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0px 3px 9px rgba(var.$color-black, 0.2);
+
+  &--side {
+    grid-template-columns: 2fr 4fr;
+  }
+
+  &--side &__img {
+    min-height: 12rem;
+  }
+
+  &__img {
+    min-height: 14rem;
+  }
+
+  &__description {
+    padding: 0.9rem 2rem 2rem;
+  }
+
+  &__info {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    border-bottom: 1px solid var.$color-grey;
+    margin-bottom: 1rem;
+    padding-bottom: 1.2rem;
+  }
+
+  &__param {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+
+    & svg {
+      color: #dfdfdf;
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+  }
+}
+
+@media (max-width: 1025px) {
+  .recipe-card__description {
+    padding: 1rem 1.2rem 1.5rem;
+  }
+}
+
+@media (max-width: 425px) {
+  .recipe-card {
+    grid-template-columns: 2fr 4fr;
+  }
+
+  .recipe-card__img {
+    grid-row: 1 / 3;
+  }
+}

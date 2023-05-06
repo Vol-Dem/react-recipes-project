@@ -1,8 +1,6 @@
 import classes from "./Homepage.module.scss";
 import SearchBox from "../components/search/SearchBox";
 import { useState, useContext } from "react";
-import RecipeItemList from "../components/recipe/recipe-item-list/RecipeItemList";
-import Recipe from "../components/recipe/recipe/Recipe";
 import Logo from "../components/layout/logo/Logo";
 import RecipeContext from "../store/recipe-context";
 import ErrorBoundary from "../components/error-boundary/ErrorBoundary";
@@ -22,6 +20,14 @@ import {
 import firebaseApp from "../config";
 import { useGetDataFromFirebase } from "../hooks/use-get-data-from-firebase";
 import { useGetDataFromHttp } from "../hooks/use-get-data-from-http";
+import { lazy } from "react";
+import { Suspense } from "react";
+import Spinner from "../components/ui/Spinner";
+
+const RecipeItemList = lazy(() =>
+  import("../components/recipe/recipe-item-list/RecipeItemList")
+);
+const Recipe = lazy(() => import("../components/recipe/recipe/Recipe"));
 
 const firestore = getFirestore(firebaseApp);
 const recipeRef = collection(firestore, "recipes");
@@ -231,25 +237,29 @@ const Homepage = () => {
       >
         <div>
           {searchResultIsOpen && (
-            <ErrorBoundary>
-              <RecipeItemList
-                data={recipesPerPage}
-                query={formData.query}
-                epmtyMessage={epmtyMessage}
-                nextPage={nextPageHandler}
-                prevPage={prevPageHandler}
-                isLastPage={isLastPage}
-                currentPage={currentPage}
-                recipesIsLoading={recipesIsLoading}
-              />
-            </ErrorBoundary>
+            <Suspense fallback={<Spinner />}>
+              <ErrorBoundary>
+                <RecipeItemList
+                  data={recipesPerPage}
+                  query={formData.query}
+                  epmtyMessage={epmtyMessage}
+                  nextPage={nextPageHandler}
+                  prevPage={prevPageHandler}
+                  isLastPage={isLastPage}
+                  currentPage={currentPage}
+                  recipesIsLoading={recipesIsLoading}
+                />
+              </ErrorBoundary>
+            </Suspense>
           )}
         </div>
 
         {recipeIsOpen && (
-          <ErrorBoundary key={recipeId}>
-            <Recipe />
-          </ErrorBoundary>
+          <Suspense fallback={<Spinner />}>
+            <ErrorBoundary key={recipeId}>
+              <Recipe />
+            </ErrorBoundary>
+          </Suspense>
         )}
       </section>
     </>

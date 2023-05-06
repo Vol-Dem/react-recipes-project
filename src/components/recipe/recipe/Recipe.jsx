@@ -1,6 +1,6 @@
 import classes from "./Recipe.module.scss";
 import { useState, useEffect, useContext } from "react";
-import Spinner from "../../ui/Spinner";
+// import Spinner from "../../ui/Spinner";
 import Card from "../../ui/Card";
 import RecipeContext from "../../../store/recipe-context";
 import Nutrition from "./nutrition/Nutrition";
@@ -15,6 +15,8 @@ import { useThrowAsyncError } from "../../../hooks/use-throw-async-error";
 import { getDoc, getFirestore, doc } from "firebase/firestore";
 import firebaseApp from "../../../config";
 import { useGetDataFromHttp } from "../../../hooks/use-get-data-from-http";
+import RecipeHeadSkeleton from "../../skeletons/RecipeHeadSkeleton";
+import RecipeDescriptionSkeleton from "../../skeletons/RecipeDescriptionSkeleton";
 
 const firestore = getFirestore(firebaseApp);
 
@@ -67,18 +69,28 @@ const Recipe = () => {
 
   return (
     <Card>
-      {recipeIsLoading && <Spinner />}
-      {recipeIsLoading || (
-        <div className={classes.recipe}>
-          <div className={classes["recipe__head"]}>
-            <ButtonBack onClick={closeRecipe} />
-            <Diets diets={recipe.diets} />
-            <h1 className={classes["recipe__title"]}>{recipe.title}</h1>
-            <div className={classes["recipe__img"]}>
-              <img src={recipe.image} alt={recipe.title} />
+      {/* {recipeIsLoading && <Spinner />} */}
+      <div className={classes.recipe}>
+        <div className={classes["recipe__head-container"]}>
+          {recipeIsLoading && <RecipeHeadSkeleton />}
+          {!recipeIsLoading && (
+            <div
+              className={`${classes["recipe__head"]} ${classes["animation-show"]}`}
+            >
+              <ButtonBack onClick={closeRecipe} />
+              <Diets diets={recipe.diets} />
+              <h1 className={classes["recipe__title"]}>{recipe.title}</h1>
+              <div className={classes["recipe__img"]}>
+                <img src={recipe.image} alt={recipe.title} />
+              </div>
             </div>
-          </div>
-          <div className={classes["recipe__description"]}>
+          )}
+        </div>
+        {recipeIsLoading && <RecipeDescriptionSkeleton />}
+        {!recipeIsLoading && (
+          <div
+            className={`${classes["recipe__description"]} ${classes["animation-show"]}`}
+          >
             <Info
               readyInMinutes={recipe.readyInMinutes}
               servings={recipe.servings}
@@ -104,8 +116,8 @@ const Recipe = () => {
               }}
             />
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </Card>
   );
 };

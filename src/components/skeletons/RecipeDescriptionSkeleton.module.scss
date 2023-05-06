@@ -1,0 +1,39 @@
+@use "./../../variables/variables.scss" as var;
+
+.recipe {
+  animation: show 0.4s ease-in;
+}
+
+.recipe__subtitle {
+  color: #dfdfdf;
+  font-size: 4.2rem;
+  font-family: var.$font-family-secondary;
+  font-weight: 500;
+  margin: 4.6rem 0 1.6rem;
+}
+
+.recipe__description {
+  padding: 2.8rem 2.8rem 0 2.8rem;
+  animation: show 0.4s ease-in;
+}
+
+.nutrition {
+  display: flex;
+  gap: 3rem;
+}
+
+@media (max-width: 375px) {
+  .nutrition {
+    gap: 1rem;
+  }
+}
+
+@keyframes show {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}

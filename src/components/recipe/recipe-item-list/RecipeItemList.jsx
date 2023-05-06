@@ -4,9 +4,9 @@ import Card from "../../ui/Card";
 import RecipeItem from "../recipe-item/RecipeItem";
 import Sort from "../sort/Sort";
 import RecipeContext from "../../../store/recipe-context";
-import Spinner from "../../ui/Spinner";
 import { ReactComponent as ArrowLeftIcon } from "./../../../assets/arrow-left.svg";
 import { ReactComponent as ArrowRightIcon } from "./../../../assets/arrow-right.svg";
+import RecipeItemSkeleton from "../../skeletons/RecipeItemSkeleton";
 
 function RecipeItemList({
   data,
@@ -26,6 +26,12 @@ function RecipeItemList({
 
   const searchResult = data;
   const sectionTitle = title || query || "Search results";
+  const recipes = sortedRecipes.map((recipe) => (
+    <RecipeItem key={recipe.id} recipe={recipe} />
+  ));
+  const recipeSkeleton = [
+    ...Array(+process.env.REACT_APP_AMOUNT_PER_PAGE).keys(),
+  ].map((i) => <RecipeItemSkeleton key={i} />);
 
   const sortHandler = (e) => {
     if (!searchResult.length) {
@@ -57,32 +63,26 @@ function RecipeItemList({
       }`}
     >
       <Card>
-        {recipesIsLoading && <Spinner />}
         {searchResult.length === 0 && !recipesIsLoading && (
           <p className={classes["search-result__empty"]}>{epmtyMessage}</p>
         )}
+
+        <div className={classes["search-result__head"]}>
+          {!recipeIsOpen && (
+            <h1 className={classes["search-result__title"]}>{sectionTitle}</h1>
+          )}
+          <Sort onSort={sortHandler} />
+        </div>
+        <div
+          className={`${classes["cards-container"]} ${
+            recipeIsOpen ? classes["cards-container--side"] : ""
+          }`}
+        >
+          {searchResult.length !== 0 && !recipesIsLoading && recipes}
+          {recipesIsLoading && recipeSkeleton}
+        </div>
+
         {searchResult.length !== 0 && (
-          <>
-            <div className={classes["search-result__head"]}>
-              {!recipeIsOpen && (
-                <h1 className={classes["search-result__title"]}>
-                  {sectionTitle}
-                </h1>
-              )}
-              <Sort onSort={sortHandler} />
-            </div>
-            <div
-              className={`${classes["cards-container"]} ${
-                recipeIsOpen ? classes["cards-container--side"] : ""
-              }`}
-            >
-              {sortedRecipes.map((recipe) => (
-                <RecipeItem key={recipe.id} recipe={recipe} />
-              ))}
-            </div>
-          </>
-        )}
-        {!recipesIsLoading && searchResult.length !== 0 && (
           <div className={classes["search-result__pagination"]}>
             {currentPage > 1 && (
               <div className={classes["search-result__btn"]}>
