@@ -9,7 +9,9 @@
   overflow: hidden;
   cursor: pointer;
   box-shadow: 0px 3px 9px rgba(var.$color-black, 0.2);
-  // transition: all 0.3s;
+  transition: all 0.3s;
+  text-decoration: none;
+  color: #304750;
   animation: show 0.4s ease-in;
 
   &:hover {
@@ -37,15 +39,11 @@
     color: var.$color-text-light;
   }
 
-  &__img {
+  &__img-container {
     position: relative;
     min-height: 14rem;
 
-    & img {
-      max-width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+    transition: all 0.5s;
 
     &--fav {
       position: absolute;
@@ -55,6 +53,17 @@
       width: 3.6rem;
       color: rgb(142, 142, 142);
       fill: var.$color-primary;
+    }
+  }
+
+  &__img {
+    max-width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 1;
+    transition: all 0.8s;
+    &--hidden {
+      opacity: 0;
     }
   }
 
@@ -111,6 +120,16 @@
   .active &__btn {
     color: var.$color-text-light;
   }
+}
+
+.food {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  fill: #758488;
+  height: 10rem;
+  width: 10rem;
 }
 
 @media (max-width: 1025px) {

@@ -1,6 +1,7 @@
 @use "./../../variables/variables.scss" as var;
 
 .notification {
+  display: grid;
   position: fixed;
   bottom: 2%;
   left: 50%;
@@ -8,10 +9,10 @@
   width: 90%;
   max-width: 90rem;
   height: auto;
+  grid-template-columns: auto 1fr auto;
   background-color: rgba(255, 255, 255, 0.98);
   box-shadow: 0rem 1rem 3rem rgba(0, 0, 0, 0.2);
   padding: 3.6rem;
-  display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 2rem;

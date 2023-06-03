@@ -1,0 +1,15 @@
+.error-page {
+  align-items: center;
+  height: 100vh;
+  &__title {
+    font-size: 15rem;
+  }
+
+  &__subtitle {
+    font-size: 3rem;
+  }
+
+  &__message {
+    font-size: 2.6rem;
+  }
+}

@@ -10,21 +10,41 @@ function MainNavigation() {
       <nav className={classes.nav}>
         <ul className={classes["nav__links"]}>
           <li>
-            <NavLink to="/">Home</NavLink>
-          </li>
-          <li>
-            <NavLink to="about">About</NavLink>
+            <NavLink
+              to="/"
+              className={(nav) => (nav.isActive ? classes.active : "")}
+            >
+              Home
+            </NavLink>
           </li>
           {isAuth && (
             <>
               <li>
-                <NavLink to="profile">Profile</NavLink>
+                <NavLink
+                  to="profile"
+                  className={(nav) => (nav.isActive ? classes.active : "")}
+                >
+                  Profile
+                </NavLink>
               </li>
               <li>
-                <NavLink to="favorites">Favorites</NavLink>
+                <NavLink
+                  to="favorites"
+                  className={(nav) => (nav.isActive ? classes.active : "")}
+                >
+                  Favorites
+                </NavLink>
               </li>
             </>
           )}
+          <li>
+            <NavLink
+              to="about"
+              className={(nav) => (nav.isActive ? classes.active : "")}
+            >
+              About
+            </NavLink>
+          </li>
         </ul>
       </nav>
     </>

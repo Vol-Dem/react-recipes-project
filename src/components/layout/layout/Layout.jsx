@@ -9,9 +9,6 @@ import UserNavigation from "../navigation/UserNavigation";
 import Buttton from "../../ui/Button";
 import Modal from "../../ui/Modal";
 import AuthForm from "../../Auth/AuthForm";
-import ErrorBoundary from "../../error-boundary/ErrorBoundary";
-import { useLocation } from "react-router-dom";
-import { useState, useEffect } from "react";
 import { Suspense } from "react";
 import Spinner from "../../ui/Spinner";
 import Notification from "../../ui/Notification";
@@ -27,13 +24,6 @@ const Layout = () => {
     (state) => state.notification.message
   );
   const dispatch = useDispatch();
-
-  const location = useLocation();
-  const [locationPath, setLocationPath] = useState(0);
-
-  useEffect(() => {
-    setLocationPath(location.pathname);
-  }, [location]);
 
   const openAuth = () => {
     dispatch(authActions.openAuthForm());
@@ -58,9 +48,7 @@ const Layout = () => {
 
       <main>
         <Suspense fallback={<Spinner />}>
-          <ErrorBoundary key={locationPath}>
-            <Outlet />
-          </ErrorBoundary>
+          <Outlet />
         </Suspense>
       </main>
       {authIsOpen && (

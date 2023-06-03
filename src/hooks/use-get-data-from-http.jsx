@@ -1,15 +1,17 @@
 import { useThrowAsyncError } from "./use-throw-async-error";
 import { TIMEOUT_SEC } from "../variables/constants";
 import { timeout } from "../variables/utils";
-import { useContext } from "react";
-import RecipeContext from "../store/recipe-context";
 import { useCallback } from "react";
+import { useDispatch } from "react-redux";
+import { getRecipes, recipeActions } from "../store/recipe";
+import { notificationActions } from "../store/notification";
+import { useMatches, useNavigate } from "react-router-dom";
 
 export const useGetDataFromHttp = () => {
   const throwAsyncError = useThrowAsyncError();
-
-  const recipeCtx = useContext(RecipeContext);
-  const onDailyLimitReached = recipeCtx.onDailyLimitReached;
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const matches = useMatches();
 
   const getData = useCallback(
     async ({ url, method, headers, body }, transformData) => {
@@ -24,7 +26,17 @@ export const useGetDataFromHttp = () => {
         const data = await res.json();
 
         if (data.code === 402) {
-          onDailyLimitReached();
+          dispatch(recipeActions.setDailyLimitIsReached());
+          dispatch(recipeActions.resetRecipes());
+          navigate(`${matches[1].pathname}`);
+          dispatch(getRecipes({}));
+          dispatch(
+            notificationActions.showNotification({
+              title: "Daily limit of API is over :(",
+              message:
+                "The application will now enter test mode. Search result will remain the same. You can still use other features!",
+            })
+          );
           return;
         }
 
@@ -36,7 +48,7 @@ export const useGetDataFromHttp = () => {
         throwAsyncError(error);
       }
     },
-    [onDailyLimitReached, throwAsyncError]
+    [throwAsyncError, dispatch, navigate, matches]
   );
   return getData;
 };

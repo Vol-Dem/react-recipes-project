@@ -1,7 +1,11 @@
 @use "./../../../variables/variables.scss" as var;
 
 .search-result {
-  height: 100%;
+  height: inherit;
+
+  &__container {
+    height: 100%;
+  }
 
   &__head {
     display: flex;

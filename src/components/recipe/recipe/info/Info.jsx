@@ -13,11 +13,11 @@ const Info = ({ readyInMinutes, servings, recipeId }) => {
     if (!isAuth) {
       dispatch(authActions.openAuthForm());
     } else {
-      dispatch(sendFav(recipeId));
+      dispatch(sendFav(+recipeId));
     }
   };
   const favList = useSelector((state) => state.fav.favList);
-  const isFav = isAuth && favList.includes(recipeId);
+  const isFav = isAuth && favList.includes(+recipeId);
 
   return (
     <div className={classes["recipe__info"]}>

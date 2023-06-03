@@ -6,13 +6,12 @@ import {
   createRoutesFromElements,
   Route,
 } from "react-router-dom";
-import RecipeProvider from "./store/RecipeProvider";
 import { useDispatch, useSelector } from "react-redux";
-import ErrorMessage from "./components/ui/ErrorMessage";
 import { useEffect } from "react";
 import { initAuth } from "./store/auth";
-import Card from "./components/ui/Card";
 import { lazy } from "react";
+import Recipe from "./components/recipe/recipe/Recipe";
+import ErrorPage from "./pages/ErrorPage";
 
 const Homepage = lazy(() => import("./pages/Homepage"));
 const About = lazy(() => import("./pages/About"));
@@ -29,28 +28,34 @@ function App() {
 
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route
-        errorElement={
-          <Card>
-            <ErrorMessage>404</ErrorMessage>
-          </Card>
-        }
-        path="/"
-        element={<Layout />}
-      >
-        <Route index element={<Homepage />} />
+      <Route errorElement={<ErrorPage />} path="/" element={<Layout />}>
+        <Route path="/" errorElement={<ErrorPage />} element={<Homepage />}>
+          <Route
+            path="recipe/:recipeId"
+            errorElement={<ErrorPage />}
+            element={<Recipe />}
+          ></Route>
+        </Route>
         <Route path="about" element={<About />} />
         {isAuth && <Route path="profile" element={<Profile />} />}
-        {isAuth && <Route path="favorites" element={<Favorites />} />}
+        {isAuth && (
+          <Route
+            path="favorites"
+            errorElement={<ErrorPage />}
+            element={<Favorites />}
+          >
+            <Route
+              path="recipe/:recipeId"
+              errorElement={<ErrorPage />}
+              element={<Recipe />}
+            />
+          </Route>
+        )}
       </Route>
     )
   );
 
-  return (
-    <RecipeProvider>
-      <RouterProvider router={router} />
-    </RecipeProvider>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;
