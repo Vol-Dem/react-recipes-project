@@ -1,6 +1,8 @@
+@use "./../variables/variables.scss" as var;
+
 .error-page {
-  align-items: center;
   height: 100vh;
+  padding: 3rem;
   &__title {
     font-size: 15rem;
   }
@@ -12,4 +14,30 @@
   &__message {
     font-size: 2.6rem;
   }
+
+  &__link {
+    text-decoration: none;
+    font-size: 2.8rem;
+    color: darken(var.$color-primary, 10%);
+    font-weight: 600;
+    font-family: inherit;
+    padding: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+
+    &:hover {
+      color: darken(var.$color-primary, 15%);
+    }
+
+    &:disabled {
+      color: var.$color-grey;
+    }
+  }
+}
+
+.error-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.4rem;
 }

@@ -2,7 +2,9 @@ import { useSelector } from "react-redux";
 import classes from "./Sort.module.scss";
 
 const Sort = ({ onSort }) => {
-  const orderBy = useSelector((state) => state.recipe.orderBy).join("-");
+  const orderBy = Object.values(
+    useSelector((state) => state.recipe.orderBy)
+  ).join("-");
 
   return (
     <div className={classes["search-result__sort"]}>

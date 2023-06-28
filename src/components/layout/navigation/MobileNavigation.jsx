@@ -1,9 +1,11 @@
 import { useState } from "react";
 import classes from "./MobileNavigation.module.scss";
 import { NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const MobileNavigation = () => {
   const [navIsOpen, setNavIsOpen] = useState(false);
+  const isAuth = useSelector((state) => state.auth.isLoggedIn);
 
   const navSwitch = () => {
     setNavIsOpen((prevState) => !prevState);
@@ -24,14 +26,18 @@ const MobileNavigation = () => {
           <li>
             <NavLink to="/">Home</NavLink>
           </li>
+          {isAuth && (
+            <>
+              <li>
+                <NavLink to="profile">Profile</NavLink>
+              </li>
+              <li>
+                <NavLink to="favorites">Favorites</NavLink>
+              </li>
+            </>
+          )}
           <li>
             <NavLink to="about">About</NavLink>
-          </li>
-          <li>
-            <NavLink to="profile">Profile</NavLink>
-          </li>
-          <li>
-            <NavLink to="favorites">Favorites</NavLink>
           </li>
         </ul>
       </nav>

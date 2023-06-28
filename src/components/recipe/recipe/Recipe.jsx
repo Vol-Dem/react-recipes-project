@@ -83,7 +83,7 @@ const Recipe = () => {
   return (
     <>
       <Card>
-        <div className={classes.recipe}>
+        <div className={classes.recipe} data-testid="recipe">
           <div className={classes["recipe__head-container"]}>
             {recipeIsLoading && <RecipeHeadSkeleton />}
             {!recipeIsLoading && (

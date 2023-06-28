@@ -83,16 +83,22 @@ function SearchBox({ getFormData }) {
           onChange={searchQueryHandler}
           placeholder={searchPlaceholder}
           className={classes["search__form-input"]}
+          data-testid="search-input"
         />
 
         <button
           type="button"
+          data-testid="filter-btn"
           className={classes["search__filter-btn"]}
           onClick={filterOpenHandler}
         >
           <FilterIcon />
         </button>
-        <button type="submit" className={classes["search__form-btn"]}>
+        <button
+          type="submit"
+          data-testid="search-submit"
+          className={classes["search__form-btn"]}
+        >
           <SearchIcon />
           <span className={classes["hidden-xs"]}>Search</span>
         </button>

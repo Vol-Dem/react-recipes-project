@@ -13,6 +13,7 @@ import {
   recipeActions,
   sortRecipes,
 } from "../../../store/recipe";
+import ErrorMessage from "../../ui/ErrorMessage";
 
 const RecipeItemList = ({ firebaseRef, filter }) => {
   const dispatch = useDispatch();
@@ -27,6 +28,7 @@ const RecipeItemList = ({ firebaseRef, filter }) => {
   );
   const title = useSelector((state) => state.recipe.title);
   const emptyMessage = useSelector((state) => state.recipe.emptyMessage);
+  const errorMessage = useSelector((state) => state.recipe.errorMessage);
 
   const recipes = recipesPerPage.map((recipe) => (
     <RecipeItem key={recipe.id} recipe={recipe} />
@@ -47,12 +49,23 @@ const RecipeItemList = ({ firebaseRef, filter }) => {
   const sortHandler = (e) => {
     const sort = e.target.value;
     const [sortBy, sortType] = sort.split("-");
-    dispatch(recipeActions.setOrderBy([sortBy, sortType]));
+    dispatch(recipeActions.setOrderBy({ sortBy, sortType }));
     dispatch(sortRecipes(firebaseRef, filter));
   };
 
+  if (errorMessage) {
+    return (
+      <Card>
+        <ErrorMessage>{errorMessage}</ErrorMessage>
+      </Card>
+    );
+  }
+
   return (
-    <div className={classes["search-result__container"]}>
+    <div
+      className={classes["search-result__container"]}
+      data-testid="recipe-item-list"
+    >
       <div
         className={`${classes["search-result"]} ${
           recipeIsOpen ? classes["hidden-md"] : ""

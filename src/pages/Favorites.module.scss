@@ -8,3 +8,10 @@
   grid-template-columns: 33rem 3fr;
   gap: 2rem;
 }
+
+@media (max-width: 768px) {
+  .recipe-columns {
+    grid-template-columns: 0fr 1fr;
+    gap: 0rem;
+  }
+}

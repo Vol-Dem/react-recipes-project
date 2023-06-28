@@ -35,7 +35,9 @@ const AuthForm = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(authActions.setErrorMessage(""));
+    return () => {
+      dispatch(authActions.setErrorMessage(""));
+    };
   }, [dispatch]);
 
   const validateEmailOnChange = (value) => {
@@ -102,11 +104,7 @@ const AuthForm = () => {
           </ErrorMessage>
         )}
         <div className={classes["auth__controls"]}>
-          <ButttonSecondary
-            type="button"
-            onClick={signUp}
-            disabled={isLoading}
-          >
+          <ButttonSecondary type="button" onClick={signUp} disabled={isLoading}>
             {isLogin ? "Create Account" : "Log in"}
           </ButttonSecondary>
           <Buttton

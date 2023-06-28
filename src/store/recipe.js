@@ -8,17 +8,16 @@ import {
   query,
   startAt,
 } from "firebase/firestore";
-import { timeout } from "../variables/utils";
-import { TIMEOUT_SEC } from "../variables/constants";
 import { notificationActions } from "./notification";
+import axios from "axios";
 
 const recipeInitialState = {
   searchResult: [],
   sortedRecipes: [],
   recipesPerPage: [],
-  orderBy: [],
+  orderBy: {},
   recipesIsLoading: false,
-  currentPage: null,
+  currentPage: 1,
   isLastPage: false,
   dailyLimitIsReached: false,
   title: "",
@@ -72,20 +71,25 @@ const recipeSlice = createSlice({
   },
 });
 
-export const setRecipesPerPageFromApi = () => {
+export const splitRecipesPerPage = () => {
   return (dispatch, getState) => {
-    const currentPage = getState().recipe.currentPage;
+    const dailyLimitIsReached = getState().recipe.dailyLimitIsReached;
     const sortedRecipes = getState().recipe.sortedRecipes;
-    const start = (currentPage - 1) * +process.env.REACT_APP_AMOUNT_PER_PAGE;
-    const end = currentPage * +process.env.REACT_APP_AMOUNT_PER_PAGE;
-    const recipes = sortedRecipes.slice(start, end);
-    const amountOfPages = Math.ceil(
-      sortedRecipes.length / +process.env.REACT_APP_AMOUNT_PER_PAGE
-    );
+    if (!dailyLimitIsReached) {
+      const currentPage = getState().recipe.currentPage;
+      const start = (currentPage - 1) * +process.env.REACT_APP_AMOUNT_PER_PAGE;
+      const end = currentPage * +process.env.REACT_APP_AMOUNT_PER_PAGE;
+      const recipes = sortedRecipes.slice(start, end);
+      const amountOfPages = Math.ceil(
+        sortedRecipes.length / +process.env.REACT_APP_AMOUNT_PER_PAGE
+      );
 
-    dispatch(recipeActions.setRecipesPerPage(recipes));
-    if (currentPage === amountOfPages) {
-      dispatch(recipeActions.setIsLastPage(true));
+      dispatch(recipeActions.setRecipesPerPage(recipes));
+      if (currentPage === amountOfPages) {
+        dispatch(recipeActions.setIsLastPage(true));
+      }
+    } else {
+      dispatch(recipeActions.setRecipesPerPage(sortedRecipes));
     }
   };
 };
@@ -102,10 +106,21 @@ const transformRecipe = (recipe) => {
   };
 };
 
-export const getRecipesFromFireBase = (firebaseQuery) => {
-  return async (dispatch) => {
+export const getDataFromFireBase = (queryParameters, position) => {
+  return async (dispatch, getState) => {
     try {
-      dispatch(recipeActions.setRecipesIsLoading(true));
+      const { sortBy, sortType } = getState().recipe.orderBy;
+      const order = sortBy
+        ? orderBy(`${sortBy}`, `${sortType}`)
+        : orderBy("nutrition");
+
+      let firebaseQuery;
+      if (position) {
+        firebaseQuery = query(...queryParameters, order, position);
+      } else {
+        firebaseQuery = query(...queryParameters, order);
+      }
+
       const recipesData = await getDocs(firebaseQuery);
 
       const isLast =
@@ -117,84 +132,79 @@ export const getRecipesFromFireBase = (firebaseQuery) => {
         if (i === +process.env.REACT_APP_AMOUNT_PER_PAGE) {
           return [];
         }
-        return transformRecipe(recipe);
+        return recipe;
       });
 
       const lastVisibleRecipe = recipesData.docs[recipesData.docs.length - 1];
       const firstVisibleRecipe = recipesData.docs[0];
       firstVisible = firstVisibleRecipe;
       lastVisible = lastVisibleRecipe;
-      dispatch(recipeActions.setRecipesPerPage(recipes));
       dispatch(recipeActions.setIsLastPage(isLast));
-      dispatch(recipeActions.setRecipesIsLoading(false));
+      return recipes;
     } catch (error) {
-      dispatch(recipeActions.setRecipesIsLoading(false));
-      dispatch(recipeActions.setErrorMessage(error.message));
       console.log(error);
+      throw new Error(error);
     }
   };
 };
 
-export const getRecipes = ({ requestUrl, firebaseRef, filter }) => {
+export const getDataFromApi = async (requestUrl) => {
+  try {
+    const response = await axios.get(requestUrl);
+    const data = response.data;
+
+    return data;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+export const getRecipes = ({
+  requestUrl,
+  firebaseRef,
+  filter,
+  position,
+  resultsAmount,
+}) => {
   return async (dispatch, getState) => {
     const dailyLimitIsReached = getState().recipe.dailyLimitIsReached;
 
-    dispatch(recipeActions.setCurrentPage(1));
     dispatch(recipeActions.setIsLastPage(false));
     dispatch(recipeActions.setRecipesIsLoading(true));
 
-    if (!dailyLimitIsReached) {
-      try {
-        const response = fetch(`${requestUrl}`);
-        const res = await Promise.race([response, timeout(TIMEOUT_SEC)]);
-        const data = await res.json();
+    try {
+      let searchResult;
 
-        if (data.code === 402) {
-          dispatch(recipeActions.setDailyLimitIsReached(true));
-          dispatch(getRecipes({ requestUrl, filter }));
-          dispatch(
-            notificationActions.showNotification({
-              title: "Daily limit of API is over :(",
-              message:
-                "The application will now enter test mode. Search result will remain the same. You can still use other features!",
-            })
-          );
-          return;
-        }
-
-        if (data.status === "failure")
-          throw new Error(`${data.message} (${data.code})`);
-
-        const recipesArr = data.results || data;
-
-        const recipes = recipesArr.map((recipe) => {
-          return transformRecipe(recipe);
-        });
-
-        console.log(recipes);
-        dispatch(recipeActions.setSearchResult(recipes));
-        dispatch(sortRecipes());
-        dispatch(setRecipesPerPageFromApi());
-        dispatch(recipeActions.setRecipesIsLoading(false));
-      } catch (error) {
-        dispatch(recipeActions.setErrorMessage(error.message));
-        dispatch(recipeActions.setRecipesIsLoading(false));
-        console.log(error.message);
+      if (!dailyLimitIsReached) {
+        searchResult = await getDataFromApi(requestUrl);
+      } else {
+        searchResult = await dispatch(
+          getDataFromFireBase([firebaseRef, filter, resultsAmount], position)
+        );
       }
-    } else {
-      const [sortBy, sortType] = getState().recipe.orderBy;
-      const order = sortBy
-        ? orderBy(`${sortBy}`, `${sortType}`)
-        : orderBy("nutrition");
+      const recipesArr = searchResult.results || searchResult;
+      const recipes = recipesArr.map((recipe) => transformRecipe(recipe));
 
-      const recipeQuery = query(
-        firebaseRef,
-        filter,
-        order,
-        limit(+process.env.REACT_APP_AMOUNT_PER_PAGE + 1)
-      );
-
-      dispatch(getRecipesFromFireBase(recipeQuery));
+      dispatch(recipeActions.setSearchResult(recipes));
+      dispatch(recipeActions.setSortedRecipes(recipes));
+      dispatch(splitRecipesPerPage());
+    } catch (error) {
+      console.log(error.message);
+      if (error.message.includes("402")) {
+        dispatch(recipeActions.setDailyLimitIsReached(true));
+        dispatch(
+          notificationActions.showNotification({
+            title: "Daily limit of API is over :(",
+            message:
+              "The application will now enter test mode. Search result will remain the same. You can still use other features!",
+          })
+        );
+        dispatch(getRecipes({ firebaseRef, filter, position, resultsAmount }));
+      } else {
+        dispatch(recipeActions.setErrorMessage(error.message));
+      }
+    } finally {
+      dispatch(recipeActions.setRecipesIsLoading(false));
     }
   };
 };
@@ -206,21 +216,11 @@ export const nextPage = (firebaseRef, filter) => {
     dispatch(recipeActions.setCurrentPage(currPage));
 
     if (!dailyLimitIsReached) {
-      dispatch(setRecipesPerPageFromApi());
+      dispatch(splitRecipesPerPage());
     } else {
-      const [sortBy, sortType] = getState().recipe.orderBy;
-      const order = sortBy
-        ? orderBy(`${sortBy}`, `${sortType}`)
-        : orderBy("nutrition");
-
-      const recipeQuery = query(
-        firebaseRef,
-        filter,
-        order,
-        startAt(lastVisible),
-        limit(+process.env.REACT_APP_AMOUNT_PER_PAGE + 1)
-      );
-      dispatch(getRecipesFromFireBase(recipeQuery));
+      const position = startAt(lastVisible);
+      const resultsAmount = limit(+process.env.REACT_APP_AMOUNT_PER_PAGE + 1);
+      dispatch(getRecipes({ firebaseRef, filter, resultsAmount, position }));
     }
   };
 };
@@ -232,23 +232,14 @@ export const prevPage = (firebaseRef, filter) => {
     dispatch(recipeActions.setCurrentPage(currPage));
 
     if (!dailyLimitIsReached) {
-      dispatch(setRecipesPerPageFromApi());
+      dispatch(splitRecipesPerPage());
       dispatch(recipeActions.setIsLastPage(false));
     } else {
-      const [sortBy, sortType] = getState().recipe.orderBy;
-      const order = sortBy
-        ? orderBy(`${sortBy}`, `${sortType}`)
-        : orderBy("nutrition");
-
-      const recipeQuery = query(
-        firebaseRef,
-        filter,
-        order,
-        endAt(firstVisible),
-        limitToLast(+process.env.REACT_APP_AMOUNT_PER_PAGE + 1)
+      const position = endAt(firstVisible);
+      const resultsAmount = limitToLast(
+        +process.env.REACT_APP_AMOUNT_PER_PAGE + 1
       );
-
-      dispatch(getRecipesFromFireBase(recipeQuery));
+      dispatch(getRecipes({ firebaseRef, filter, resultsAmount, position }));
     }
   };
 };
@@ -257,7 +248,7 @@ export const sortRecipes = (firebaseRef, filter) => {
   return (dispatch, getState) => {
     dispatch(recipeActions.setCurrentPage(1));
     dispatch(recipeActions.setIsLastPage(false));
-    const [sortBy, sortType] = getState().recipe.orderBy;
+    const { sortBy, sortType } = getState().recipe.orderBy;
     const searchResult = getState().recipe.searchResult;
     const dailyLimitIsReached = getState().recipe.dailyLimitIsReached;
 
@@ -273,9 +264,10 @@ export const sortRecipes = (firebaseRef, filter) => {
       });
 
       dispatch(recipeActions.setSortedRecipes(sortedRecipes));
-      dispatch(setRecipesPerPageFromApi());
+      dispatch(splitRecipesPerPage());
     } else {
-      dispatch(getRecipes({ firebaseRef, filter }));
+      const resultsAmount = limit(+process.env.REACT_APP_AMOUNT_PER_PAGE + 1);
+      dispatch(getRecipes({ firebaseRef, filter, resultsAmount }));
     }
   };
 };
