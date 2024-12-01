@@ -16,6 +16,7 @@ body {
   font-family: "Raleway", sans-serif;
   line-height: 1;
   font-weight: 400;
+  font-size: 1.4rem;
   min-height: 100vh;
   color: var.$color-text-primary;
   box-sizing: border-box;
@@ -41,8 +42,60 @@ body:before {
   overflow: hidden;
 }
 
+@font-face {
+  font-family: "Grand Hotel";
+  src: url("./fonts/GrandHotel/GrandHotel-Regular.ttf") format("truetype");
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: "Raleway";
+  src: url("./fonts/Raleway/Raleway-Regular.ttf") format("truetype");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Raleway";
+  src: url("./fonts/Raleway/Raleway-Medium.ttf") format("truetype");
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: "Raleway";
+  src: url("./fonts/Raleway/Raleway-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: "Raleway";
+  src: url("./fonts/Raleway/Raleway-Bold.ttf") format("truetype");
+  font-weight: 700;
+}
+
 @media (max-width: 1024px) {
   html {
     font-size: 48%;
+  }
+}
+
+@media (max-width: 768px) {
+  body:before {
+    background: linear-gradient(
+        to right bottom,
+        rgba(38, 50, 55, 0.7),
+        rgba(48, 71, 80, 0.7)
+      ),
+      url("./assets/bg768.webp") no-repeat top/cover;
+  }
+}
+
+@media (max-width: 425px) {
+  body:before {
+    background: linear-gradient(
+        to right bottom,
+        rgba(38, 50, 55, 0.7),
+        rgba(48, 71, 80, 0.7)
+      ),
+      url("./assets/bg425.webp") no-repeat top/cover;
   }
 }

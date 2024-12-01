@@ -9,15 +9,18 @@
   border-radius: 0.4rem;
   display: grid;
   place-content: center;
+  flex-shrink: 0;
+
+  cursor: pointer;
 }
 
 .checkbox:focus {
-  outline: max(2px, 0.2rem) solid var.$color-grey;
+  outline: max(2px, 0.2rem) solid var.$color-gray;
   outline-offset: max(1.4px, 0.1rem);
 }
 
 .checkbox:disabled {
-  background-color: var.$color-grey;
+  background-color: var.$color-gray;
   cursor: not-allowed;
 }
 
@@ -40,6 +43,8 @@
   /* grid-template-columns: 1em auto; */
   gap: 1.4rem;
   text-transform: capitalize;
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   align-items: center;
+  line-height: 1.2;
+  cursor: pointer;
 }

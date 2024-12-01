@@ -24,6 +24,7 @@ const Favorites = () => {
   const title = "Favorites";
   const emptyMessage = "Your fav list is empty";
 
+  //Load user favorites
   useEffect(() => {
     if (!favList.length) {
       return;
@@ -48,6 +49,7 @@ const Favorites = () => {
     );
 
     return () => {
+      //Reset current recipes data and sort order when component is unmounted
       dispatch(recipeActions.setOrderBy([]));
       dispatch(recipeActions.resetRecipes());
     };

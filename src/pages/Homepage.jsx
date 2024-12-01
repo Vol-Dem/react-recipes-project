@@ -27,6 +27,7 @@ const Homepage = () => {
   const { recipeId } = useParams();
   const recipeIsOpen = !!recipeId;
   const errorMessage = useSelector((state) => state.recipe.errorMessage);
+  const emptyMessage = useSelector((state) => state.recipe.emptyMessage);
   const recipesIsLoading = useSelector(
     (state) => state.recipe.recipesIsLoading
   );
@@ -34,6 +35,10 @@ const Homepage = () => {
     (state) => state.recipe.recipesPerPage
   ).length;
 
+  /**
+   *Create request URL from form data, distpatch actions to fetch recipes and redirect to /.
+   * @param {Object} data - Form data for fetch request
+   */
   const getFormDataHandler = (data) => {
     const query = data.query || "";
     const cuisine = data.cuisine || "";
@@ -68,6 +73,7 @@ const Homepage = () => {
 
   useEffect(() => {
     return () => {
+      //Reset current recipes data and sort order when component is unmounted
       dispatch(recipeActions.resetRecipes());
       dispatch(recipeActions.setOrderBy([]));
       dispatch(recipeActions.setErrorMessage(""));
@@ -95,7 +101,7 @@ const Homepage = () => {
           recipeIsOpen && recipesPerPageIsEmpty ? classes["recipe-columns"] : ""
         }`}
       >
-        {(recipesIsLoading || recipesPerPageIsEmpty) && (
+        {(recipesIsLoading || recipesPerPageIsEmpty || emptyMessage) && (
           <Suspense fallback={<Spinner />}>
             <RecipeItemList firebaseRef={recipeRef} />
           </Suspense>

@@ -21,6 +21,11 @@ const favSlice = createSlice({
   },
 });
 
+/**
+ *Add recipe to favlist and upload updated favlist to DB
+ * @param {number} id - Recipe id
+ * @returns
+ */
 export const sendFav = (id) => {
   return async (dispatch, getState) => {
     dispatch(favActions.addToFav(id));
@@ -35,6 +40,10 @@ export const sendFav = (id) => {
   };
 };
 
+/**
+ * Loads user favlist from DB
+ * @returns
+ */
 export const loadFav = () => {
   return async (dispatch, getState) => {
     const uid = getState().auth.user.uid;
@@ -42,6 +51,7 @@ export const loadFav = () => {
     const favSnap = await getDoc(favRef);
     if (favSnap.exists()) {
       const favList = favSnap.data().favList;
+      console.log(favList);
       dispatch(favActions.updateFav(favList));
     }
   };

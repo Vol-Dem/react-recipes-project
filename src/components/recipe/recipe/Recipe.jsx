@@ -122,15 +122,15 @@ const Recipe = () => {
                 recipeId={recipeId}
               />
               <div>
-                <h3 className={classes["recipe__subtitle"]}>Ingredients</h3>
+                <h2 className={classes["recipe__subtitle"]}>Ingredients</h2>
                 <Ingridients ingredients={recipe.extendedIngredients} />
               </div>
               <div>
-                <h3 className={classes["recipe__subtitle"]}>Instructions</h3>
+                <h2 className={classes["recipe__subtitle"]}>Instructions</h2>
                 <Instructions instructions={recipe.instructions} />
               </div>
               <div>
-                <h3 className={classes["recipe__subtitle"]}>Nutrition</h3>
+                <h2 className={classes["recipe__subtitle"]}>Nutrition</h2>
                 <Nutrition nutrition={recipe.nutrition} nutrients={nutrients} />
               </div>
               <Credits

@@ -1,0 +1,12 @@
+@use "./../../variables/variables.scss" as var;
+
+.link {
+  @include var.linkA;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+
+  & svg {
+    width: 1.6rem;
+  }
+}

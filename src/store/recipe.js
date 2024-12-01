@@ -71,6 +71,10 @@ const recipeSlice = createSlice({
   },
 });
 
+/**
+ * Split recipes per page
+ * @returns
+ */
 export const splitRecipesPerPage = () => {
   return (dispatch, getState) => {
     const dailyLimitIsReached = getState().recipe.dailyLimitIsReached;
@@ -94,6 +98,11 @@ export const splitRecipesPerPage = () => {
   };
 };
 
+/**
+ *Retrive data from recipe object
+ * @param {Object} recipe Recipe data to transform
+ * @returns {Object} Transformed data (recipe)
+ */
 const transformRecipe = (recipe) => {
   return {
     id: recipe.id,
@@ -106,6 +115,13 @@ const transformRecipe = (recipe) => {
   };
 };
 
+/**
+ *Fetch data from firestore
+ * @param {Array} queryParameters Array of parameters for firestore query function: firebase reference, filters, resultsAmount etc.
+ * Requires firebase reference to be present
+ * @param {Object} [position] Result of firestore startAt() or endAt() for firestore query.
+ * @returns {Array} Array with fetched data
+ */
 export const getDataFromFireBase = (queryParameters, position) => {
   return async (dispatch, getState) => {
     try {
@@ -148,6 +164,11 @@ export const getDataFromFireBase = (queryParameters, position) => {
   };
 };
 
+/**
+ *Fetch data from API
+ * @param {string} requestUrl The URL for API with parameters
+ * @returns {Array} Array with fetched data
+ */
 export const getDataFromApi = async (requestUrl) => {
   try {
     const response = await axios.get(requestUrl);
@@ -159,6 +180,18 @@ export const getDataFromApi = async (requestUrl) => {
   }
 };
 
+/**
+ *Fetch data from API if daily limit is not reached or from firestore if it was reached and dispatch actions to set recipe data.
+ Dispatch notification about daily limit when a 402 error occurs.
+ Dispatch error message if error occurs.
+ * @param {Object} obj - An object.
+ * @param {string} obj.requestUrl - URL with parameters to fetch data from API
+ * @param {Object} obj.firebaseRef - Reference to firebase
+ * @param {Object} [obj.filter] - Result of firestore filter function (where()) for firestore query.
+ * @param {Object} [obj.position] - Result of firestore startAt() or endAt() for firestore query.
+ * @param {Object} obj.resultsAmount - Result of firestore limit() or limitToLast() function for firestore query. Amount of expected results from firestore
+ * @returns 
+ */
 export const getRecipes = ({
   requestUrl,
   firebaseRef,
@@ -199,7 +232,9 @@ export const getRecipes = ({
               "The application will now enter test mode. Search result will remain the same. You can still use other features!",
           })
         );
-        dispatch(getRecipes({ firebaseRef, filter, position, resultsAmount }));
+        dispatch(
+          getDataFromFireBase([firebaseRef, filter, resultsAmount], position)
+        );
       } else {
         dispatch(recipeActions.setErrorMessage(error.message));
       }
@@ -209,6 +244,13 @@ export const getRecipes = ({
   };
 };
 
+/**
+ * Switch to next page.
+ * When daily limit is reached dispatch thunk to fetch next portion of data from firestore.
+ * @param {Object} firebaseRef- Reference to firebase
+ * @param {Object} [filter] - Firestore filter function (where()) for firestore query.
+ * @returns
+ */
 export const nextPage = (firebaseRef, filter) => {
   return async (dispatch, getState) => {
     const dailyLimitIsReached = getState().recipe.dailyLimitIsReached;
@@ -225,6 +267,13 @@ export const nextPage = (firebaseRef, filter) => {
   };
 };
 
+/**
+ * Switch to previous page.
+ * When daily limit is reached dispatch thunk to fetch next portion of data from firestore.
+ * @param {Object} firebaseRef- Reference to firebase
+ * @param {Object} [filter] - Firestore filter function (where()) for firestore query.
+ * @returns
+ */
 export const prevPage = (firebaseRef, filter) => {
   return async (dispatch, getState) => {
     const dailyLimitIsReached = getState().recipe.dailyLimitIsReached;
@@ -244,6 +293,13 @@ export const prevPage = (firebaseRef, filter) => {
   };
 };
 
+/**
+ * Sort current recipes data
+ * When daily limit is reached dispatch thunk to fetch sorted data from firestore
+ * @param {Object} firebaseRef- Reference to firebase
+ * @param {Object} [filter] - Firestore filter function (where()) for firestore query.
+ * @returns
+ */
 export const sortRecipes = (firebaseRef, filter) => {
   return (dispatch, getState) => {
     dispatch(recipeActions.setCurrentPage(1));

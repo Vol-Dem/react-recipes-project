@@ -2,6 +2,8 @@
 
 .auth {
   margin: 0 3.6rem;
+  width: 36rem;
+  max-width: 100%;
 
   &__title {
     font-size: 4.6rem;
@@ -12,7 +14,7 @@
   &__form {
     display: flex;
     flex-direction: column;
-    min-width: 36rem;
+    width: 100%;
     gap: 1rem;
   }
 
@@ -42,7 +44,7 @@
     }
 
     &:disabled {
-      color: var.$color-grey;
+      color: var.$color-gray;
     }
   }
 
@@ -51,13 +53,57 @@
 
     &:disabled {
       color: transparent;
-      background-color: var.$color-grey;
+      background-color: var.$color-gray;
       box-shadow: none;
     }
+  }
+
+  &__btn-social {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  &__icon {
+    width: 2.6rem;
+    height: 2.6rem;
   }
 }
 
 .invalid {
   background-color: lighten(var.$color-red, 55%);
   border-color: var.$color-red;
+}
+
+.link {
+  @include var.linkA;
+  // font-size: 1.6rem;
+}
+
+.privacy {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgb(var.$color-text-white, 60%);
+  line-height: 1.4;
+}
+
+.icon {
+  width: 2rem;
+  margin-right: 1rem;
+}
+
+.reset {
+  display: flex;
+  justify-content: space-between;
+  // margin-top: -10px;
+  margin-left: 1rem;
+}
+
+@media (max-width: 380px) {
+  .auth {
+    margin: 0;
+    width: 36rem;
+    max-width: 100%;
+  }
 }

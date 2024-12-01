@@ -91,6 +91,7 @@ function SearchBox({ getFormData }) {
           data-testid="filter-btn"
           className={classes["search__filter-btn"]}
           onClick={filterOpenHandler}
+          title="Filter"
         >
           <FilterIcon />
         </button>
@@ -98,6 +99,7 @@ function SearchBox({ getFormData }) {
           type="submit"
           data-testid="search-submit"
           className={classes["search__form-btn"]}
+          title="Search"
         >
           <SearchIcon />
           <span className={classes["hidden-xs"]}>Search</span>

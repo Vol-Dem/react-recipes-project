@@ -12,6 +12,8 @@ import { initAuth } from "./store/auth";
 import { lazy } from "react";
 import Recipe from "./components/recipe/recipe/Recipe";
 import ErrorPage from "./pages/ErrorPage";
+import ToS from "./pages/ToS";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 const Homepage = lazy(() => import("./pages/Homepage"));
 const About = lazy(() => import("./pages/About"));
@@ -22,6 +24,7 @@ function App() {
   const isAuth = useSelector((state) => state.auth.isLoggedIn);
   const dispatch = useDispatch();
 
+  //Authorizes user on application load
   useEffect(() => {
     dispatch(initAuth());
   }, [dispatch]);
@@ -51,6 +54,16 @@ function App() {
             />
           </Route>
         )}
+        <Route
+          path="tos"
+          errorElement={<ErrorPage />}
+          element={<ToS title="Terms of Service" />}
+        ></Route>
+        <Route
+          path="privacy"
+          errorElement={<ErrorPage />}
+          element={<PrivacyPolicy title="Privacy Policy" />}
+        ></Route>
       </Route>
     )
   );

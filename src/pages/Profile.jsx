@@ -15,14 +15,17 @@ const Profile = () => {
   const errorMessageAuth = useSelector((state) => state.auth.errorMessage);
   const userData = useSelector((state) => state.auth.user);
 
+  //Switch visibility of change name form
   const changeNameIsActiveHandler = () => {
     setChangeNameIsActive((prevState) => !prevState);
   };
 
+  //Switch visibility of change password form
   const changePassIsActiveHandler = () => {
     setChangePassIsActive((prevState) => !prevState);
   };
 
+  //Retrive data from form and dispatch changeUserPassword action with new password
   const changePasswordHandler = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
@@ -30,6 +33,7 @@ const Profile = () => {
     dispatch(changeUserPassword(password));
   };
 
+  //Retrive data from form and dispatch changeUserName action with new name
   const changeNameHandler = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);

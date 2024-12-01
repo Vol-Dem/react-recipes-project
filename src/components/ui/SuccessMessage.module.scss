@@ -1,0 +1,19 @@
+@use "../../variables/variables.scss" as var;
+
+.success {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  border: 1px solid rgba(73, 171, 107, 0.6);
+  border-radius: 10px;
+  padding: 0.4rem 0.8rem;
+  background-color: var.$color-background-primary;
+  //   box-shadow: var.$box-shadow;
+
+  & svg {
+    width: 2.6rem;
+    color: rgba(73, 171, 107, 0.6);
+    flex-shrink: 0;
+  }
+}

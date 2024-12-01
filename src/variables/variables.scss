@@ -5,7 +5,11 @@ $color-background-dark: #263237;
 $color-text-primary: #304750;
 $color-text-light: #fff;
 $color-text-orange: #ad6c12;
-$color-grey: #bdbdbd;
+$color-text-white: #fff;
+$color-text-gray: #acacac;
+$color-text-gray-dark: #808080;
+$color-text-dark: #242424;
+$color-gray: #bdbdbd;
 $color-red: #ca0000;
 $color-black: #000;
 $color-primary: #ff992b;
@@ -14,3 +18,24 @@ $color-primaryd: #d68023;
 //FONTS
 $font-family-primary: "Raleway", sans-serif;
 $font-family-secondary: "Grand Hotel", sans-serif;
+
+//SHADOWS
+$drop-shadow: drop-shadow(2px 3px 5px rgba(22, 0, 0, 0.1));
+$box-shadow: 0rem 0rem 1rem rgba(0, 0, 0, 0.4);
+$box-shadow-light: 0rem 0rem 0.5rem rgba(0, 0, 0, 0.25);
+$box-shadow-dark: 0rem 0rem 1rem rgba(0, 0, 0, 0.9);
+$box-shadow-inset: inset 0rem 0rem 0.5rem rgba(0, 0, 0, 0.3);
+
+@mixin linkA {
+  display: inline-block;
+  //   color: #7278f0;
+  color: #3279e0;
+
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s;
+
+  &:hover {
+    color: lighten(#7278f0, 7%);
+  }
+}
