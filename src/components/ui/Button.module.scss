@@ -11,8 +11,10 @@
   cursor: pointer;
   white-space: nowrap;
   transition: all 0.3s ease;
+  transition-property: box-shadow, background-color;
 
   &:hover {
+    // transform: scale(1.1);
     background-color: darken(var.$color-primary, 10%);
   }
 

@@ -59,9 +59,11 @@
     text-transform: uppercase;
     font-family: var.$font-family-primary;
     transition: all 0.3s;
+    cursor: pointer;
 
     &:hover {
       background-color: darken(var.$color-primary, 12%);
+      box-shadow: 0.2rem 0.3rem 0.5rem rgba(var.$color-black, 0.4);
     }
 
     &:active {
@@ -109,7 +111,7 @@
     font-weight: 700;
     padding: 1rem 1.5rem;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: color 0.3s;
 
     &:hover {
       color: darken(var.$color-primary, 20%);

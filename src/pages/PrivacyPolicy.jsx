@@ -3,6 +3,8 @@ import classes from "./PrivacyPolicy.module.scss";
 import { useEffect } from "react";
 import LinkA from "../components/ui/LinkA";
 import Card from "../components/ui/Card";
+import { motion } from "framer-motion";
+import { ANIMATION_SLIDE_IN, ANIMATION_SLIDE_IN_INITIAL } from "../variables/constants";
 
 const PrivacyPolicy = ({ title }) => {
   useEffect(() => {
@@ -14,6 +16,7 @@ const PrivacyPolicy = ({ title }) => {
   }, []);
 
   return (
+    <motion.div initial={ANIMATION_SLIDE_IN_INITIAL} animate={ANIMATION_SLIDE_IN}>
     <Card className={classes.policy}>
       <h1 className={classes["policy__h1"]}>
         <strong>Privacy Policy</strong>
@@ -136,6 +139,7 @@ const PrivacyPolicy = ({ title }) => {
         If you have questions about this Privacy Policy, contact us.
       </p>
     </Card>
+    </motion.div>
   );
 };
 

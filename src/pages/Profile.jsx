@@ -7,6 +7,11 @@ import ErrorMessage from "../components/ui/ErrorMessage";
 import { useState } from "react";
 import ButttonSecondary from "../components/ui/ButtonSecondary";
 import { ReactComponent as UserIcon } from "./../assets/user.svg";
+import { motion } from "framer-motion";
+import {
+  ANIMATION_SLIDE_IN,
+  ANIMATION_SLIDE_IN_INITIAL,
+} from "../variables/constants";
 
 const Profile = () => {
   const [changeNameIsActive, setChangeNameIsActive] = useState(false);
@@ -80,7 +85,11 @@ const Profile = () => {
   );
 
   return (
-    <section className={classes.profile}>
+    <motion.div
+      initial={ANIMATION_SLIDE_IN_INITIAL}
+      animate={ANIMATION_SLIDE_IN}
+      className={classes.profile}
+    >
       <Card>
         <div className={classes["profile__container"]}>
           <div className={classes["profile__img"]}>
@@ -104,7 +113,7 @@ const Profile = () => {
           </div>
         </div>
       </Card>
-    </section>
+    </motion.div>
   );
 };
 

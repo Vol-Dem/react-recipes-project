@@ -21,6 +21,7 @@ const recipeInitialState = {
   isLastPage: false,
   dailyLimitIsReached: false,
   title: "",
+  options: [],
   emptyMessage: "",
   errorMessage: "",
 };
@@ -58,6 +59,9 @@ const recipeSlice = createSlice({
     },
     setTitle(state, actions) {
       state.title = actions.payload;
+    },
+    setOptions(state, actions) {
+      state.options = actions.payload;
     },
     setEmptyMessage(state, actions) {
       state.emptyMessage = actions.payload;
@@ -204,7 +208,6 @@ export const getRecipes = ({
 
     dispatch(recipeActions.setIsLastPage(false));
     dispatch(recipeActions.setRecipesIsLoading(true));
-
     try {
       let searchResult;
 
@@ -221,6 +224,7 @@ export const getRecipes = ({
       dispatch(recipeActions.setSearchResult(recipes));
       dispatch(recipeActions.setSortedRecipes(recipes));
       dispatch(splitRecipesPerPage());
+      dispatch(recipeActions.setRecipesIsLoading(false));
     } catch (error) {
       console.log(error.message);
       if (error.message.includes("402")) {
@@ -233,14 +237,22 @@ export const getRecipes = ({
           })
         );
         dispatch(
-          getDataFromFireBase([firebaseRef, filter, resultsAmount], position)
+          getRecipes({
+            requestUrl,
+            firebaseRef,
+            filter,
+            position,
+            resultsAmount,
+          })
         );
       } else {
         dispatch(recipeActions.setErrorMessage(error.message));
+        dispatch(recipeActions.setRecipesIsLoading(false));
       }
-    } finally {
-      dispatch(recipeActions.setRecipesIsLoading(false));
     }
+    // finally {
+    //   dispatch(recipeActions.setRecipesIsLoading(false));
+    // }
   };
 };
 

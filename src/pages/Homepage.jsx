@@ -2,7 +2,11 @@ import classes from "./Homepage.module.scss";
 import SearchBox from "../components/search/SearchBox";
 import Logo from "../components/layout/logo/Logo";
 import { useEffect } from "react";
-import { RESULT_NUM } from "../variables/constants";
+import {
+  ANIMATION_SLIDE_IN,
+  ANIMATION_SLIDE_IN_INITIAL,
+  RESULT_NUM,
+} from "../variables/constants";
 import { lazy } from "react";
 import { Suspense } from "react";
 import Spinner from "../components/ui/Spinner";
@@ -13,6 +17,7 @@ import { collection, getFirestore, limit } from "firebase/firestore";
 import firebaseApp from "../config";
 import ErrorMessage from "../components/ui/ErrorMessage";
 import Card from "../components/ui/Card";
+import { AnimatePresence, motion } from "framer-motion";
 
 const RecipeItemList = lazy(() =>
   import("../components/recipe/recipe-item-list/RecipeItemList")
@@ -31,7 +36,7 @@ const Homepage = () => {
   const recipesIsLoading = useSelector(
     (state) => state.recipe.recipesIsLoading
   );
-  const recipesPerPageIsEmpty = !!useSelector(
+  const recipesPerPageIsEmpty = !useSelector(
     (state) => state.recipe.recipesPerPage
   ).length;
 
@@ -64,6 +69,11 @@ const Homepage = () => {
     const resultsAmount = limit(+process.env.REACT_APP_AMOUNT_PER_PAGE + 1);
 
     dispatch(recipeActions.setTitle(title));
+    dispatch(
+      recipeActions.setOptions(
+        [cuisine, diet, intolerance, type].filter(Boolean)
+      )
+    );
     dispatch(recipeActions.setEmptyMessage(emptyMessage));
     dispatch(recipeActions.setOrderBy([]));
     dispatch(recipeActions.setCurrentPage(1));
@@ -77,18 +87,31 @@ const Homepage = () => {
       dispatch(recipeActions.resetRecipes());
       dispatch(recipeActions.setOrderBy([]));
       dispatch(recipeActions.setErrorMessage(""));
+      dispatch(recipeActions.setEmptyMessage(""));
     };
   }, [dispatch]);
 
   return (
-    <>
+    <motion.div
+      initial={ANIMATION_SLIDE_IN_INITIAL}
+      animate={ANIMATION_SLIDE_IN}
+    >
       <section
         data-testid="section-search"
         className={`${classes["section-search"]} ${
-          recipesPerPageIsEmpty || recipeIsOpen ? classes.mt0 : ""
+          !recipesPerPageIsEmpty || recipesIsLoading || recipeIsOpen
+            ? classes.mt0
+            : ""
         }`}
       >
-        {recipeIsOpen || (!recipesPerPageIsEmpty && <Logo />)}
+        <AnimatePresence>
+          {recipesPerPageIsEmpty && !recipesIsLoading && !recipeIsOpen && (
+            <Logo />
+          )}
+        </AnimatePresence>
+        {/* <Logo
+          hide={!recipesPerPageIsEmpty || recipesIsLoading || recipeIsOpen}
+        /> */}
         <SearchBox getFormData={getFormDataHandler} />
       </section>
       {errorMessage && (
@@ -98,10 +121,12 @@ const Homepage = () => {
       )}
       <section
         className={`${classes["section-content"]} ${
-          recipeIsOpen && recipesPerPageIsEmpty ? classes["recipe-columns"] : ""
+          recipeIsOpen && !recipesPerPageIsEmpty
+            ? classes["recipe-columns"]
+            : ""
         }`}
       >
-        {(recipesIsLoading || recipesPerPageIsEmpty || emptyMessage) && (
+        {(recipesIsLoading || !recipesPerPageIsEmpty || emptyMessage) && (
           <Suspense fallback={<Spinner />}>
             <RecipeItemList firebaseRef={recipeRef} />
           </Suspense>
@@ -109,7 +134,7 @@ const Homepage = () => {
 
         <Outlet />
       </section>
-    </>
+    </motion.div>
   );
 };
 

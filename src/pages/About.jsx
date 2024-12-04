@@ -1,9 +1,17 @@
 import Card from "../components/ui/Card";
+import {
+  ANIMATION_SLIDE_IN,
+  ANIMATION_SLIDE_IN_INITIAL,
+} from "../variables/constants";
 import classes from "./About.module.scss";
+import { motion } from "framer-motion";
 
 const About = () => {
   return (
-    <>
+    <motion.div
+      initial={ANIMATION_SLIDE_IN_INITIAL}
+      animate={ANIMATION_SLIDE_IN}
+    >
       <Card>
         {/* <h1 className={classes["about__h1"]}>
           Welcome to the “Your recipe book”!
@@ -18,10 +26,10 @@ const About = () => {
         <h1 className={classes["about__h1"]}>
           Welcome to the “Your recipe book”!
         </h1>
-        <h className={classes["about__text"]}>
+        <p className={classes["about__text"]}>
           Welcome to "Your Recipe Book", the ultimate destination for cooking
           enthusiasts!
-        </h>
+        </p>
         <p className={classes["about__text"]}>
           This&nbsp;platform is designed to be your go-to virtual space for
           discovering, organizing, and saving your favorite recipes. Whether
@@ -56,7 +64,7 @@ const About = () => {
         </p>
         <p className={classes["about__text"]}>Happy cooking!</p>
       </Card>
-    </>
+    </motion.div>
   );
 };
 

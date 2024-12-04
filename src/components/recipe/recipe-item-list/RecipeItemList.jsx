@@ -14,19 +14,21 @@ import {
   sortRecipes,
 } from "../../../store/recipe";
 import ErrorMessage from "../../ui/ErrorMessage";
+import { motion } from "framer-motion";
 
-const RecipeItemList = ({ firebaseRef, filter }) => {
+const RecipeItemList = ({ firebaseRef, filter, skeletonItemsAmount }) => {
   const dispatch = useDispatch();
   const { recipeId } = useParams();
   const recipeIsOpen = !!recipeId;
   const recipesPerPage = useSelector((state) => state.recipe.recipesPerPage);
-  const recipesPerPageIsEmpty = !!recipesPerPage.length;
+  const recipesPerPageIsNotEmpty = !!recipesPerPage.length;
   const currentPage = useSelector((state) => state.recipe.currentPage);
   const isLastPage = useSelector((state) => state.recipe.isLastPage);
   const recipesIsLoading = useSelector(
     (state) => state.recipe.recipesIsLoading
   );
   const title = useSelector((state) => state.recipe.title);
+  const options = useSelector((state) => state.recipe.options);
   const emptyMessage = useSelector((state) => state.recipe.emptyMessage);
   const errorMessage = useSelector((state) => state.recipe.errorMessage);
 
@@ -35,7 +37,9 @@ const RecipeItemList = ({ firebaseRef, filter }) => {
   ));
 
   const recipeSkeleton = [
-    ...Array(+process.env.REACT_APP_AMOUNT_PER_PAGE).keys(),
+    ...Array(
+      skeletonItemsAmount || +process.env.REACT_APP_AMOUNT_PER_PAGE
+    ).keys(),
   ].map((i) => <RecipeItemSkeleton key={i} />);
 
   const nextPageHandler = () => {
@@ -62,7 +66,10 @@ const RecipeItemList = ({ firebaseRef, filter }) => {
   }
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, y: 0 }}
+      animate={{ opacity: 1, y: 0 }}
+      // transition={{ duration: 0.3 }}
       className={classes["search-result__container"]}
       data-testid="recipe-item-list"
     >
@@ -72,28 +79,31 @@ const RecipeItemList = ({ firebaseRef, filter }) => {
         }`}
       >
         <Card>
-          {!recipesPerPageIsEmpty && !recipesIsLoading && (
+          {!recipesPerPageIsNotEmpty && !recipesIsLoading && (
             <p className={classes["search-result__empty"]}>{emptyMessage}</p>
           )}
 
-          {recipesPerPageIsEmpty && (
+          {(recipesPerPageIsNotEmpty || recipesIsLoading) && (
             <div className={classes["search-result__head"]}>
               {!recipeIsOpen && (
-                <h1 className={classes["search-result__title"]}>{title}</h1>
+                <h1 className={classes["search-result__title"]}>
+                  {title} {options.map((option) => ` | ${option}`)}
+                </h1>
               )}
               <Sort onSort={sortHandler} />
             </div>
           )}
-          <div
+          <motion.ul
+            variants={{ visible: { transition: { staggerChildren: 0.5 } } }}
             className={`${classes["cards-container"]} ${
               recipeIsOpen ? classes["cards-container--side"] : ""
             }`}
           >
-            {recipesPerPageIsEmpty && !recipesIsLoading && recipes}
+            {recipesPerPageIsNotEmpty && !recipesIsLoading && recipes}
             {recipesIsLoading && recipeSkeleton}
-          </div>
+          </motion.ul>
 
-          {recipesPerPageIsEmpty && (
+          {recipesPerPageIsNotEmpty && (
             <div className={classes["search-result__pagination"]}>
               {currentPage > 1 && (
                 <div className={classes["search-result__btn"]}>
@@ -116,7 +126,7 @@ const RecipeItemList = ({ firebaseRef, filter }) => {
           )}
         </Card>
       </div>
-    </div>
+    </motion.div>
   );
 };
 export default RecipeItemList;

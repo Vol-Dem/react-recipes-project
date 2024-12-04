@@ -21,3 +21,7 @@ export const AGREEMENT_MESSAGE =
 export const OFFLINE_ERROR_MESSAGE =
   "Internet connection lost. Check your connection settings";
 export const DEF_ERROR_MESSAGE = "Oops! Something went wrong. Try refreshing!";
+
+export const ANIMATION_SLIDE_IN = { opacity: 1, y: 0 };
+export const ANIMATION_SLIDE_IN_INITIAL = { opacity: 0, y: 30 };
+export const ANIMATION_SLIDE_OUT = { opacity: 0, y: 0 };

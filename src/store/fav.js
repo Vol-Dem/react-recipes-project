@@ -51,7 +51,6 @@ export const loadFav = () => {
     const favSnap = await getDoc(favRef);
     if (favSnap.exists()) {
       const favList = favSnap.data().favList;
-      console.log(favList);
       dispatch(favActions.updateFav(favList));
     }
   };

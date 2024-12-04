@@ -1,7 +1,7 @@
 import Header from "../header/Header";
 import classes from "./Layout.module.scss";
 import MainNavigation from "../navigation/MainNavigation";
-import { Outlet } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import MobileNavigation from "../navigation/MobileNavigation";
 import { useSelector, useDispatch } from "react-redux";
 import { authActions } from "../../../store/auth";
@@ -12,6 +12,7 @@ import AuthForm from "../../Auth/AuthForm";
 import { Suspense } from "react";
 import Spinner from "../../ui/Spinner";
 import Notification from "../../ui/Notification";
+import { AnimatePresence, motion } from "framer-motion";
 
 const Layout = () => {
   const isAuth = useSelector((state) => state.auth.isLoggedIn);
@@ -36,7 +37,9 @@ const Layout = () => {
     <div className={classes.wrapper}>
       <Header>
         <MobileNavigation />
-        <div className={classes.logo}>Your recipe book</div>
+        <Link to="/" className={classes.logo}>
+          Your recipe book
+        </Link>
         <MainNavigation />
         {isAuth && <UserNavigation />}
         {!isAuth && (
@@ -51,14 +54,19 @@ const Layout = () => {
           <Outlet />
         </Suspense>
       </main>
-      {authIsOpen && (
-        <Modal onClose={closeAuth}>
-          <AuthForm />
-        </Modal>
-      )}
-      {notificationIsShown && (
-        <Notification title={notificationTitle} message={notificationMessage} />
-      )}
+      <AnimatePresence>
+        {authIsOpen && (
+          <Modal onClose={closeAuth}>
+            <AuthForm />
+          </Modal>
+        )}
+        {notificationIsShown && (
+          <Notification
+            title={notificationTitle}
+            message={notificationMessage}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 };

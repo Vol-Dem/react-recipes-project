@@ -7,6 +7,11 @@ import { Outlet, useParams } from "react-router-dom";
 import { getRecipes, recipeActions } from "../store/recipe";
 import firebaseApp from "../config";
 import { useState } from "react";
+import { motion } from "framer-motion";
+import {
+  ANIMATION_SLIDE_IN,
+  ANIMATION_SLIDE_IN_INITIAL,
+} from "../variables/constants";
 
 const firestore = getFirestore(firebaseApp);
 const favRef = collection(firestore, "recipes");
@@ -15,6 +20,7 @@ const Favorites = () => {
   const [filter, setFilter] = useState();
   const isAuth = useSelector((state) => state.auth.isLoggedIn);
   const favList = useSelector((state) => state.fav.favList);
+
   const dailyLimitIsReached = useSelector(
     (state) => state.recipe.dailyLimitIsReached
   );
@@ -52,19 +58,28 @@ const Favorites = () => {
       //Reset current recipes data and sort order when component is unmounted
       dispatch(recipeActions.setOrderBy([]));
       dispatch(recipeActions.resetRecipes());
+      dispatch(recipeActions.setEmptyMessage(""));
     };
   }, [favList, dispatch, dailyLimitIsReached]);
 
   return (
-    <section
+    <motion.div
+      initial={ANIMATION_SLIDE_IN_INITIAL}
+      animate={ANIMATION_SLIDE_IN}
       className={`${classes["section-favorites"]} ${
         recipeIsOpen ? classes["recipe-columns"] : ""
       }`}
     >
-      {isAuth && <RecipeItemList firebaseRef={favRef} filter={filter} />}
+      {isAuth && (
+        <RecipeItemList
+          firebaseRef={favRef}
+          filter={filter}
+          skeletonItemsAmount={favList?.length}
+        />
+      )}
 
       <Outlet />
-    </section>
+    </motion.div>
   );
 };
 

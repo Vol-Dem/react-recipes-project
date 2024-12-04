@@ -24,6 +24,7 @@ import Checkbox from "../ui/Checkbox";
 import LinkA from "../ui/LinkA";
 import SuccessMessage from "../ui/SuccessMessage";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -143,7 +144,14 @@ const AuthForm = () => {
   );
 
   return (
-    <section className={classes.auth}>
+    <motion.div
+      key={isLogin}
+      variants={{ visible: { opacity: 1 }, hidden: { opacity: 0 } }}
+      // initial="hidden"
+      // animate="visible"
+      transition={{ duration: 0.6 }}
+      className={classes.auth}
+    >
       {!showResetPassword && (
         <h3 className={classes["auth__title"]}>
           {isLogin ? "Log in" : "Sign Up"}
@@ -151,7 +159,11 @@ const AuthForm = () => {
       )}
       {showResetPassword && resetPasswordForm}
       {!showResetPassword && (
-        <form onSubmit={authHandler} className={classes["auth__form"]}>
+        <motion.form
+          variants={{ visible: { transition: { staggerChildren: 0.05 } } }}
+          onSubmit={authHandler}
+          className={classes["auth__form"]}
+        >
           {isLogin && (
             <Buttton
               className={classes["auth__btn-social"]}
@@ -273,7 +285,7 @@ const AuthForm = () => {
               <span>{isLogin ? "Log in" : "Sign up"}</span>
             </Buttton>
           </div>
-        </form>
+        </motion.form>
       )}
       {isLogin && (
         <div className={classes["privacy"]}>
@@ -287,7 +299,7 @@ const AuthForm = () => {
           </Link>
         </div>
       )}
-    </section>
+    </motion.div>
   );
 };
 

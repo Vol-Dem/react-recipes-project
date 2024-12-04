@@ -11,7 +11,7 @@ const RecipeItemSkeleton = () => {
   const classSide = recipeIsOpen ? classes["recipe-card--side"] : "";
 
   return (
-    <div id="recipe-item" className={`${classes["recipe-card"]} ${classSide} `}>
+    <li id="recipe-item" className={`${classes["recipe-card"]} ${classSide} `}>
       <div className={classes["recipe-card__img"]}>
         <Skeleton classNames="img" />
       </div>
@@ -30,7 +30,7 @@ const RecipeItemSkeleton = () => {
           {!recipeIsOpen && <Skeleton classNames="btn" />}
         </div>
       </div>
-    </div>
+    </li>
   );
 };
 

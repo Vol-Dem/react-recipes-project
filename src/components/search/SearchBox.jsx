@@ -4,6 +4,7 @@ import { ReactComponent as FilterIcon } from "./../../assets/filter.svg";
 import { ReactComponent as SearchIcon } from "./../../assets/search.svg";
 import Filter from "./filter/Filter";
 import Tags from "./tags/Tags";
+import { motion } from "framer-motion";
 
 function SearchBox({ getFormData }) {
   const [searchInput, setSearchInput] = useState("");
@@ -20,7 +21,7 @@ function SearchBox({ getFormData }) {
     setSearchInput(e.target.value);
   };
 
-  const getQueryFromForm = (e) => {
+  const submitFormHandler = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
 
@@ -66,7 +67,7 @@ function SearchBox({ getFormData }) {
       <form
         id="search"
         className={classes["search__form"]}
-        onSubmit={getQueryFromForm}
+        onSubmit={submitFormHandler}
       >
         <div
           className={`${classes["search__filter"]} ${
@@ -86,7 +87,9 @@ function SearchBox({ getFormData }) {
           data-testid="search-input"
         />
 
-        <button
+        <motion.button
+          whileHover={{ scale: 1.1, transition: { type: "spring" } }}
+          whileTap={{ scale: 0.95 }}
           type="button"
           data-testid="filter-btn"
           className={classes["search__filter-btn"]}
@@ -94,8 +97,10 @@ function SearchBox({ getFormData }) {
           title="Filter"
         >
           <FilterIcon />
-        </button>
+        </motion.button>
         <button
+          // whileHover={{ scale: 1.1, transition: { type: "spring" } }}
+          // whileTap={{ scale: 0.95 }}
           type="submit"
           data-testid="search-submit"
           className={classes["search__form-btn"]}

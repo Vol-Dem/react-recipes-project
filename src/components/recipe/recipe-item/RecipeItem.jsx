@@ -6,6 +6,8 @@ import { ReactComponent as StarIcon } from "./../../../assets/star.svg";
 import { ReactComponent as FoodIcon } from "./../../../assets/food.svg";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import { motion } from "framer-motion";
+import { ANIMATION_SLIDE_IN } from "../../../variables/constants";
 
 const RecipeItem = ({ recipe }) => {
   const [imgIsLoading, setImgIsLoading] = useState(true);
@@ -26,7 +28,21 @@ const RecipeItem = ({ recipe }) => {
   };
 
   return (
-    <div
+    <motion.li
+      key={recipe.id}
+      layout
+      initial={{ opacity: 0, scale: 0.8 }}
+      variants={{
+        hidden: { opacity: 0, scale: 0.5 },
+        visible: {
+          opacity: 1,
+          // scale: [0.8, 1.3, 1],
+          scale: 1,
+          transition: { type: "spring" },
+        },
+      }}
+      animate="visible"
+      whileHover={{ scale: 1.04, transition: { type: "tween" } }}
       className={`${classes["recipe-card"]} ${classSide} ${
         recipe.id === +recipeId ? classes.active : ""
       }`}
@@ -64,7 +80,7 @@ const RecipeItem = ({ recipe }) => {
           Read More
         </div>
       )}
-    </div>
+    </motion.li>
   );
 };
 
