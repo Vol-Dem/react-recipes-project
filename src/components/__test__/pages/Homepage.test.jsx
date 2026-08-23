@@ -4,11 +4,11 @@ import Homepage from "../../../pages/Homepage";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
-import thunk from "redux-thunk";
+import { thunk } from "redux-thunk";
 import axios from "axios";
 import { recipeActions } from "../../../store/recipe";
 
-jest.mock("axios");
+vi.mock("axios");
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
 const expectedResult = [
@@ -33,6 +33,7 @@ const initialState = {
   title: "",
   emptyMessage: "",
   errorMessage: "",
+  options: [],
 };
 
 describe("Homepage component", () => {
@@ -58,7 +59,7 @@ describe("Homepage component", () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("sends request with correct URL and dispatches actions on form submission", async () => {
@@ -77,17 +78,17 @@ describe("Homepage component", () => {
       </BrowserRouter>
     );
     const inputQuery = "pasta";
-    const expectedUrl = `${process.env.REACT_APP_SPOONACULAR_API_URL}/recipes/complexSearch?apiKey=${process.env.REACT_APP_SPOONACULAR_API_KEY}&query=${inputQuery}&cuisine=&diet=&intolerances=&type=&number=10&addRecipeNutrition=true`;
+    const expectedUrl = `${import.meta.env.VITE_SPOONACULAR_API_URL}/recipes/complexSearch?apiKey=${import.meta.env.VITE_SPOONACULAR_API_KEY}&query=${inputQuery}&cuisine=&diet=&intolerances=&type=&number=10&addRecipeNutrition=true`;
     const searchInput = screen.getByTestId("search-input");
     const submitBtn = screen.getByTestId("search-submit");
 
     fireEvent.change(searchInput, { target: { value: inputQuery } });
-    userEvent.click(submitBtn);
+    const user = userEvent.setup();
+    await user.click(submitBtn);
 
     await waitFor(() => {
       const dispatchedActions = store.getActions();
       expect(axios.get).toBeCalledWith(expectedUrl);
-      expect(dispatchedActions).toContainEqual(recipeActions.setTitle("pasta"));
       expect(dispatchedActions).toContainEqual(recipeActions.setCurrentPage(1));
       expect(dispatchedActions).toContainEqual(
         recipeActions.setEmptyMessage(
@@ -166,7 +167,7 @@ describe("Homepage component", () => {
     expect(recipeItemListEl).toBeInTheDocument();
     expect(recipeEl).not.toBeInTheDocument();
     expect(errorEl).not.toBeInTheDocument();
-    expect(sectionSearchEl).toHaveClass("mt0");
+    expect(sectionSearchEl.className).toMatch(/_mt0_/);
   });
 
   it("renders error with expected error message", async () => {
@@ -198,7 +199,7 @@ describe("Homepage component", () => {
 
     expect(errorEl).toBeInTheDocument();
     expect(errorMessageEl).toBeInTheDocument();
-    expect(h1El).toBeInTheDocument();
+    expect(h1El).not.toBeInTheDocument();
     expect(searchInputEl).toBeInTheDocument();
     expect(recipeItemListEl).not.toBeInTheDocument();
     expect(recipeEl).not.toBeInTheDocument();

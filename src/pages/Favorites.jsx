@@ -39,8 +39,8 @@ const Favorites = () => {
 
     dispatch(recipeActions.setEmptyMessage(""));
     const favListQuery = favList.join(",");
-    const requestUrl = `https://api.spoonacular.com/recipes/informationBulk?apiKey=${process.env.REACT_APP_SPOONACULAR_API_KEY}&ids=${favListQuery}&includeNutrition=true`;
-    const resultsAmount = limit(+process.env.REACT_APP_AMOUNT_PER_PAGE + 1);
+    const requestUrl = `https://api.spoonacular.com/recipes/informationBulk?apiKey=${import.meta.env.VITE_SPOONACULAR_API_KEY}&ids=${favListQuery}&includeNutrition=true`;
+    const resultsAmount = limit(+import.meta.env.VITE_AMOUNT_PER_PAGE + 1);
     const filter = where("id", "in", favList);
     setFilter(filter);
 

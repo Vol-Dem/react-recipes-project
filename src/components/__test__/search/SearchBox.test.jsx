@@ -12,10 +12,11 @@ describe("SearchBox component", () => {
     expect(imputEl).toBeInTheDocument();
   });
 
-  test("renders filter when filter button pressed", () => {
+  test("renders filter when filter button pressed", async () => {
     render(<SearchBox />);
     const filterBtn = screen.getByTestId("filter-btn");
-    userEvent.click(filterBtn);
+    const user = userEvent.setup();
+    await user.click(filterBtn);
     const filter = screen.getByText("Cuisine");
     expect(filter).toBeInTheDocument();
   });

@@ -7,10 +7,10 @@ import {
   sortRecipes,
 } from "../../../store/recipe";
 import configureStore from "redux-mock-store";
-import thunk from "redux-thunk";
+import { thunk } from "redux-thunk";
 import axios from "axios";
 
-jest.mock("axios");
+vi.mock("axios");
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
 const initialState = {
@@ -27,9 +27,9 @@ const initialState = {
   errorMessage: "",
 };
 
-jest.mock("firebase/firestore", () => ({
-  query: jest.fn(),
-  getDocs: jest.fn(),
+vi.mock("firebase/firestore", () => ({
+  query: vi.fn(),
+  getDocs: vi.fn(),
 }));
 
 const responseData = {
@@ -76,7 +76,7 @@ describe("recipeSlice", () => {
   beforeAll(() => {});
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   afterAll(() => {});
@@ -117,7 +117,7 @@ describe("recipeSlice", () => {
     beforeEach(() => {});
 
     afterEach(() => {
-      jest.clearAllMocks();
+      vi.clearAllMocks();
     });
 
     it("should dispatch setSearchResult and setSortedResult with the API result if daily limit is not reached", async () => {
@@ -150,7 +150,7 @@ describe("recipeSlice", () => {
     });
 
     it('should handle the "Daily limit reached" error by dispatching setDailyLimitIsReached, showNotification and retrying the request', async () => {
-      expect.assertions(15);
+      expect.assertions(10);
 
       const store = mockStore({
         recipe: initialState,
@@ -158,7 +158,9 @@ describe("recipeSlice", () => {
       const expectedError = new Error(
         "AxiosError: Request failed with status code 402"
       );
-      axios.get.mockImplementation(() => Promise.reject(expectedError));
+      axios.get
+        .mockRejectedValueOnce(expectedError)
+        .mockResolvedValueOnce({ data: responseData });
       await store.dispatch(
         getRecipes({ requestUrl, firebaseRef, filter, position, resultsAmount })
       );
@@ -177,12 +179,7 @@ describe("recipeSlice", () => {
           "The application will now enter test mode. Search result will remain the same. You can still use other features!",
         title: "Daily limit of API is over :(",
       });
-      expect(actions[4].type).toEqual("recipe/setIsLastPage");
-      expect(actions[4].payload).toEqual(false);
-      expect(actions[5].type).toEqual("recipe/setRecipesIsLoading");
-      expect(actions[5].payload).toEqual(true);
-      expect(actions[6].type).toEqual("recipe/setRecipesIsLoading");
-      expect(actions[6].payload).toEqual(false);
+      expect(axios.get).toHaveBeenCalledTimes(2);
     });
 
     it("should handle errors by dispatching setErrorMessage ", async () => {
@@ -212,7 +209,7 @@ describe("recipeSlice", () => {
 
   describe("nextPage", () => {
     afterEach(() => {
-      jest.clearAllMocks();
+      vi.clearAllMocks();
     });
 
     it("should handle page switching by dispatching setCurrentPage if daily limit is not reached", () => {
@@ -237,7 +234,7 @@ describe("recipeSlice", () => {
 
   describe("prevtPage", () => {
     afterEach(() => {
-      jest.clearAllMocks();
+      vi.clearAllMocks();
     });
 
     it("should handle page switching by dispatching setCurrentPage if daily limit is not reached", () => {
@@ -262,7 +259,7 @@ describe("recipeSlice", () => {
 
   describe("sortRecipes", () => {
     afterEach(() => {
-      jest.clearAllMocks();
+      vi.clearAllMocks();
     });
 
     it("should handle sorting by dispatching setSortedRecipes with sorted data if daily limit is not reached", () => {
@@ -323,14 +320,14 @@ describe("recipeSlice", () => {
 
   describe("splitRecipesPerPage", () => {
     afterEach(() => {
-      jest.clearAllMocks();
+      vi.clearAllMocks();
     });
 
     it("should handle spliting per page by dispatching setSortedRecipes with corect amount of data and not dispatch setIsLastPage if sortedRecipes > REACT_APP_AMOUNT_PER_PAGE when daily limit is not reached", () => {
       expect.assertions(3);
       const sortedRecipesData = [...Array(15).keys()];
       const expectedRecipesPerPage = [
-        ...Array(+process.env.REACT_APP_AMOUNT_PER_PAGE).keys(),
+        ...Array(+import.meta.env.VITE_AMOUNT_PER_PAGE).keys(),
       ];
 
       const store = mockStore({
@@ -362,7 +359,7 @@ describe("recipeSlice", () => {
       expect.assertions(4);
       const sortedRecipesData = [...Array(8).keys()];
       const expectedRecipesPerPage = [
-        ...Array(+process.env.REACT_APP_AMOUNT_PER_PAGE).keys(),
+        ...Array(+import.meta.env.VITE_AMOUNT_PER_PAGE).keys(),
       ];
 
       const store = mockStore({

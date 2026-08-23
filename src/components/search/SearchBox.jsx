@@ -1,7 +1,7 @@
 import { useState } from "react";
 import classes from "./SearchBox.module.scss";
-import { ReactComponent as FilterIcon } from "./../../assets/filter.svg";
-import { ReactComponent as SearchIcon } from "./../../assets/search.svg";
+import FilterIcon from "./../../assets/filter.svg?react";
+import SearchIcon from "./../../assets/search.svg?react";
 import Filter from "./filter/Filter";
 import Tags from "./tags/Tags";
 import { motion } from "framer-motion";

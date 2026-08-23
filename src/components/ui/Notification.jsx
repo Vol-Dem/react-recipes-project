@@ -1,15 +1,11 @@
 import Button from "./Button";
 import Card from "./Card";
 import classes from "./Notification.module.scss";
-import { ReactComponent as TriangleIcon } from "./../../assets/triangle.svg";
+import TriangleIcon from "./../../assets/triangle.svg?react";
 import { createPortal } from "react-dom";
 import { useDispatch } from "react-redux";
 import { notificationActions } from "../../store/notification";
 import { motion } from "framer-motion";
-import {
-  ANIMATION_SLIDE_IN,
-  ANIMATION_SLIDE_IN_INITIAL,
-} from "../../variables/constants";
 
 const Notification = ({ title, message }) => {
   const dispatch = useDispatch();

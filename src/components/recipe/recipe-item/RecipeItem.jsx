@@ -1,13 +1,12 @@
 import classes from "./RecipeItem.module.scss";
-import { ReactComponent as ClockIcon } from "./../../../assets/clock.svg";
-import { ReactComponent as CaloriesIcon } from "./../../../assets/calories.svg";
+import ClockIcon from "./../../../assets/clock.svg?react";
+import CaloriesIcon from "./../../../assets/calories.svg?react";
 import { useState } from "react";
-import { ReactComponent as StarIcon } from "./../../../assets/star.svg";
-import { ReactComponent as FoodIcon } from "./../../../assets/food.svg";
+import StarIcon from "./../../../assets/star.svg?react";
+import FoodIcon from "./../../../assets/food.svg?react";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ANIMATION_SLIDE_IN } from "../../../variables/constants";
 
 const RecipeItem = ({ recipe }) => {
   const [imgIsLoading, setImgIsLoading] = useState(true);

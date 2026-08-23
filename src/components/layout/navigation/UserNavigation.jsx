@@ -1,5 +1,5 @@
 import classes from "./UserNavigation.module.scss";
-import { ReactComponent as UserIcon } from "./../../../assets/user.svg";
+import UserIcon from "./../../../assets/user.svg?react";
 import ButttonSecondary from "../../ui/ButtonSecondary";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";

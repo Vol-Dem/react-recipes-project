@@ -85,11 +85,11 @@ export const splitRecipesPerPage = () => {
     const sortedRecipes = getState().recipe.sortedRecipes;
     if (!dailyLimitIsReached) {
       const currentPage = getState().recipe.currentPage;
-      const start = (currentPage - 1) * +process.env.REACT_APP_AMOUNT_PER_PAGE;
-      const end = currentPage * +process.env.REACT_APP_AMOUNT_PER_PAGE;
+      const start = (currentPage - 1) * +import.meta.env.VITE_AMOUNT_PER_PAGE;
+      const end = currentPage * +import.meta.env.VITE_AMOUNT_PER_PAGE;
       const recipes = sortedRecipes.slice(start, end);
       const amountOfPages = Math.ceil(
-        sortedRecipes.length / +process.env.REACT_APP_AMOUNT_PER_PAGE
+        sortedRecipes.length / +import.meta.env.VITE_AMOUNT_PER_PAGE
       );
 
       dispatch(recipeActions.setRecipesPerPage(recipes));
@@ -144,12 +144,12 @@ export const getDataFromFireBase = (queryParameters, position) => {
       const recipesData = await getDocs(firebaseQuery);
 
       const isLast =
-        recipesData.docs.length <= +process.env.REACT_APP_AMOUNT_PER_PAGE;
+        recipesData.docs.length <= +import.meta.env.VITE_AMOUNT_PER_PAGE;
 
       const recipes = recipesData.docs.flatMap((entry, i) => {
         const recipe = entry.data();
 
-        if (i === +process.env.REACT_APP_AMOUNT_PER_PAGE) {
+        if (i === +import.meta.env.VITE_AMOUNT_PER_PAGE) {
           return [];
         }
         return recipe;
@@ -273,7 +273,7 @@ export const nextPage = (firebaseRef, filter) => {
       dispatch(splitRecipesPerPage());
     } else {
       const position = startAt(lastVisible);
-      const resultsAmount = limit(+process.env.REACT_APP_AMOUNT_PER_PAGE + 1);
+      const resultsAmount = limit(+import.meta.env.VITE_AMOUNT_PER_PAGE + 1);
       dispatch(getRecipes({ firebaseRef, filter, resultsAmount, position }));
     }
   };
@@ -298,7 +298,7 @@ export const prevPage = (firebaseRef, filter) => {
     } else {
       const position = endAt(firstVisible);
       const resultsAmount = limitToLast(
-        +process.env.REACT_APP_AMOUNT_PER_PAGE + 1
+        +import.meta.env.VITE_AMOUNT_PER_PAGE + 1
       );
       dispatch(getRecipes({ firebaseRef, filter, resultsAmount, position }));
     }
@@ -334,7 +334,7 @@ export const sortRecipes = (firebaseRef, filter) => {
       dispatch(recipeActions.setSortedRecipes(sortedRecipes));
       dispatch(splitRecipesPerPage());
     } else {
-      const resultsAmount = limit(+process.env.REACT_APP_AMOUNT_PER_PAGE + 1);
+      const resultsAmount = limit(+import.meta.env.VITE_AMOUNT_PER_PAGE + 1);
       dispatch(getRecipes({ firebaseRef, filter, resultsAmount }));
     }
   };

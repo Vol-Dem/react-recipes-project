@@ -6,7 +6,7 @@ import { changeUserName, changeUserPassword } from "../store/auth";
 import ErrorMessage from "../components/ui/ErrorMessage";
 import { useState } from "react";
 import ButttonSecondary from "../components/ui/ButtonSecondary";
-import { ReactComponent as UserIcon } from "./../assets/user.svg";
+import UserIcon from "./../assets/user.svg?react";
 import { motion } from "framer-motion";
 import {
   ANIMATIONS_FM_SLIDEIN,

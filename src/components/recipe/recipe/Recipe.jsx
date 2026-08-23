@@ -17,7 +17,7 @@ import RecipeHeadSkeleton from "../../skeletons/RecipeHeadSkeleton";
 import RecipeDescriptionSkeleton from "../../skeletons/RecipeDescriptionSkeleton";
 import { useMatches, useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { ReactComponent as FoodImg } from "../../../assets/food.svg";
+import FoodImg from "../../../assets/food.svg?react";
 
 const firestore = getFirestore(firebaseApp);
 
@@ -55,7 +55,7 @@ const Recipe = () => {
     setRecipeIsLoading(true);
     setImgIsLoading(true);
     if (!dailyLimitReached) {
-      const url = `${process.env.REACT_APP_SPOONACULAR_API_URL}/recipes/${recipeId}/information?apiKey=${process.env.REACT_APP_SPOONACULAR_API_KEY}&includeNutrition=${INCLUDE_NUTRITION}`;
+      const url = `${import.meta.env.VITE_SPOONACULAR_API_URL}/recipes/${recipeId}/information?apiKey=${import.meta.env.VITE_SPOONACULAR_API_KEY}&includeNutrition=${INCLUDE_NUTRITION}`;
 
       const getRecipe = (data) => {
         setRecipe(data);

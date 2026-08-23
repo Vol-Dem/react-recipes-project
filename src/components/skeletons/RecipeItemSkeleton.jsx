@@ -1,8 +1,8 @@
 import React from "react";
 import Skeleton from "./Skeleton";
 import classes from "./RecipeItemSkeleton.module.scss";
-import { ReactComponent as ClockIcon } from "./../../assets/clock.svg";
-import { ReactComponent as CaloriesIcon } from "./../../assets/calories.svg";
+import ClockIcon from "./../../assets/clock.svg?react";
+import CaloriesIcon from "./../../assets/calories.svg?react";
 import { useParams } from "react-router-dom";
 
 const RecipeItemSkeleton = () => {

@@ -1,5 +1,5 @@
 import classes from "./ButtonBack.module.scss";
-import { ReactComponent as ArrowBackIcon } from "./../../assets/arrow-back.svg";
+import ArrowBackIcon from "./../../assets/arrow-back.svg?react";
 
 const ButtonBack = ({ onClick }) => {
   return (

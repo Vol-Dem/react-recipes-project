@@ -2,8 +2,8 @@ import classes from "./RecipeItemList.module.scss";
 import Card from "../../ui/Card";
 import RecipeItem from "../recipe-item/RecipeItem";
 import Sort from "../sort/Sort";
-import { ReactComponent as ArrowLeftIcon } from "./../../../assets/arrow-left.svg";
-import { ReactComponent as ArrowRightIcon } from "./../../../assets/arrow-right.svg";
+import ArrowLeftIcon from "./../../../assets/arrow-left.svg?react";
+import ArrowRightIcon from "./../../../assets/arrow-right.svg?react";
 import RecipeItemSkeleton from "../../skeletons/RecipeItemSkeleton";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -43,7 +43,7 @@ const RecipeItemList = ({
 
   const recipeSkeleton = [
     ...Array(
-      skeletonItemsAmount || +process.env.REACT_APP_AMOUNT_PER_PAGE
+      skeletonItemsAmount || +import.meta.env.VITE_AMOUNT_PER_PAGE
     ).keys(),
   ].map((i) => <RecipeItemSkeleton key={i} />);
 

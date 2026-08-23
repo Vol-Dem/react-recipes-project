@@ -10,11 +10,11 @@ export const useGetDataFromFirebase = () => {
     const recipesData = await getDocs(query);
 
     const isLast =
-      recipesData.docs.length <= +process.env.REACT_APP_AMOUNT_PER_PAGE;
+      recipesData.docs.length <= +import.meta.env.VITE_AMOUNT_PER_PAGE;
     const recipes = recipesData.docs.flatMap((entry, i) => {
       const recipe = entry.data();
 
-      if (i === +process.env.REACT_APP_AMOUNT_PER_PAGE) {
+      if (i === +import.meta.env.VITE_AMOUNT_PER_PAGE) {
         return [];
       }
       return {

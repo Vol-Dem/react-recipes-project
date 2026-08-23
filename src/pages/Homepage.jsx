@@ -56,9 +56,9 @@ const Homepage = () => {
     const maxCalories = data.maxCalories || "";
 
     const requestUrl = `${
-      process.env.REACT_APP_SPOONACULAR_API_URL
+      import.meta.env.VITE_SPOONACULAR_API_URL
     }/recipes/complexSearch?apiKey=${
-      process.env.REACT_APP_SPOONACULAR_API_KEY
+      import.meta.env.VITE_SPOONACULAR_API_KEY
     }&query=${query}&cuisine=${cuisine}&diet=${diet}&intolerances=${intolerance}&type=${type}${
       maxReadyTime && `&maxReadyTime=${maxReadyTime}`
     }${minCalories && `&minCalories=${minCalories}`}${
@@ -67,7 +67,7 @@ const Homepage = () => {
 
     const searchTitle = query || "Search result";
     const emptyMessage = `No results for "${query}". Try checking your spelling`;
-    const resultsAmount = limit(+process.env.REACT_APP_AMOUNT_PER_PAGE + 1);
+    const resultsAmount = limit(+import.meta.env.VITE_AMOUNT_PER_PAGE + 1);
 
     setTitle(searchTitle);
     dispatch(

@@ -1,10 +1,10 @@
 import classes from "./Info.module.scss";
-import { ReactComponent as ClockIcon } from "./../../../../assets/clock.svg";
-import { ReactComponent as ServingsIcon } from "./../../../../assets/servings.svg";
+import ClockIcon from "./../../../../assets/clock.svg?react";
+import ServingsIcon from "./../../../../assets/servings.svg?react";
 import { useDispatch, useSelector } from "react-redux";
 import { sendFav } from "../../../../store/fav";
 import { authActions } from "../../../../store/auth";
-import { ReactComponent as StarIcon } from "./../../../../assets/star.svg";
+import StarIcon from "./../../../../assets/star.svg?react";
 
 const Info = ({ readyInMinutes, servings, recipeId }) => {
   const isAuth = useSelector((state) => state.auth.isLoggedIn);
