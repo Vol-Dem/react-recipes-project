@@ -12,7 +12,7 @@
   transition: all 0.3s ease-in;
   transition-property: box-shadow, background;
   text-decoration: none;
-  color: #304750;
+  color: var.$color-text-primary;
 
   &:hover {
     transform: scale(1.04);
@@ -51,7 +51,7 @@
       right: 6%;
       height: 3.6rem;
       width: 3.6rem;
-      color: rgb(142, 142, 142);
+      color: var.$color-text-muted;
       fill: var.$color-primary;
     }
   }
@@ -127,7 +127,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  fill: #758488;
+  fill: var.$color-icon-muted;
   height: 10rem;
   width: 10rem;
 }

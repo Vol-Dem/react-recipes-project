@@ -27,8 +27,8 @@ body:before {
   display: block;
   background: linear-gradient(
       to right bottom,
-      rgba(38, 50, 55, 0.7),
-      rgba(48, 71, 80, 0.7)
+      var.$color-overlay-dark,
+      var.$color-overlay-primary
     ),
     url("./assets/bg.webp") no-repeat top/cover;
   height: 100vh;
@@ -82,8 +82,8 @@ body:before {
   body:before {
     background: linear-gradient(
         to right bottom,
-        rgba(38, 50, 55, 0.7),
-        rgba(48, 71, 80, 0.7)
+        var.$color-overlay-dark,
+        var.$color-overlay-primary
       ),
       url("./assets/bg768.webp") no-repeat top/cover;
   }
@@ -93,8 +93,8 @@ body:before {
   body:before {
     background: linear-gradient(
         to right bottom,
-        rgba(38, 50, 55, 0.7),
-        rgba(48, 71, 80, 0.7)
+        var.$color-overlay-dark,
+        var.$color-overlay-primary
       ),
       url("./assets/bg425.webp") no-repeat top/cover;
   }

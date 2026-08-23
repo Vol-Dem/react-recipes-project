@@ -25,7 +25,7 @@
 }
 
 .recipe__fav {
-  color: rgb(126, 126, 126);
+  color: var.$color-info-muted;
   cursor: pointer;
 
   & svg {

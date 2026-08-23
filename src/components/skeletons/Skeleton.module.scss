@@ -1,5 +1,7 @@
+@use "./../../variables/variables.scss" as var;
+
 .skeleton {
-  background-color: #dfdfdf;
+  background-color: var.$color-background-skeleton;
   border-radius: 0.6rem;
 
   &.title {

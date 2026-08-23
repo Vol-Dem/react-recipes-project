@@ -1,3 +1,4 @@
+@use "sass:color";
 @use "./../../variables/variables.scss" as var;
 
 .auth {
@@ -36,11 +37,11 @@
   &__btn--switch {
     background-color: transparent;
     border: none;
-    color: darken(var.$color-primary, 10%);
+    color: color.adjust(var.$color-primary, $lightness: -10%);
     font-weight: 600;
 
     &:hover {
-      color: darken(var.$color-primary, 15%);
+      color: color.adjust(var.$color-primary, $lightness: -15%);
     }
 
     &:disabled {
@@ -72,7 +73,7 @@
 }
 
 .invalid {
-  background-color: lighten(var.$color-red, 55%);
+  background-color: color.adjust(var.$color-red, $lightness: 55%);
   border-color: var.$color-red;
 }
 
@@ -83,7 +84,7 @@
 .privacy {
   margin-top: 2rem;
   padding-top: 1rem;
-  border-top: 1px solid rgb(var.$color-text-white, 60%);
+  border-top: 1px solid color.change(var.$color-text-white, $alpha: 0.6);
   line-height: 1.4;
 }
 

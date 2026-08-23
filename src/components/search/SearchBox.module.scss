@@ -1,3 +1,4 @@
+@use "sass:color";
 @use "./../../variables/variables.scss" as var;
 
 .search {
@@ -62,7 +63,7 @@
     cursor: pointer;
 
     &:hover {
-      background-color: darken(var.$color-primary, 12%);
+      background-color: color.adjust(var.$color-primary, $lightness: -12%);
       box-shadow: 0.2rem 0.3rem 0.5rem rgba(var.$color-black, 0.4);
     }
 
@@ -105,7 +106,7 @@
     align-items: center;
     background: transparent;
     border: none;
-    color: darken(var.$color-primary, 10%);
+    color: color.adjust(var.$color-primary, $lightness: -10%);
     height: 100%;
     font-size: 2.8rem;
     font-weight: 700;
@@ -114,7 +115,7 @@
     transition: color 0.3s;
 
     &:hover {
-      color: darken(var.$color-primary, 20%);
+      color: color.adjust(var.$color-primary, $lightness: -20%);
     }
 
     svg {

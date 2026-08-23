@@ -43,7 +43,7 @@
     justify-content: center;
 
     & svg {
-      color: #dfdfdf;
+      color: var.$color-background-skeleton;
       width: 1.5rem;
       height: 1.5rem;
     }

@@ -1,3 +1,5 @@
+@use "./../../variables/variables.scss" as var;
+
 .spinner {
   display: flex;
   position: relative;
@@ -27,10 +29,10 @@
     position: absolute;
     width: 64px;
     height: 64px;
-    border: 8px solid #304750;
+    border: 8px solid var.$color-text-primary;
     border-radius: 50%;
     animation: spinner 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-    border-color: #fff transparent transparent transparent;
+    border-color: var.$color-text-light transparent transparent transparent;
   }
 
   & div:nth-child(1) {
