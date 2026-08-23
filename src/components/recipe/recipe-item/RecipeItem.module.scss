@@ -32,7 +32,7 @@
     right: auto;
   }
 
-  &--side &__img {
+  &--side &__img-container {
     min-height: 12rem;
   }
 
@@ -43,7 +43,7 @@
 
   &__img-container {
     position: relative;
-    min-height: 14rem;
+    min-height: 16rem;
 
     transition: all 0.5s;
 

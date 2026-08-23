@@ -5,8 +5,8 @@ import { NavLink } from "react-router-dom";
 import Card from "../components/ui/Card";
 import { motion } from "framer-motion";
 import {
-  ANIMATION_SLIDE_IN,
-  ANIMATION_SLIDE_IN_INITIAL,
+  ANIMATIONS_FM_SLIDEIN,
+  ANIMATIONS_FM_SLIDEIN_INITIAL,
 } from "../variables/constants";
 
 const ToS = ({ title }) => {
@@ -20,8 +20,8 @@ const ToS = ({ title }) => {
 
   return (
     <motion.div
-      initial={ANIMATION_SLIDE_IN_INITIAL}
-      animate={ANIMATION_SLIDE_IN}
+      initial={ANIMATIONS_FM_SLIDEIN_INITIAL}
+      animate={ANIMATIONS_FM_SLIDEIN}
     >
       <Card className={classes.tos}>
         <h1 className={classes["tos__h1"]}>Terms of Service</h1>

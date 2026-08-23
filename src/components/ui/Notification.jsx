@@ -1,4 +1,4 @@
-import Buttton from "./Button";
+import Button from "./Button";
 import Card from "./Card";
 import classes from "./Notification.module.scss";
 import { ReactComponent as TriangleIcon } from "./../../assets/triangle.svg";
@@ -31,15 +31,15 @@ const Notification = ({ title, message }) => {
               <h4 className={classes["notification__title"]}>{title}</h4>
               <p className={classes["notification__text"]}>{message}</p>
             </div>
-            <Buttton
+            <Button
               className={classes["notification__btn"]}
               onClick={closeNotificationHandler}
             >
               Got it!
-            </Buttton>
+            </Button>
           </Card>
         </motion.div>,
-        document.body
+        document.body,
       )}
     </>
   );

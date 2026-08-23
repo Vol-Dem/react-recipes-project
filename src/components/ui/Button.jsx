@@ -1,7 +1,7 @@
 import classes from "./Button.module.scss";
 import { motion } from "framer-motion";
 
-const Buttton = (props) => {
+const Button = (props) => {
   const { className, disabled, onClick, button } = props;
   return (
     <motion.button
@@ -24,4 +24,4 @@ const Buttton = (props) => {
   );
 };
 
-export default Buttton;
+export default Button;

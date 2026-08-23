@@ -16,7 +16,7 @@ import {
   reauthenticateWithPopup,
   EmailAuthProvider,
 } from "firebase/auth";
-import { DEF_ERROR_MESSAGE } from "../variables/constants";
+import { ERROR_MESSAGE_DEFAULT } from "../variables/constants";
 import firebaseApp from "../config";
 import { loadFav } from "./fav";
 import { getFirestore } from "firebase/firestore";
@@ -158,19 +158,35 @@ export const authRequest = (isLogin, email, password) => {
       );
       dispatch(authActions.closeAuthForm());
     } catch (error) {
-      if (error.code === "auth/invalid-login-credentials") {
-        dispatch(authActions.setErrorMessage("Invalid login credentials"));
-      } else if (error.code === "auth/too-many-requests") {
-        dispatch(
-          authActions.setErrorMessage(
-            "Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later"
-          )
-        );
-      } else {
-        dispatch(authActions.setErrorMessage(DEF_ERROR_MESSAGE));
+      let errMessage;
+      switch (error.code) {
+        case "auth/invalid-login-credentials":
+          errMessage = "Invalid login credentials";
+          break;
+        case "auth/invalid-email":
+          errMessage = "Invalid email";
+          break;
+        case "auth/wrong-password":
+          errMessage = "Wrong password";
+          break;
+        case "auth/missing-password":
+          errMessage = "Missing password";
+          break;
+        case "auth/user-not-found":
+          errMessage = "User not found";
+          break;
+        case "auth/too-many-requests":
+          errMessage =
+            "Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later";
+          break;
+        default:
+          errMessage = error.message;
       }
+
+      dispatch(authActions.setErrorMessage(errMessage));
+    } finally {
+      dispatch(authActions.setIsLoading(false));
     }
-    dispatch(authActions.setIsLoading(false));
   };
 };
 
@@ -248,7 +264,7 @@ export const authWithGoogle = () => {
         // The AuthCredential type that was used.
         // const credential = GoogleAuthProvider.credentialFromError(error);
         // ...
-        dispatch(authActions.setErrorMessage(DEF_ERROR_MESSAGE));
+        dispatch(authActions.setErrorMessage(ERROR_MESSAGE_DEFAULT));
       });
   };
 };
@@ -313,7 +329,7 @@ export const resetUserPassword = (email) => {
         if (error.code === "auth/invalid-email") {
           dispatch(authActions.setErrorMessage("Invalid email"));
         } else {
-          dispatch(authActions.setErrorMessage(DEF_ERROR_MESSAGE));
+          dispatch(authActions.setErrorMessage(ERROR_MESSAGE_DEFAULT));
         }
         // ..
       });

@@ -6,7 +6,7 @@ import MobileNavigation from "../navigation/MobileNavigation";
 import { useSelector, useDispatch } from "react-redux";
 import { authActions } from "../../../store/auth";
 import UserNavigation from "../navigation/UserNavigation";
-import Buttton from "../../ui/Button";
+import Button from "../../ui/Button";
 import Modal from "../../ui/Modal";
 import AuthForm from "../../Auth/AuthForm";
 import { Suspense } from "react";
@@ -18,11 +18,11 @@ const Layout = () => {
   const isAuth = useSelector((state) => state.auth.isLoggedIn);
   const authIsOpen = useSelector((state) => state.auth.authFormIsOpen);
   const notificationIsShown = useSelector(
-    (state) => state.notification.isShown
+    (state) => state.notification.isShown,
   );
   const notificationTitle = useSelector((state) => state.notification.title);
   const notificationMessage = useSelector(
-    (state) => state.notification.message
+    (state) => state.notification.message,
   );
   const dispatch = useDispatch();
 
@@ -43,9 +43,9 @@ const Layout = () => {
         <MainNavigation />
         {isAuth && <UserNavigation />}
         {!isAuth && (
-          <Buttton onClick={openAuth} className={classes["btn-auth"]}>
+          <Button onClick={openAuth} className={classes["btn-auth"]}>
             Sign In
-          </Buttton>
+          </Button>
         )}
       </Header>
 

@@ -10,15 +10,17 @@ import {
   authWithGoogle,
   resetUserPassword,
 } from "../../store/auth";
-import Buttton from "../ui/Button";
+import Button from "../ui/Button";
 import { useEffect } from "react";
 import ButttonSecondary from "../ui/ButtonSecondary";
 import {
-  AGREEMENT_MESSAGE,
-  DEF_INPUT_ERROR_MESSAGE,
-  EMAIL_MAX_LENGTH,
-  OFFLINE_ERROR_MESSAGE,
-  PASSWORD_MAX_LENGTH,
+  ANIMATIONS_FM_SLIDEIN,
+  ANIMATIONS_FM_SLIDEIN_INITIAL,
+  MESSAGE_AGREEMENT,
+  ERROR_MESSAGE_OFFLINE,
+  ERROR_MESSAGE_INPUT_DEF,
+  VALIDATION_EMAIL_MAX_LENGTH,
+  VALIDATION_PASSWORD_MAX_LENGTH,
 } from "../../variables/constants";
 import Checkbox from "../ui/Checkbox";
 import LinkA from "../ui/LinkA";
@@ -42,7 +44,7 @@ const AuthForm = () => {
   const successMessage = useSelector((state) => state.auth.successMessage);
   const isLoading = useSelector((state) => state.auth.isLoading);
   const showResetPassword = useSelector(
-    (state) => state.auth.showResetPassword
+    (state) => state.auth.showResetPassword,
   );
   const dispatch = useDispatch();
 
@@ -60,23 +62,23 @@ const AuthForm = () => {
     dispatch(authActions.setSuccessMessage(""));
     setShowErrorMessage(true);
     if (!navigator?.onLine) {
-      dispatch(authActions.setErrorMessage(OFFLINE_ERROR_MESSAGE));
+      dispatch(authActions.setErrorMessage(ERROR_MESSAGE_OFFLINE));
       return;
     }
 
     if (!agreement && !isLogin) {
-      dispatch(authActions.setErrorMessage(AGREEMENT_MESSAGE));
+      dispatch(authActions.setErrorMessage(MESSAGE_AGREEMENT));
       return;
     }
 
-    if (isLogin || (email.isValid && password.isValid)) {
+    if (email.isValid && password.isValid) {
       dispatch(authRequest(isLogin, email.value, password.value));
     } else {
-      dispatch(authActions.setErrorMessage(DEF_INPUT_ERROR_MESSAGE));
+      dispatch(authActions.setErrorMessage(ERROR_MESSAGE_INPUT_DEF));
     }
 
     // if (!email.isValid || !password.isValid) {
-    //   dispatch(authActions.setErrorMessage(DEF_INPUT_ERROR_MESSAGE));
+    //   dispatch(authActions.setErrorMessage(ERROR_MESSAGE_INPUT_DEF));
     // } else {
     //   dispatch(authRequest(isLogin, email.value, password.value));
     // }
@@ -124,7 +126,7 @@ const AuthForm = () => {
         validation={{
           required: true,
           email: true,
-          maxLength: EMAIL_MAX_LENGTH,
+          maxLength: VALIDATION_EMAIL_MAX_LENGTH,
         }}
         showError={showErrorMessage}
         value={email.value}
@@ -139,17 +141,16 @@ const AuthForm = () => {
           {successMessage}
         </SuccessMessage>
       )}
-      <Buttton>Reset password</Buttton>
+      <Button>Reset password</Button>
     </form>
   );
 
   return (
     <motion.div
       key={isLogin}
-      variants={{ visible: { opacity: 1 }, hidden: { opacity: 0 } }}
-      // initial="hidden"
-      // animate="visible"
-      transition={{ duration: 0.6 }}
+      initial={ANIMATIONS_FM_SLIDEIN_INITIAL}
+      animate={ANIMATIONS_FM_SLIDEIN}
+      exit={ANIMATIONS_FM_SLIDEIN_INITIAL}
       className={classes.auth}
     >
       {!showResetPassword && (
@@ -159,26 +160,21 @@ const AuthForm = () => {
       )}
       {showResetPassword && resetPasswordForm}
       {!showResetPassword && (
-        <motion.form
-          variants={{ visible: { transition: { staggerChildren: 0.05 } } }}
-          onSubmit={authHandler}
-          className={classes["auth__form"]}
-        >
+        <form onSubmit={authHandler} className={classes["auth__form"]}>
           {isLogin && (
-            <Buttton
-              className={classes["auth__btn-social"]}
+            <Button
               type="button"
               onClick={() => {
                 dispatch(authWithGoogle());
               }}
             >
               <img
-                className={classes["auth__icon"]}
+                className={classes["icon"]}
                 alt="google-icon"
                 src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
               ></img>{" "}
-              <span>Sign in with Google</span>
-            </Buttton>
+              Sign in with Google
+            </Button>
           )}
           <Input
             label="Email"
@@ -193,15 +189,21 @@ const AuthForm = () => {
             onChange={(e, isValid) => {
               setEmail({ value: e.target.value, isValid });
             }}
-            validation={
-              !isLogin
-                ? {
-                    required: true,
-                    email: true,
-                    maxLength: EMAIL_MAX_LENGTH,
-                  }
-                : false
-            }
+            validation={{
+              required: true,
+              email: true,
+              maxLength: VALIDATION_EMAIL_MAX_LENGTH,
+              disableErrorOnBlur: !isLogin ? false : true,
+            }}
+            // validation={
+            //   !isLogin
+            //     ? {
+            //         required: true,
+            //         email: true,
+            //         maxLength: VALIDATION_EMAIL_MAX_LENGTH,
+            //       }
+            //     : false
+            // }
             showError={showErrorMessage}
             value={email.value}
           />
@@ -217,15 +219,21 @@ const AuthForm = () => {
             onChange={(e, isValid) => {
               setPassword({ value: e.target.value, isValid });
             }}
-            validation={
-              !isLogin
-                ? {
-                    required: true,
-                    password: true,
-                    maxLength: PASSWORD_MAX_LENGTH,
-                  }
-                : false
-            }
+            validation={{
+              required: true,
+              password: true,
+              maxLength: VALIDATION_PASSWORD_MAX_LENGTH,
+              disableErrorOnBlur: !isLogin ? false : true,
+            }}
+            // validation={
+            //   !isLogin
+            //     ? {
+            //         required: true,
+            //         password: true,
+            //         maxLength: VALIDATION_PASSWORD_MAX_LENGTH,
+            //       }
+            //     : false
+            // }
             showError={showErrorMessage}
             value={password.value}
           />
@@ -277,15 +285,15 @@ const AuthForm = () => {
             >
               {isLogin ? "Create Account" : "Log in"}
             </ButttonSecondary>
-            <Buttton
+            <Button
               disabled={isLoading}
               className={classes["auth__btn--submit"]}
             >
               {isLoading && <Spinner size="small" />}
               <span>{isLogin ? "Log in" : "Sign up"}</span>
-            </Buttton>
+            </Button>
           </div>
-        </motion.form>
+        </form>
       )}
       {isLogin && (
         <div className={classes["privacy"]}>

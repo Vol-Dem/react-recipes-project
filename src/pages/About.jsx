@@ -1,7 +1,7 @@
 import Card from "../components/ui/Card";
 import {
-  ANIMATION_SLIDE_IN,
-  ANIMATION_SLIDE_IN_INITIAL,
+  ANIMATIONS_FM_SLIDEIN,
+  ANIMATIONS_FM_SLIDEIN_INITIAL,
 } from "../variables/constants";
 import classes from "./About.module.scss";
 import { motion } from "framer-motion";
@@ -9,8 +9,8 @@ import { motion } from "framer-motion";
 const About = () => {
   return (
     <motion.div
-      initial={ANIMATION_SLIDE_IN_INITIAL}
-      animate={ANIMATION_SLIDE_IN}
+      initial={ANIMATIONS_FM_SLIDEIN_INITIAL}
+      animate={ANIMATIONS_FM_SLIDEIN}
     >
       <Card>
         {/* <h1 className={classes["about__h1"]}>

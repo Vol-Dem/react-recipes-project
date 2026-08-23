@@ -16,7 +16,12 @@ import {
 import ErrorMessage from "../../ui/ErrorMessage";
 import { motion } from "framer-motion";
 
-const RecipeItemList = ({ firebaseRef, filter, skeletonItemsAmount }) => {
+const RecipeItemList = ({
+  title,
+  firebaseRef,
+  filter,
+  skeletonItemsAmount,
+}) => {
   const dispatch = useDispatch();
   const { recipeId } = useParams();
   const recipeIsOpen = !!recipeId;
@@ -27,7 +32,7 @@ const RecipeItemList = ({ firebaseRef, filter, skeletonItemsAmount }) => {
   const recipesIsLoading = useSelector(
     (state) => state.recipe.recipesIsLoading
   );
-  const title = useSelector((state) => state.recipe.title);
+  // const title = useSelector((state) => state.recipe.title);
   const options = useSelector((state) => state.recipe.options);
   const emptyMessage = useSelector((state) => state.recipe.emptyMessage);
   const errorMessage = useSelector((state) => state.recipe.errorMessage);

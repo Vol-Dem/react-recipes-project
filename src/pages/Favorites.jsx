@@ -9,8 +9,9 @@ import firebaseApp from "../config";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import {
-  ANIMATION_SLIDE_IN,
-  ANIMATION_SLIDE_IN_INITIAL,
+  ANIMATIONS_FM_SLIDEIN,
+  ANIMATIONS_FM_SLIDEIN_INITIAL,
+  MESSAGE_EMPTY_FAV,
 } from "../variables/constants";
 
 const firestore = getFirestore(firebaseApp);
@@ -27,23 +28,23 @@ const Favorites = () => {
   const { recipeId } = useParams();
   const recipeIsOpen = !!recipeId;
   const dispatch = useDispatch();
-  const title = "Favorites";
-  const emptyMessage = "Your fav list is empty";
+  // const title = "Favorites";
 
   //Load user favorites
   useEffect(() => {
     if (!favList.length) {
+      dispatch(recipeActions.setEmptyMessage(MESSAGE_EMPTY_FAV));
       return;
     }
 
+    dispatch(recipeActions.setEmptyMessage(""));
     const favListQuery = favList.join(",");
     const requestUrl = `https://api.spoonacular.com/recipes/informationBulk?apiKey=${process.env.REACT_APP_SPOONACULAR_API_KEY}&ids=${favListQuery}&includeNutrition=true`;
     const resultsAmount = limit(+process.env.REACT_APP_AMOUNT_PER_PAGE + 1);
     const filter = where("id", "in", favList);
     setFilter(filter);
 
-    dispatch(recipeActions.setTitle(title));
-    dispatch(recipeActions.setEmptyMessage(emptyMessage));
+    // dispatch(recipeActions.setTitle(title));
     dispatch(recipeActions.setCurrentPage(1));
     dispatch(
       getRecipes({
@@ -64,14 +65,15 @@ const Favorites = () => {
 
   return (
     <motion.div
-      initial={ANIMATION_SLIDE_IN_INITIAL}
-      animate={ANIMATION_SLIDE_IN}
+      initial={ANIMATIONS_FM_SLIDEIN_INITIAL}
+      animate={ANIMATIONS_FM_SLIDEIN}
       className={`${classes["section-favorites"]} ${
         recipeIsOpen ? classes["recipe-columns"] : ""
       }`}
     >
       {isAuth && (
         <RecipeItemList
+          title="Favorites"
           firebaseRef={favRef}
           filter={filter}
           skeletonItemsAmount={favList?.length}

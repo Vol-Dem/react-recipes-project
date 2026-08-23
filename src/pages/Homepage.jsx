@@ -1,10 +1,10 @@
 import classes from "./Homepage.module.scss";
 import SearchBox from "../components/search/SearchBox";
 import Logo from "../components/layout/logo/Logo";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
-  ANIMATION_SLIDE_IN,
-  ANIMATION_SLIDE_IN_INITIAL,
+  ANIMATIONS_FM_SLIDEIN,
+  ANIMATIONS_FM_SLIDEIN_INITIAL,
   RESULT_NUM,
 } from "../variables/constants";
 import { lazy } from "react";
@@ -27,6 +27,7 @@ const firestore = getFirestore(firebaseApp);
 const recipeRef = collection(firestore, "recipes");
 
 const Homepage = () => {
+  const [title, setTitle] = useState("Search result");
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { recipeId } = useParams();
@@ -64,11 +65,11 @@ const Homepage = () => {
       maxCalories && `&maxCalories=${maxCalories}`
     }&number=${RESULT_NUM}&addRecipeNutrition=true`;
 
-    const title = query || "Search result";
+    const searchTitle = query || "Search result";
     const emptyMessage = `No results for "${query}". Try checking your spelling`;
     const resultsAmount = limit(+process.env.REACT_APP_AMOUNT_PER_PAGE + 1);
 
-    dispatch(recipeActions.setTitle(title));
+    setTitle(searchTitle);
     dispatch(
       recipeActions.setOptions(
         [cuisine, diet, intolerance, type].filter(Boolean)
@@ -88,13 +89,14 @@ const Homepage = () => {
       dispatch(recipeActions.setOrderBy([]));
       dispatch(recipeActions.setErrorMessage(""));
       dispatch(recipeActions.setEmptyMessage(""));
+      dispatch(recipeActions.setOptions([]));
     };
   }, [dispatch]);
 
   return (
     <motion.div
-      initial={ANIMATION_SLIDE_IN_INITIAL}
-      animate={ANIMATION_SLIDE_IN}
+      initial={ANIMATIONS_FM_SLIDEIN_INITIAL}
+      animate={ANIMATIONS_FM_SLIDEIN}
     >
       <section
         data-testid="section-search"
@@ -105,9 +107,11 @@ const Homepage = () => {
         }`}
       >
         <AnimatePresence>
-          {recipesPerPageIsEmpty && !recipesIsLoading && !recipeIsOpen && (
-            <Logo />
-          )}
+          {recipesPerPageIsEmpty &&
+            !recipesIsLoading &&
+            !recipeIsOpen &&
+            !errorMessage &&
+            !emptyMessage && <Logo />}
         </AnimatePresence>
         {/* <Logo
           hide={!recipesPerPageIsEmpty || recipesIsLoading || recipeIsOpen}
@@ -128,7 +132,7 @@ const Homepage = () => {
       >
         {(recipesIsLoading || !recipesPerPageIsEmpty || emptyMessage) && (
           <Suspense fallback={<Spinner />}>
-            <RecipeItemList firebaseRef={recipeRef} />
+            <RecipeItemList title={title} firebaseRef={recipeRef} />
           </Suspense>
         )}
 
