@@ -32,7 +32,6 @@ const RecipeItemList = ({
   const recipesIsLoading = useSelector(
     (state) => state.recipe.recipesIsLoading
   );
-  // const title = useSelector((state) => state.recipe.title);
   const options = useSelector((state) => state.recipe.options);
   const emptyMessage = useSelector((state) => state.recipe.emptyMessage);
   const errorMessage = useSelector((state) => state.recipe.errorMessage);
@@ -74,7 +73,6 @@ const RecipeItemList = ({
     <motion.div
       initial={{ opacity: 0, y: 0 }}
       animate={{ opacity: 1, y: 0 }}
-      // transition={{ duration: 0.3 }}
       className={classes["search-result__container"]}
       data-testid="recipe-item-list"
     >

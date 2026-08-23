@@ -14,13 +14,6 @@ const Button = (props) => {
     >
       {props.children}
     </motion.button>
-    // <button
-    //   className={`${classes.btn} ${props.className || ""}`}
-    //   onClick={props.onClick}
-    //   disabled={props.disabled}
-    // >
-    //   {props.children}
-    // </button>
   );
 };
 

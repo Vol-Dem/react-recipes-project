@@ -10,7 +10,6 @@
 
 .notification {
   display: grid;
-  // transform: translate(-50%);
 
   height: auto;
   grid-template-columns: auto 1fr auto;
@@ -20,7 +19,6 @@
   align-items: center;
   justify-content: space-between;
   gap: 2rem;
-  // animation: slideIn 0.1s ease-out;
 
   & svg {
     color: var.$color-primary;
@@ -29,7 +27,6 @@
   }
 
   &__message {
-    // font-size: 2rem;
   }
 
   &__title {

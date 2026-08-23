@@ -99,8 +99,6 @@ function SearchBox({ getFormData }) {
           <FilterIcon />
         </motion.button>
         <button
-          // whileHover={{ scale: 1.1, transition: { type: "spring" } }}
-          // whileTap={{ scale: 0.95 }}
           type="submit"
           data-testid="search-submit"
           className={classes["search__form-btn"]}

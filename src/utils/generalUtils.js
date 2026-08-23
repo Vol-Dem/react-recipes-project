@@ -1,5 +1,3 @@
-import { ERROR_MESSAGE_DEFAULT } from "../variables/constants";
-
 /**
  * Validate input data
  * @param {string} rules - Type of validation (email, password, required, minLength, maxLength, number, string)
@@ -71,21 +69,3 @@ export const validateInput = (rules, value) => {
   return { inputValue: value, isValid, errorMessage };
 };
 
-export const throwCustomError = (message) => {
-  const error = new Error(message);
-  error.isCustom = true; // Add a custom flag
-  throw error;
-};
-
-export const handleErrors = (err) => {
-  // const isStandardError = ERROR_MESSAGES.includes(err.message);
-  let errorMessage = ERROR_MESSAGE_DEFAULT;
-
-  if (err.isCustom) {
-    errorMessage = err.message;
-  } else {
-    console.error(err);
-  }
-
-  return errorMessage;
-};

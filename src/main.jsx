@@ -4,7 +4,6 @@ import "./index.scss";
 import App from "./App";
 import { Provider } from "react-redux";
 import store from "./store/redux-store";
-import "./fonts/GrandHotel/GrandHotel-Regular.ttf";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>

@@ -13,16 +13,6 @@ const About = () => {
       animate={ANIMATIONS_FM_SLIDEIN}
     >
       <Card>
-        {/* <h1 className={classes["about__h1"]}>
-          Welcome to the “Your recipe book”!
-        </h1>
-        <p className={classes["about__text"]}>
-          This is a virtual space where cooking enthusiasts can find and save
-          their favorite recipes. This convenient and attractive web application
-          will allow you to easily find recipes by type of dish, cuisine or
-          special requirements such as dietary restrictions, calories, cooking
-          time, etc.
-        </p> */}
         <h1 className={classes["about__h1"]}>
           Welcome to the “Your recipe book”!
         </h1>

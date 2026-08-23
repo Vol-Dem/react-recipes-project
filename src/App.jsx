@@ -1,4 +1,3 @@
-// import classes from "./App.module.scss";
 import Layout from "./components/layout/layout/Layout";
 import {
   createBrowserRouter,
@@ -24,7 +23,6 @@ function App() {
   const isAuth = useSelector((state) => state.auth.isLoggedIn);
   const dispatch = useDispatch();
 
-  //Authorizes user on application load
   useEffect(() => {
     dispatch(initAuth());
   }, [dispatch]);

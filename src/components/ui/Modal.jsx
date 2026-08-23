@@ -44,7 +44,6 @@ const Modal = (props) => {
             initial="hidden"
             animate="visible"
             exit="exit"
-            // transition={{ type: "spring", duration: 0.3 }}
             className={`${classes.modal} ${classes["modal--content"]} ${
               className ? className : ""
             }`}

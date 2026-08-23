@@ -28,7 +28,6 @@ const Favorites = () => {
   const { recipeId } = useParams();
   const recipeIsOpen = !!recipeId;
   const dispatch = useDispatch();
-  // const title = "Favorites";
 
   //Load user favorites
   useEffect(() => {
@@ -44,7 +43,6 @@ const Favorites = () => {
     const filter = where("id", "in", favList);
     setFilter(filter);
 
-    // dispatch(recipeActions.setTitle(title));
     dispatch(recipeActions.setCurrentPage(1));
     dispatch(
       getRecipes({

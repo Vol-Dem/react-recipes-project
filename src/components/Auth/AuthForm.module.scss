@@ -78,7 +78,6 @@
 
 .link {
   @include var.linkA;
-  // font-size: 1.6rem;
 }
 
 .privacy {
@@ -96,7 +95,6 @@
 .reset {
   display: flex;
   justify-content: space-between;
-  // margin-top: -10px;
   margin-left: 1rem;
 }
 

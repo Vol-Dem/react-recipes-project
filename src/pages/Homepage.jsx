@@ -113,9 +113,6 @@ const Homepage = () => {
             !errorMessage &&
             !emptyMessage && <Logo />}
         </AnimatePresence>
-        {/* <Logo
-          hide={!recipesPerPageIsEmpty || recipesIsLoading || recipeIsOpen}
-        /> */}
         <SearchBox getFormData={getFormDataHandler} />
       </section>
       {errorMessage && (

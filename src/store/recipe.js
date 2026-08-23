@@ -250,9 +250,6 @@ export const getRecipes = ({
         dispatch(recipeActions.setRecipesIsLoading(false));
       }
     }
-    // finally {
-    //   dispatch(recipeActions.setRecipesIsLoading(false));
-    // }
   };
 };
 

@@ -63,7 +63,6 @@ describe("Homepage component", () => {
   });
 
   it("sends request with correct URL and dispatches actions on form submission", async () => {
-    // expect.assertions(6);
 
     const store = mockStore({
       recipe: initialState,
@@ -154,7 +153,6 @@ describe("Homepage component", () => {
     );
     const h1El = screen.queryByText("Your recipe book");
     const pizzaEl = await screen.findByText("Pizza");
-    // const pizzaEl = screen.queryByText("Pizza");
     const searchInputEl = screen.getByTestId("search-input");
     const recipeItemListEl = screen.queryByTestId("recipe-item-list");
     const recipeEl = screen.queryByTestId("recipe");
