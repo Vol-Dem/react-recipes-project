@@ -1,15 +1,15 @@
 import { useEffect } from "react";
 import LinkA from "../components/ui/LinkA";
-import classes from "./ToS.module.scss";
+import classes from "./TermsOfService.module.scss";
 import { NavLink } from "react-router-dom";
 import Card from "../components/ui/Card";
 import { motion } from "framer-motion";
 import {
-  ANIMATIONS_FM_SLIDEIN,
-  ANIMATIONS_FM_SLIDEIN_INITIAL,
+  ANIMATION_SLIDE_IN,
+  ANIMATION_SLIDE_IN_INITIAL,
 } from "../variables/constants";
 
-const ToS = ({ title }) => {
+const TermsOfService = ({ title }) => {
   useEffect(() => {
     document.title = title;
   }, [title]);
@@ -20,8 +20,8 @@ const ToS = ({ title }) => {
 
   return (
     <motion.div
-      initial={ANIMATIONS_FM_SLIDEIN_INITIAL}
-      animate={ANIMATIONS_FM_SLIDEIN}
+      initial={ANIMATION_SLIDE_IN_INITIAL}
+      animate={ANIMATION_SLIDE_IN}
     >
       <Card className={classes.tos}>
         <h1 className={classes["tos__h1"]}>Terms of Service</h1>
@@ -128,4 +128,4 @@ const ToS = ({ title }) => {
   );
 };
 
-export default ToS;
+export default TermsOfService;

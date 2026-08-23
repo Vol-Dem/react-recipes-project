@@ -5,12 +5,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { changeUserName, changeUserPassword } from "../store/auth";
 import ErrorMessage from "../components/ui/ErrorMessage";
 import { useState } from "react";
-import ButttonSecondary from "../components/ui/ButtonSecondary";
+import ButtonSecondary from "../components/ui/ButtonSecondary";
 import UserIcon from "./../assets/user.svg?react";
 import { motion } from "framer-motion";
 import {
-  ANIMATIONS_FM_SLIDEIN,
-  ANIMATIONS_FM_SLIDEIN_INITIAL,
+  ANIMATION_SLIDE_IN,
+  ANIMATION_SLIDE_IN_INITIAL,
 } from "../variables/constants";
 
 const Profile = () => {
@@ -30,7 +30,7 @@ const Profile = () => {
     setChangePassIsActive((prevState) => !prevState);
   };
 
-  //Retrive data from form and dispatch changeUserPassword action with new password
+  //Retrieve data from form and dispatch changeUserPassword action with new password
   const changePasswordHandler = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
@@ -38,7 +38,7 @@ const Profile = () => {
     dispatch(changeUserPassword(password));
   };
 
-  //Retrive data from form and dispatch changeUserName action with new name
+  //Retrieve data from form and dispatch changeUserName action with new name
   const changeNameHandler = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
@@ -60,12 +60,12 @@ const Profile = () => {
             }}
             autoFocus={true}
           />
-          <ButttonSecondary>Submit</ButttonSecondary>
+          <ButtonSecondary>Submit</ButtonSecondary>
         </>
       )}
-      <ButttonSecondary type="button" onClick={changeNameIsActiveHandler}>
+      <ButtonSecondary type="button" onClick={changeNameIsActiveHandler}>
         {!changeNameIsActive ? "Change" : "Cancel"}
-      </ButttonSecondary>
+      </ButtonSecondary>
     </form>
   );
 
@@ -75,19 +75,19 @@ const Profile = () => {
       {changePassIsActive && (
         <>
           <Input input={{ type: "password", name: "pass" }} autoFocus={true} />
-          <ButttonSecondary>Submit</ButttonSecondary>
+          <ButtonSecondary>Submit</ButtonSecondary>
         </>
       )}
-      <ButttonSecondary type="button" onClick={changePassIsActiveHandler}>
+      <ButtonSecondary type="button" onClick={changePassIsActiveHandler}>
         {!changePassIsActive ? "Change" : "Cancel"}
-      </ButttonSecondary>
+      </ButtonSecondary>
     </form>
   );
 
   return (
     <motion.div
-      initial={ANIMATIONS_FM_SLIDEIN_INITIAL}
-      animate={ANIMATIONS_FM_SLIDEIN}
+      initial={ANIMATION_SLIDE_IN_INITIAL}
+      animate={ANIMATION_SLIDE_IN}
       className={classes.profile}
     >
       <Card>

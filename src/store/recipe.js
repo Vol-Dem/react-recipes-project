@@ -103,7 +103,7 @@ export const splitRecipesPerPage = () => {
 };
 
 /**
- *Retrive data from recipe object
+ *Retrieve data from recipe object
  * @param {Object} recipe Recipe data to transform
  * @returns {Object} Transformed data (recipe)
  */

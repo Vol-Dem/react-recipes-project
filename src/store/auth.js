@@ -12,7 +12,6 @@ import {
   sendPasswordResetEmail,
   sendEmailVerification,
   reauthenticateWithCredential,
-  updateEmail,
   reauthenticateWithPopup,
   EmailAuthProvider,
 } from "firebase/auth";
@@ -28,11 +27,8 @@ const provider = new GoogleAuthProvider();
 const authInitialState = {
   isLoggedIn: false,
   authFormIsOpen: false,
-  reAuthFormIsOpen: false,
   showResetPassword: false,
   isLoading: false,
-  userDataIsLoading: false,
-  userDataLoadError: "",
   errorMessage: "",
   successMessage: "",
   user: {
@@ -73,9 +69,6 @@ const authSlice = createSlice({
     closeAuthForm(state) {
       state.authFormIsOpen = false;
     },
-    setReauthFormIsOpen(state, actions) {
-      state.reAuthFormIsOpen = actions.payload;
-    },
     setShowResetPassword(state, actions) {
       state.showResetPassword = actions.payload;
     },
@@ -87,12 +80,6 @@ const authSlice = createSlice({
     },
     setIsLoading(state, actions) {
       state.isLoading = actions.payload;
-    },
-    setUserDataIsLoading(state, actions) {
-      state.userDataIsLoading = actions.payload;
-    },
-    setUserDataLoadError(state, actions) {
-      state.userDataLoadError = actions.payload;
     },
   },
 });
@@ -276,7 +263,7 @@ export const promptForCredentials = async (password) => {
   }
 };
 
-export const reAuthUser = async (type, password) => {
+export const reauthenticateUser = async (type, password) => {
   try {
     const user = auth.currentUser;
 

@@ -12,13 +12,13 @@ import {
 } from "../../store/auth";
 import Button from "../ui/Button";
 import { useEffect } from "react";
-import ButttonSecondary from "../ui/ButtonSecondary";
+import ButtonSecondary from "../ui/ButtonSecondary";
 import {
-  ANIMATIONS_FM_SLIDEIN,
-  ANIMATIONS_FM_SLIDEIN_INITIAL,
+  ANIMATION_SLIDE_IN,
+  ANIMATION_SLIDE_IN_INITIAL,
   MESSAGE_AGREEMENT,
   ERROR_MESSAGE_OFFLINE,
-  ERROR_MESSAGE_INPUT_DEF,
+  ERROR_MESSAGE_INVALID_INPUT,
   VALIDATION_EMAIL_MAX_LENGTH,
   VALIDATION_PASSWORD_MAX_LENGTH,
 } from "../../variables/constants";
@@ -74,7 +74,7 @@ const AuthForm = () => {
     if (email.isValid && password.isValid) {
       dispatch(authRequest(isLogin, email.value, password.value));
     } else {
-      dispatch(authActions.setErrorMessage(ERROR_MESSAGE_INPUT_DEF));
+      dispatch(authActions.setErrorMessage(ERROR_MESSAGE_INVALID_INPUT));
     }
 
   };
@@ -143,9 +143,9 @@ const AuthForm = () => {
   return (
     <motion.div
       key={isLogin}
-      initial={ANIMATIONS_FM_SLIDEIN_INITIAL}
-      animate={ANIMATIONS_FM_SLIDEIN}
-      exit={ANIMATIONS_FM_SLIDEIN_INITIAL}
+      initial={ANIMATION_SLIDE_IN_INITIAL}
+      animate={ANIMATION_SLIDE_IN}
+      exit={ANIMATION_SLIDE_IN_INITIAL}
       className={classes.auth}
     >
       {!showResetPassword && (
@@ -254,14 +254,14 @@ const AuthForm = () => {
             </ErrorMessage>
           )}
           <div className={classes["auth__controls"]}>
-            <ButttonSecondary
+            <ButtonSecondary
               type="button"
               onClick={switchSignType}
               disabled={isLoading}
               className={classes["auth__btn--switch"]}
             >
               {isLogin ? "Create Account" : "Log in"}
-            </ButttonSecondary>
+            </ButtonSecondary>
             <Button
               disabled={isLoading}
               className={classes["auth__btn--submit"]}

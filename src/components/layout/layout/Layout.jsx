@@ -8,7 +8,7 @@ import { authActions } from "../../../store/auth";
 import UserNavigation from "../navigation/UserNavigation";
 import Button from "../../ui/Button";
 import Modal from "../../ui/Modal";
-import AuthForm from "../../Auth/AuthForm";
+import AuthForm from "../../authentication/AuthForm";
 import { Suspense } from "react";
 import Spinner from "../../ui/Spinner";
 import Notification from "../../ui/Notification";

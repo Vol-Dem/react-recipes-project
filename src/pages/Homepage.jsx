@@ -3,8 +3,8 @@ import SearchBox from "../components/search/SearchBox";
 import Logo from "../components/layout/logo/Logo";
 import { useEffect, useState } from "react";
 import {
-  ANIMATIONS_FM_SLIDEIN,
-  ANIMATIONS_FM_SLIDEIN_INITIAL,
+  ANIMATION_SLIDE_IN,
+  ANIMATION_SLIDE_IN_INITIAL,
   RESULT_NUM,
 } from "../variables/constants";
 import { lazy } from "react";
@@ -95,8 +95,8 @@ const Homepage = () => {
 
   return (
     <motion.div
-      initial={ANIMATIONS_FM_SLIDEIN_INITIAL}
-      animate={ANIMATIONS_FM_SLIDEIN}
+      initial={ANIMATION_SLIDE_IN_INITIAL}
+      animate={ANIMATION_SLIDE_IN}
     >
       <section
         data-testid="section-search"

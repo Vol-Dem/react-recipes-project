@@ -116,7 +116,7 @@
   &--open &__nav {
     z-index: 1111;
     opacity: 1;
-    animation: slideIn 0.5s ease-in;
+    animation: slide-in 0.5s ease-in;
   }
 
   &--open &__icon {
@@ -140,7 +140,7 @@
   }
 }
 
-@keyframes slideIn {
+@keyframes slide-in {
   0% {
     opacity: 0;
   }

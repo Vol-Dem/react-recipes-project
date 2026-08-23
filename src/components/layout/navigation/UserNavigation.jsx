@@ -1,6 +1,6 @@
 import classes from "./UserNavigation.module.scss";
 import UserIcon from "./../../../assets/user.svg?react";
-import ButttonSecondary from "../../ui/ButtonSecondary";
+import ButtonSecondary from "../../ui/ButtonSecondary";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { authActions } from "../../../store/auth";
@@ -34,12 +34,12 @@ const UserNavigation = () => {
               <NavLink to="favorites">Favorites</NavLink>
             </li>
           </ul>
-          <ButttonSecondary
+          <ButtonSecondary
             onClick={logout}
             className={classes["nav-btn-auth"]}
           >
             Logout
-          </ButttonSecondary>
+          </ButtonSecondary>
         </div>
       </div>
     </>

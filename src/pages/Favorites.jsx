@@ -9,9 +9,9 @@ import firebaseApp from "../config";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import {
-  ANIMATIONS_FM_SLIDEIN,
-  ANIMATIONS_FM_SLIDEIN_INITIAL,
-  MESSAGE_EMPTY_FAV,
+  ANIMATION_SLIDE_IN,
+  ANIMATION_SLIDE_IN_INITIAL,
+  MESSAGE_EMPTY_FAVORITES,
 } from "../variables/constants";
 
 const firestore = getFirestore(firebaseApp);
@@ -32,7 +32,7 @@ const Favorites = () => {
   //Load user favorites
   useEffect(() => {
     if (!favList.length) {
-      dispatch(recipeActions.setEmptyMessage(MESSAGE_EMPTY_FAV));
+      dispatch(recipeActions.setEmptyMessage(MESSAGE_EMPTY_FAVORITES));
       return;
     }
 
@@ -63,8 +63,8 @@ const Favorites = () => {
 
   return (
     <motion.div
-      initial={ANIMATIONS_FM_SLIDEIN_INITIAL}
-      animate={ANIMATIONS_FM_SLIDEIN}
+      initial={ANIMATION_SLIDE_IN_INITIAL}
+      animate={ANIMATION_SLIDE_IN}
       className={`${classes["section-favorites"]} ${
         recipeIsOpen ? classes["recipe-columns"] : ""
       }`}

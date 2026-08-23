@@ -232,7 +232,7 @@ describe("recipeSlice", () => {
     });
   });
 
-  describe("prevtPage", () => {
+  describe("prevPage", () => {
     afterEach(() => {
       vi.clearAllMocks();
     });
@@ -323,7 +323,7 @@ describe("recipeSlice", () => {
       vi.clearAllMocks();
     });
 
-    it("should handle spliting per page by dispatching setSortedRecipes with corect amount of data and not dispatch setIsLastPage if sortedRecipes > REACT_APP_AMOUNT_PER_PAGE when daily limit is not reached", () => {
+    it("should handle splitting per page by dispatching setSortedRecipes with correct amount of data and not dispatch setIsLastPage if sortedRecipes > REACT_APP_AMOUNT_PER_PAGE when daily limit is not reached", () => {
       expect.assertions(3);
       const sortedRecipesData = [...Array(15).keys()];
       const expectedRecipesPerPage = [
@@ -355,7 +355,7 @@ describe("recipeSlice", () => {
       expect(actions[1]?.type).not.toEqual("recipe/setIsLastPage");
     });
 
-    it("should handle spliting per page by dispatching setSortedRecipes with corect amount of data and dispatch setIsLastPage if sortedRecipes <= REACT_APP_AMOUNT_PER_PAGE when daily limit is not reached", () => {
+    it("should handle splitting per page by dispatching setSortedRecipes with correct amount of data and dispatch setIsLastPage if sortedRecipes <= REACT_APP_AMOUNT_PER_PAGE when daily limit is not reached", () => {
       expect.assertions(4);
       const sortedRecipesData = [...Array(8).keys()];
       const expectedRecipesPerPage = [
@@ -388,7 +388,7 @@ describe("recipeSlice", () => {
       expect(actions[1].payload).toEqual(true);
     });
 
-    it("should handle spliting per page by dispatching setSortedRecipes with corect amount of data and not dispatch setIsLastPage if daily limit is reached", () => {
+    it("should handle splitting per page by dispatching setSortedRecipes with correct amount of data and not dispatch setIsLastPage if daily limit is reached", () => {
       expect.assertions(3);
 
       const sortedRecipesData = [...Array(10).keys()];

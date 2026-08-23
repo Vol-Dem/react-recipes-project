@@ -133,14 +133,14 @@ describe("Homepage component", () => {
   it("renders RecipeItemList with expected items and does not render Recipe, ErrorMessage component and h1 'Your recipe book' when search result is not empty", async () => {
     expect.assertions(7);
 
-    const currentSate = {
+    const currentState = {
       ...initialState,
       searchResult: expectedResult,
       sortedRecipes: expectedResult,
       recipesPerPage: expectedResult,
     };
     const store = mockStore({
-      recipe: currentSate,
+      recipe: currentState,
       auth: { isLoggedIn: false },
       fav: { favList: [] },
     });
@@ -171,12 +171,12 @@ describe("Homepage component", () => {
   it("renders error with expected error message", async () => {
     expect.assertions(7);
 
-    const currentSate = {
+    const currentState = {
       ...initialState,
       errorMessage: "Test error message",
     };
     const store = mockStore({
-      recipe: currentSate,
+      recipe: currentState,
       auth: { isLoggedIn: false },
       fav: { favList: [] },
     });

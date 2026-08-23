@@ -5,8 +5,8 @@ import LinkA from "../components/ui/LinkA";
 import Card from "../components/ui/Card";
 import { motion } from "framer-motion";
 import {
-  ANIMATIONS_FM_SLIDEIN,
-  ANIMATIONS_FM_SLIDEIN_INITIAL,
+  ANIMATION_SLIDE_IN,
+  ANIMATION_SLIDE_IN_INITIAL,
 } from "../variables/constants";
 
 const PrivacyPolicy = ({ title }) => {
@@ -20,8 +20,8 @@ const PrivacyPolicy = ({ title }) => {
 
   return (
     <motion.div
-      initial={ANIMATIONS_FM_SLIDEIN_INITIAL}
-      animate={ANIMATIONS_FM_SLIDEIN}
+      initial={ANIMATION_SLIDE_IN_INITIAL}
+      animate={ANIMATION_SLIDE_IN}
     >
       <Card className={classes.policy}>
         <h1 className={classes["policy__h1"]}>

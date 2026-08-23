@@ -1,6 +1,6 @@
 import classes from "./ButtonSecondary.module.scss";
 
-const ButttonSecondary = (props) => {
+const ButtonSecondary = (props) => {
   return (
     <button
       className={`${classes["btn-secondary"]} ${props.className || ""}`}
@@ -13,4 +13,4 @@ const ButttonSecondary = (props) => {
   );
 };
 
-export default ButttonSecondary;
+export default ButtonSecondary;

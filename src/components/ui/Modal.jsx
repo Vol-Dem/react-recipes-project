@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import Card from "./Card";
 import classes from "./Modal.module.scss";
 import { createPortal } from "react-dom";
-import CrossSvg from "../../assets/CrossSvg";
+import CloseIcon from "../../assets/CloseIcon";
 import { motion } from "framer-motion";
 
 const Modal = (props) => {
@@ -52,7 +52,7 @@ const Modal = (props) => {
               {title && <h2 className={classes.title}>{title}</h2>}
               {props.children}
               <button className={classes["modal__close"]} onClick={onClose}>
-                <CrossSvg />
+                <CloseIcon />
               </button>
             </Card>
           </motion.div>

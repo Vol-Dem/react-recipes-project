@@ -2,17 +2,17 @@ import classes from "./Recipe.module.scss";
 import { useState, useEffect } from "react";
 import Card from "../../ui/Card";
 import Nutrition from "./nutrition/Nutrition";
-import Ingridients from "./ingridients/Ingredients";
+import Ingredients from "./ingredients/Ingredients";
 import Instructions from "./instructions/Instructions";
 import Credits from "./credits/Credits";
 import Info from "./info/Info";
 import Diets from "./diets/Diets";
 import { INCLUDE_NUTRITION } from "../../../variables/constants";
 import ButtonBack from "../../ui/ButtonBack";
-import { useThrowAsyncError } from "../../../hooks/use-throw-async-error";
+import { useThrowAsyncError } from "../../../hooks/useThrowAsyncError";
 import { getDoc, getFirestore, doc } from "firebase/firestore";
 import firebaseApp from "../../../config";
-import { useGetDataFromHttp } from "../../../hooks/use-get-data-from-http";
+import { useGetDataFromHttp } from "../../../hooks/useGetDataFromHttp";
 import RecipeHeadSkeleton from "../../skeletons/RecipeHeadSkeleton";
 import RecipeDescriptionSkeleton from "../../skeletons/RecipeDescriptionSkeleton";
 import { useMatches, useNavigate, useParams } from "react-router-dom";
@@ -123,7 +123,7 @@ const Recipe = () => {
               />
               <div>
                 <h2 className={classes["recipe__subtitle"]}>Ingredients</h2>
-                <Ingridients ingredients={recipe.extendedIngredients} />
+                <Ingredients ingredients={recipe.extendedIngredients} />
               </div>
               <div>
                 <h2 className={classes["recipe__subtitle"]}>Instructions</h2>

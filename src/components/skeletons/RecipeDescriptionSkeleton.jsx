@@ -6,7 +6,7 @@ const RecipeDescriptionSkeleton = () => {
     <div className={classes["recipe__description"]}>
       <Skeleton classNames="text width-20" />
       <div>
-        <h3 className={classes["recipe__subtitle"]}>Ingridients</h3>
+        <h3 className={classes["recipe__subtitle"]}>Ingredients</h3>
         <Skeleton classNames="text width-100" />
         <Skeleton classNames="text width-100" />
         <Skeleton classNames="text width-100" />

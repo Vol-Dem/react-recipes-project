@@ -11,7 +11,7 @@ import { initAuth } from "./store/auth";
 import { lazy } from "react";
 import Recipe from "./components/recipe/recipe/Recipe";
 import ErrorPage from "./pages/ErrorPage";
-import ToS from "./pages/ToS";
+import TermsOfService from "./pages/TermsOfService";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 const Homepage = lazy(() => import("./pages/Homepage"));
@@ -55,7 +55,7 @@ function App() {
         <Route
           path="tos"
           errorElement={<ErrorPage />}
-          element={<ToS title="Terms of Service" />}
+          element={<TermsOfService title="Terms of Service" />}
         ></Route>
         <Route
           path="privacy"

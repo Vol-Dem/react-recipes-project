@@ -1,4 +1,4 @@
-import { useThrowAsyncError } from "./use-throw-async-error";
+import { useThrowAsyncError } from "./useThrowAsyncError";
 import { TIMEOUT_SEC } from "../variables/constants";
 import { timeout } from "../variables/utils";
 import { useCallback } from "react";
