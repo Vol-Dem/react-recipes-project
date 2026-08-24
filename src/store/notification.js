@@ -4,10 +4,10 @@ const notificationSlice = createSlice({
   name: "notification",
   initialState: { isShown: false, title: "", message: "" },
   reducers: {
-    showNotification(state, actions) {
+    showNotification(state, action) {
       state.isShown = true;
-      state.title = actions.payload.title;
-      state.message = actions.payload.message;
+      state.title = action.payload.title;
+      state.message = action.payload.message;
     },
     closeNotification(state) {
       state.isShown = false;

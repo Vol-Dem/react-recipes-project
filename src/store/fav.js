@@ -8,15 +8,15 @@ const favSlice = createSlice({
   name: "fav",
   initialState: { favList: [], recipes: [] },
   reducers: {
-    addToFav(state, actions) {
-      if (!state.favList.includes(actions.payload)) {
-        state.favList.push(actions.payload);
+    addToFav(state, action) {
+      if (!state.favList.includes(action.payload)) {
+        state.favList.push(action.payload);
       } else {
-        state.favList = state.favList.filter((id) => id !== actions.payload);
+        state.favList = state.favList.filter((id) => id !== action.payload);
       }
     },
-    updateFav(state, actions) {
-      state.favList = actions.payload;
+    updateFav(state, action) {
+      state.favList = action.payload;
     },
   },
 });

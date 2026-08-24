@@ -33,41 +33,41 @@ const recipeSlice = createSlice({
   name: "recipe",
   initialState: recipeInitialState,
   reducers: {
-    setSearchResult(state, actions) {
-      state.searchResult = actions.payload;
+    setSearchResult(state, action) {
+      state.searchResult = action.payload;
     },
-    setSortedRecipes(state, actions) {
-      state.sortedRecipes = actions.payload;
+    setSortedRecipes(state, action) {
+      state.sortedRecipes = action.payload;
     },
-    setRecipesPerPage(state, actions) {
-      state.recipesPerPage = actions.payload;
+    setRecipesPerPage(state, action) {
+      state.recipesPerPage = action.payload;
     },
-    setOrderBy(state, actions) {
-      state.orderBy = actions.payload;
+    setOrderBy(state, action) {
+      state.orderBy = action.payload;
     },
-    setRecipesIsLoading(state, actions) {
-      state.recipesIsLoading = actions.payload;
+    setRecipesIsLoading(state, action) {
+      state.recipesIsLoading = action.payload;
     },
-    setCurrentPage(state, actions) {
-      state.currentPage = actions.payload;
+    setCurrentPage(state, action) {
+      state.currentPage = action.payload;
     },
-    setIsLastPage(state, actions) {
-      state.isLastPage = actions.payload;
+    setIsLastPage(state, action) {
+      state.isLastPage = action.payload;
     },
     setDailyLimitIsReached(state) {
       state.dailyLimitIsReached = true;
     },
-    setTitle(state, actions) {
-      state.title = actions.payload;
+    setTitle(state, action) {
+      state.title = action.payload;
     },
-    setOptions(state, actions) {
-      state.options = actions.payload;
+    setOptions(state, action) {
+      state.options = action.payload;
     },
-    setEmptyMessage(state, actions) {
-      state.emptyMessage = actions.payload;
+    setEmptyMessage(state, action) {
+      state.emptyMessage = action.payload;
     },
-    setErrorMessage(state, actions) {
-      state.errorMessage = actions.payload;
+    setErrorMessage(state, action) {
+      state.errorMessage = action.payload;
     },
     resetRecipes(state) {
       state.recipesPerPage = [];
@@ -126,7 +126,7 @@ const transformRecipe = (recipe) => {
  * @param {Object} [position] Result of Firestore startAt() or endAt() for the Firestore query.
  * @returns {Array} Array with fetched data
  */
-export const getDataFromFireBase = (queryParameters, position) => {
+export const getDataFromFirebase = (queryParameters, position) => {
   return async (dispatch, getState) => {
     try {
       const { sortBy, sortType } = getState().recipe.orderBy;
@@ -215,7 +215,7 @@ export const getRecipes = ({
         searchResult = await getDataFromApi(requestUrl);
       } else {
         searchResult = await dispatch(
-          getDataFromFireBase([firebaseRef, filter, resultsAmount], position)
+          getDataFromFirebase([firebaseRef, filter, resultsAmount], position)
         );
       }
       const recipesArr = searchResult.results || searchResult;

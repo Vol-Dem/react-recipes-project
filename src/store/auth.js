@@ -45,14 +45,14 @@ const authSlice = createSlice({
   name: "auth",
   initialState: authInitialState,
   reducers: {
-    login(state, actions) {
+    login(state, action) {
       state.isLoggedIn = true;
       state.user = {
-        idToken: actions.payload.accessToken,
-        uid: actions.payload.uid,
-        email: actions.payload.email,
-        userName: actions.payload.displayName,
-        emailVerified: actions.payload.emailVerified,
+        idToken: action.payload.accessToken,
+        uid: action.payload.uid,
+        email: action.payload.email,
+        userName: action.payload.displayName,
+        emailVerified: action.payload.emailVerified,
       };
     },
     logout(state) {
@@ -69,17 +69,17 @@ const authSlice = createSlice({
     closeAuthForm(state) {
       state.authFormIsOpen = false;
     },
-    setShowResetPassword(state, actions) {
-      state.showResetPassword = actions.payload;
+    setShowResetPassword(state, action) {
+      state.showResetPassword = action.payload;
     },
-    setErrorMessage(state, actions) {
-      state.errorMessage = actions.payload;
+    setErrorMessage(state, action) {
+      state.errorMessage = action.payload;
     },
-    setSuccessMessage(state, actions) {
-      state.successMessage = actions.payload;
+    setSuccessMessage(state, action) {
+      state.successMessage = action.payload;
     },
-    setIsLoading(state, actions) {
-      state.isLoading = actions.payload;
+    setIsLoading(state, action) {
+      state.isLoading = action.payload;
     },
   },
 });
