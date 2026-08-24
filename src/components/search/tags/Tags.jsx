@@ -3,7 +3,11 @@ import Tag from "../../ui/Tag";
 
 const Tags = ({ onTagClick }) => {
   return (
-    <div className={classes["search__tags"]}>
+    <div
+      className={classes["search__tags"]}
+      role="group"
+      aria-label="Quick recipe filters"
+    >
       <Tag
         tagCfg={{
           dataQuery: "vegetarian",

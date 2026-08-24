@@ -17,11 +17,18 @@ const MobileNavigation = () => {
         navIsOpen ? classes["mobile-nav--open"] : ""
       }`}
     >
-      <div className={classes["mobile-nav__button"]} onClick={navSwitch}>
+      <button
+        type="button"
+        className={classes["mobile-nav__button"]}
+        onClick={navSwitch}
+        aria-expanded={navIsOpen}
+        aria-controls="mobile-navigation"
+        aria-label={navIsOpen ? "Close navigation menu" : "Open navigation menu"}
+      >
         <span className={classes["mobile-nav__icon"]}></span>
-      </div>
+      </button>
       <div className={classes["mobile-nav__background"]}></div>
-      <nav className={classes["mobile-nav__nav"]}>
+      <nav id="mobile-navigation" className={classes["mobile-nav__nav"]}>
         <ul className={classes["mobile-nav__links"]} onClick={navSwitch}>
           <li>
             <NavLink to="/">Home</NavLink>

@@ -32,17 +32,17 @@ const TermsOfService = ({ title }) => {
           Services, you agree to be bound by these Terms. If you do not agree,
           please do not use our Services.
         </p>
-        <h4 className={classes["tos__h4"]}>
+        <h2 className={classes["tos__h4"]}>
           1. <strong>Acceptance of Terms</strong>
-        </h4>
+        </h2>
         <p className={classes["tos__text"]}>
           By accessing or using Website, you confirm that you are at least the
           age of majority in your jurisdiction or have obtained parental consent
           to use our Services.
         </p>
-        <h4 className={classes["tos__h4"]}>
+        <h2 className={classes["tos__h4"]}>
           2. <strong>Modifications to Terms</strong>
-        </h4>
+        </h2>
         <p className={classes["tos__text"]}>
           We reserve the right to modify these Terms at any time. Changes will
           be effective immediately upon posting. It is your responsibility to
@@ -50,9 +50,9 @@ const TermsOfService = ({ title }) => {
           Services after modifications signifies your acceptance of the updated
           Terms.
         </p>
-        <h4 className={classes["tos__h4"]}>
+        <h2 className={classes["tos__h4"]}>
           3. <strong>Use of Services</strong>
-        </h4>
+        </h2>
         <ul className={classes["tos__list"]}>
           <li className={classes["tos__list-item"]}>
             You agree to use the Services only for lawful purposes and in
@@ -72,9 +72,9 @@ const TermsOfService = ({ title }) => {
             </ul>
           </li>
         </ul>
-        <h4 className={classes["tos__h4"]}>
+        <h2 className={classes["tos__h4"]}>
           4. <strong>Account Responsibilities</strong>
-        </h4>
+        </h2>
         <ul className={classes["tos__list"]}>
           <li className={classes["tos__list-item"]}>
             You are responsible for maintaining the confidentiality of your
@@ -85,9 +85,9 @@ const TermsOfService = ({ title }) => {
             breach of security.
           </li>
         </ul>
-        <h4 className={classes["tos__h4"]}>
+        <h2 className={classes["tos__h4"]}>
           5. <strong>Intellectual Property</strong>
-        </h4>
+        </h2>
         <ul className={classes["tos__list"]}>
           <li className={classes["tos__list-item"]}>
             All content on the Services, including text, graphics, logos, and
@@ -99,25 +99,25 @@ const TermsOfService = ({ title }) => {
             without our express written consent.
           </li>
         </ul>
-        <h4 className={classes["tos__h4"]}>
+        <h2 className={classes["tos__h4"]}>
           6. <strong>Limitation of Liability</strong>
-        </h4>
+        </h2>
         <p className={classes["tos__text"]}>
           To the fullest extent permitted by law, Website shall not be liable
           for any direct, indirect, incidental, consequential, or punitive
           damages resulting from your use or inability to use the Services.
         </p>
-        <h4 className={classes["tos__h4"]}>
+        <h2 className={classes["tos__h4"]}>
           7. <strong>Termination</strong>
-        </h4>
+        </h2>
         <p className={classes["tos__text"]}>
           We may suspend or terminate your access to the Services at our sole
           discretion, without notice, for any violation of these Terms or other
           harmful behavior.
         </p>
-        <h4 className={classes["tos__h4"]}>
+        <h2 className={classes["tos__h4"]}>
           8. <strong>Governing Law</strong>
-        </h4>
+        </h2>
         <p className={classes["tos__text"]}>
           These Terms are governed by and construed in accordance with the laws
           of Ukraine. Any disputes arising from these Terms will be subject to

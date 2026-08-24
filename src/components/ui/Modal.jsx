@@ -34,6 +34,9 @@ const Modal = ({ children, className, disableClass, onClose, title }) => {
             onClick={onClose}
           ></motion.div>
           <motion.div
+            role="dialog"
+            aria-modal="true"
+            aria-label={title || "Dialog"}
             layout
             variants={{
               hidden: { opacity: 0, y: "-30%", x: "-50%" },
@@ -50,7 +53,11 @@ const Modal = ({ children, className, disableClass, onClose, title }) => {
             <Card>
               {title && <h2 className={classes.title}>{title}</h2>}
               {children}
-              <button className={classes["modal__close"]} onClick={onClose}>
+              <button
+                className={classes["modal__close"]}
+                onClick={onClose}
+                aria-label="Close dialog"
+              >
                 <CloseIcon />
               </button>
             </Card>

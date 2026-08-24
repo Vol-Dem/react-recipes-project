@@ -83,7 +83,7 @@ const Recipe = () => {
   return (
     <>
       <Card>
-        <div className={classes.recipe} data-testid="recipe">
+        <article className={classes.recipe} data-testid="recipe">
           <div className={classes["recipe__head-container"]}>
             {recipeIsLoading && <RecipeHeadSkeleton />}
             {!recipeIsLoading && (
@@ -121,18 +121,18 @@ const Recipe = () => {
                 servings={recipe.servings}
                 recipeId={recipeId}
               />
-              <div>
+              <section>
                 <h2 className={classes["recipe__subtitle"]}>Ingredients</h2>
                 <Ingredients ingredients={recipe.extendedIngredients} />
-              </div>
-              <div>
+              </section>
+              <section>
                 <h2 className={classes["recipe__subtitle"]}>Instructions</h2>
                 <Instructions instructions={recipe.instructions} />
-              </div>
-              <div>
+              </section>
+              <section>
                 <h2 className={classes["recipe__subtitle"]}>Nutrition</h2>
                 <Nutrition nutrition={recipe.nutrition} nutrients={nutrients} />
-              </div>
+              </section>
               <Credits
                 credits={{
                   creditsText: recipe.creditsText,
@@ -142,7 +142,7 @@ const Recipe = () => {
               />
             </div>
           )}
-        </div>
+        </article>
       </Card>
     </>
   );

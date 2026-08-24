@@ -107,10 +107,17 @@ const RecipeItemList = ({
           </motion.ul>
 
           {recipesPerPageIsNotEmpty && (
-            <div className={classes["search-result__pagination"]}>
+            <nav
+              className={classes["search-result__pagination"]}
+              aria-label="Recipe results pages"
+            >
               {currentPage > 1 && (
                 <div className={classes["search-result__btn"]}>
-                  <button onClick={prevPageHandler} disabled={recipesIsLoading}>
+                  <button
+                    onClick={prevPageHandler}
+                    disabled={recipesIsLoading}
+                    aria-label="Previous results page"
+                  >
                     <ArrowLeftIcon />
                   </button>
                 </div>
@@ -120,12 +127,16 @@ const RecipeItemList = ({
               </span>
               {!isLastPage && (
                 <div className={classes["search-result__btn"]}>
-                  <button onClick={nextPageHandler} disabled={recipesIsLoading}>
+                  <button
+                    onClick={nextPageHandler}
+                    disabled={recipesIsLoading}
+                    aria-label="Next results page"
+                  >
                     <ArrowRightIcon />
                   </button>
                 </div>
               )}
-            </div>
+            </nav>
           )}
         </Card>
       </div>

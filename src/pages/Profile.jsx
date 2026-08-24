@@ -49,7 +49,7 @@ const Profile = () => {
 
   const nameForm = (
     <form onSubmit={changeNameHandler} className={classes["profile__form"]}>
-      <div>Name: {!changeNameIsActive && <span>{userData.userName}</span>}</div>
+      {!changeNameIsActive && <span>{userData.userName}</span>}
       {changeNameIsActive && (
         <>
           <Input
@@ -71,7 +71,7 @@ const Profile = () => {
 
   const passForm = (
     <form onSubmit={changePasswordHandler} className={classes["profile__form"]}>
-      <div>Password: {!changePassIsActive && <span>********</span>}</div>
+      {!changePassIsActive && <span>********</span>}
       {changePassIsActive && (
         <>
           <Input input={{ type: "password", name: "pass" }} autoFocus={true} />
@@ -97,19 +97,25 @@ const Profile = () => {
           </div>
           <div>
             <h1 className={classes["profile__title"]}>Profile</h1>
-            <div className={classes["profile__info"]}>
-              <div className={classes["profile__element"]}>{nameForm}</div>
+            <dl className={classes["profile__info"]}>
               <div className={classes["profile__element"]}>
-                <div>Email: {userData.email}</div>
+                <dt>Name:</dt>
+                <dd>{nameForm}</dd>
               </div>
-              <div className={classes["profile__element"]}>{passForm}</div>
-
-              {errorMessageAuth && (
-                <ErrorMessage className={classes["auth__error"]}>
-                  {errorMessageAuth}
-                </ErrorMessage>
-              )}
-            </div>
+              <div className={classes["profile__element"]}>
+                <dt>Email:</dt>
+                <dd>{userData.email}</dd>
+              </div>
+              <div className={classes["profile__element"]}>
+                <dt>Password:</dt>
+                <dd>{passForm}</dd>
+              </div>
+            </dl>
+            {errorMessageAuth && (
+              <ErrorMessage className={classes["auth__error"]}>
+                {errorMessageAuth}
+              </ErrorMessage>
+            )}
           </div>
         </div>
       </Card>

@@ -8,7 +8,7 @@ const Sort = ({ onSort }) => {
 
   return (
     <div className={classes["search-result__sort"]}>
-      <span>Sort&nbsp;by</span>
+      <label htmlFor="sort">Sort&nbsp;by</label>
       <select
         className={classes["search-result__select"]}
         name="sort"
