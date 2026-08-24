@@ -103,7 +103,7 @@ export const splitRecipesPerPage = () => {
 };
 
 /**
- *Retrieve data from recipe object
+ * Retrieves data from a recipe object.
  * @param {Object} recipe Recipe data to transform
  * @returns {Object} Transformed data (recipe)
  */
@@ -120,10 +120,10 @@ const transformRecipe = (recipe) => {
 };
 
 /**
- *Fetch data from firestore
- * @param {Array} queryParameters Array of parameters for firestore query function: firebase reference, filters, resultsAmount etc.
- * Requires firebase reference to be present
- * @param {Object} [position] Result of firestore startAt() or endAt() for firestore query.
+ * Fetches data from Firestore.
+ * @param {Array} queryParameters Array of parameters for the Firestore query function: Firebase reference, filters, resultsAmount, etc.
+ * Requires a Firebase reference to be present.
+ * @param {Object} [position] Result of Firestore startAt() or endAt() for the Firestore query.
  * @returns {Array} Array with fetched data
  */
 export const getDataFromFireBase = (queryParameters, position) => {
@@ -190,10 +190,10 @@ export const getDataFromApi = async (requestUrl) => {
  Dispatch error message if error occurs.
  * @param {Object} obj - An object.
  * @param {string} obj.requestUrl - URL with parameters to fetch data from API
- * @param {Object} obj.firebaseRef - Reference to firebase
- * @param {Object} [obj.filter] - Result of firestore filter function (where()) for firestore query.
- * @param {Object} [obj.position] - Result of firestore startAt() or endAt() for firestore query.
- * @param {Object} obj.resultsAmount - Result of firestore limit() or limitToLast() function for firestore query. Amount of expected results from firestore
+ * @param {Object} obj.firebaseRef - Reference to Firebase.
+ * @param {Object} [obj.filter] - Result of the Firestore filter function (where()) for the Firestore query.
+ * @param {Object} [obj.position] - Result of Firestore startAt() or endAt() for the Firestore query.
+ * @param {Object} obj.resultsAmount - Result of Firestore limit() or limitToLast() for the query. Amount of expected results from Firestore.
  * @returns 
  */
 export const getRecipes = ({
@@ -255,8 +255,8 @@ export const getRecipes = ({
 
 /**
  * Switch to next page.
- * When daily limit is reached dispatch thunk to fetch next portion of data from firestore.
- * @param {Object} firebaseRef- Reference to firebase
+ * When the daily limit is reached, dispatches a thunk to fetch the next portion of data from Firestore.
+ * @param {Object} firebaseRef - Reference to Firebase.
  * @param {Object} [filter] - Firestore filter function (where()) for firestore query.
  * @returns
  */
@@ -278,8 +278,8 @@ export const nextPage = (firebaseRef, filter) => {
 
 /**
  * Switch to previous page.
- * When daily limit is reached dispatch thunk to fetch next portion of data from firestore.
- * @param {Object} firebaseRef- Reference to firebase
+ * When the daily limit is reached, dispatches a thunk to fetch the previous portion of data from Firestore.
+ * @param {Object} firebaseRef - Reference to Firebase.
  * @param {Object} [filter] - Firestore filter function (where()) for firestore query.
  * @returns
  */
@@ -304,8 +304,8 @@ export const prevPage = (firebaseRef, filter) => {
 
 /**
  * Sort current recipes data
- * When daily limit is reached dispatch thunk to fetch sorted data from firestore
- * @param {Object} firebaseRef- Reference to firebase
+ * When the daily limit is reached, dispatches a thunk to fetch sorted data from Firestore.
+ * @param {Object} firebaseRef - Reference to Firebase.
  * @param {Object} [filter] - Firestore filter function (where()) for firestore query.
  * @returns
  */

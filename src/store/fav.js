@@ -22,7 +22,7 @@ const favSlice = createSlice({
 });
 
 /**
- *Add recipe to favlist and upload updated favlist to DB
+ * Add a recipe to the favorites list and upload the updated list to the database.
  * @param {number} id - Recipe id
  * @returns
  */
@@ -41,7 +41,7 @@ export const sendFav = (id) => {
 };
 
 /**
- * Loads user favlist from DB
+ * Loads the user's favorites list from the database.
  * @returns
  */
 export const loadFav = () => {

@@ -29,7 +29,7 @@ const Favorites = () => {
   const recipeIsOpen = !!recipeId;
   const dispatch = useDispatch();
 
-  //Load user favorites
+  // Load the user's favorites.
   useEffect(() => {
     if (!favList.length) {
       dispatch(recipeActions.setEmptyMessage(MESSAGE_EMPTY_FAVORITES));
@@ -54,7 +54,7 @@ const Favorites = () => {
     );
 
     return () => {
-      //Reset current recipes data and sort order when component is unmounted
+      // Reset the current recipe data and sort order when the component unmounts.
       dispatch(recipeActions.setOrderBy([]));
       dispatch(recipeActions.resetRecipes());
       dispatch(recipeActions.setEmptyMessage(""));

@@ -85,7 +85,7 @@ const authSlice = createSlice({
 });
 
 /**
- *Automatically authorizes the user and load related favlist if user object is exists.
+ * Automatically authorizes the user and loads the related favorites list when a user exists.
  * @returns
  */
 export const initAuth = () => {
@@ -108,7 +108,7 @@ export const initAuth = () => {
 };
 
 /**
- *Makes a firebase authentication request and authorizes the user.
+ * Makes a Firebase authentication request and authorizes the user.
  * @param {boolean} isLogin - Type of request. If false, create new user. If true, authorizes the user.
  * @param {string} email - User email
  * @param {string} password - User password

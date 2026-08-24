@@ -42,7 +42,7 @@ const Homepage = () => {
   ).length;
 
   /**
-   *Create request URL from form data, distpatch actions to fetch recipes and redirect to /.
+   * Creates a request URL from form data, dispatches actions to fetch recipes, and redirects to `/`.
    * @param {Object} data - Form data for fetch request
    */
   const getFormDataHandler = (data) => {
@@ -84,7 +84,7 @@ const Homepage = () => {
 
   useEffect(() => {
     return () => {
-      //Reset current recipes data and sort order when component is unmounted
+      // Reset the current recipe data and sort order when the component unmounts.
       dispatch(recipeActions.resetRecipes());
       dispatch(recipeActions.setOrderBy([]));
       dispatch(recipeActions.setErrorMessage(""));
