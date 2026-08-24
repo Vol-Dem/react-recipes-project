@@ -5,7 +5,7 @@ import {
   createRoutesFromElements,
   Route,
 } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { initAuth } from "./store/auth";
 import { lazy } from "react";
@@ -13,58 +13,62 @@ import Recipe from "./components/recipe/recipe/Recipe";
 import ErrorPage from "./pages/ErrorPage";
 import TermsOfService from "./pages/TermsOfService";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import NotFound from "./pages/NotFound";
+import ProtectedRoute from "./components/routing/ProtectedRoute";
 
 const Homepage = lazy(() => import("./pages/Homepage"));
 const About = lazy(() => import("./pages/About"));
 const Profile = lazy(() => import("./pages/Profile"));
 const Favorites = lazy(() => import("./pages/Favorites"));
 
-function App() {
-  const isAuth = useSelector((state) => state.auth.isLoggedIn);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(initAuth());
-  }, [dispatch]);
-
-  const router = createBrowserRouter(
-    createRoutesFromElements(
-      <Route errorElement={<ErrorPage />} path="/" element={<Layout />}>
-        <Route path="/" errorElement={<ErrorPage />} element={<Homepage />}>
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route errorElement={<ErrorPage />} path="/" element={<Layout />}>
+      <Route path="" element={<Homepage />}>
+        <Route
+          path="recipe/:recipeId"
+          errorElement={<ErrorPage />}
+          element={<Recipe />}
+        />
+      </Route>
+      <Route path="about" element={<About />} />
+      <Route element={<ProtectedRoute />}>
+        <Route path="profile" element={<Profile />} />
+        <Route
+          path="favorites"
+          errorElement={<ErrorPage />}
+          element={<Favorites />}
+        >
           <Route
             path="recipe/:recipeId"
             errorElement={<ErrorPage />}
             element={<Recipe />}
-          ></Route>
+          />
         </Route>
-        <Route path="about" element={<About />} />
-        {isAuth && <Route path="profile" element={<Profile />} />}
-        {isAuth && (
-          <Route
-            path="favorites"
-            errorElement={<ErrorPage />}
-            element={<Favorites />}
-          >
-            <Route
-              path="recipe/:recipeId"
-              errorElement={<ErrorPage />}
-              element={<Recipe />}
-            />
-          </Route>
-        )}
-        <Route
-          path="tos"
-          errorElement={<ErrorPage />}
-          element={<TermsOfService title="Terms of Service" />}
-        ></Route>
-        <Route
-          path="privacy"
-          errorElement={<ErrorPage />}
-          element={<PrivacyPolicy title="Privacy Policy" />}
-        ></Route>
       </Route>
-    )
-  );
+      <Route
+        path="tos"
+        errorElement={<ErrorPage />}
+        element={<TermsOfService title="Terms of Service" />}
+      />
+      <Route
+        path="privacy"
+        errorElement={<ErrorPage />}
+        element={<PrivacyPolicy title="Privacy Policy" />}
+      />
+      <Route path="*" element={<NotFound />} />
+    </Route>
+  )
+);
+
+function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const unsubscribe = dispatch(initAuth());
+
+    return unsubscribe;
+  }, [dispatch]);
 
   return <RouterProvider router={router} />;
 }

@@ -25,6 +25,7 @@ const firestore = getFirestore(firebaseApp);
 const provider = new GoogleAuthProvider();
 
 const authInitialState = {
+  isInitialized: false,
   isLoggedIn: false,
   authFormIsOpen: false,
   showResetPassword: false,
@@ -63,6 +64,9 @@ const authSlice = createSlice({
 
       signOut(auth);
     },
+    completeAuthInitialization(state) {
+      state.isInitialized = true;
+    },
     openAuthForm(state) {
       state.authFormIsOpen = true;
     },
@@ -90,7 +94,7 @@ const authSlice = createSlice({
  */
 export const initAuth = () => {
   return (dispatch) => {
-    onAuthStateChanged(auth, (user) => {
+    return onAuthStateChanged(auth, (user) => {
       if (user) {
         dispatch(
           authActions.login({
@@ -103,6 +107,8 @@ export const initAuth = () => {
         );
         dispatch(loadFav(user.uid));
       }
+
+      dispatch(authActions.completeAuthInitialization());
     });
   };
 };

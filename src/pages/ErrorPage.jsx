@@ -2,9 +2,9 @@ import { NavLink, useRouteError } from "react-router-dom";
 import Card from "../components/ui/Card";
 import classes from "./ErrorPage.module.scss";
 
-const PageNotFound = () => {
+const ErrorPage = () => {
   const error = useRouteError();
-  console.log(error);
+
   return (
     <section className={classes["error-page"]}>
       <Card className={classes["error-card"]}>
@@ -25,4 +25,4 @@ const PageNotFound = () => {
   );
 };
 
-export default PageNotFound;
+export default ErrorPage;
