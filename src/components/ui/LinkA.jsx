@@ -1,10 +1,17 @@
 import classes from "./LinkA.module.scss";
 
-const LinkA = (props) => {
+const LinkA = ({
+  children,
+  className,
+  external,
+  href,
+  onClick,
+  smoothScroll: shouldSmoothScroll,
+}) => {
   const smoothScroll = (e) => {
     e.preventDefault();
 
-    const scrollTarget = document.querySelector(props.href);
+    const scrollTarget = document.querySelector(href);
     const headerHeight = document.querySelector("#header").offsetHeight;
     const distToTop = window.scrollY + scrollTarget.getBoundingClientRect().top;
     window.scrollTo({ top: distToTop - headerHeight - 10, behavior: "smooth" });
@@ -12,21 +19,21 @@ const LinkA = (props) => {
 
   return (
     <a
-      className={`${classes.link} ${props.className || ""}`}
-      target={props.external ? "_blank" : ""}
+      className={`${classes.link} ${className || ""}`}
+      target={external ? "_blank" : ""}
       rel="noreferrer nofollow"
-      href={props.href}
+      href={href}
       onClick={(e) => {
-        if (props?.onClick) {
-          props.onClick(e);
+        if (onClick) {
+          onClick(e);
         }
-        if (props?.smoothScroll) {
+        if (shouldSmoothScroll) {
           smoothScroll(e);
         }
       }}
     >
-      {props.children}
-      {props.external && (
+      {children}
+      {external && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"

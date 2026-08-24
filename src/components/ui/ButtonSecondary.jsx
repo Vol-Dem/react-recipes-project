@@ -1,14 +1,14 @@
 import classes from "./ButtonSecondary.module.scss";
 
-const ButtonSecondary = (props) => {
+const ButtonSecondary = ({ children, className, disabled, onClick, type }) => {
   return (
     <button
-      className={`${classes["btn-secondary"]} ${props.className || ""}`}
-      type={props.type}
-      onClick={props.onClick}
-      disabled={props.disabled}
+      className={`${classes["btn-secondary"]} ${className || ""}`}
+      type={type}
+      onClick={onClick}
+      disabled={disabled}
     >
-      {props.children}
+      {children}
     </button>
   );
 };

@@ -3,8 +3,7 @@ import classes from "./MainNavigation.module.scss";
 import { useSelector } from "react-redux";
 import { motion } from "framer-motion";
 
-const NavItem = (props) => {
-  const { to, className } = props;
+const NavItem = ({ children, className, to }) => {
   const location = useLocation();
 
   const activePath =
@@ -13,7 +12,7 @@ const NavItem = (props) => {
   return (
     <li>
       <NavLink to={to} className={(nav) => (nav.isActive ? className : "")}>
-        {props.children}
+        {children}
       </NavLink>
       {activePath && (
         <motion.div
@@ -25,7 +24,7 @@ const NavItem = (props) => {
   );
 };
 
-function MainNavigation() {
+const MainNavigation = () => {
   const isAuth = useSelector((state) => state.auth.isLoggedIn);
 
   return (
@@ -52,6 +51,6 @@ function MainNavigation() {
       </nav>
     </>
   );
-}
+};
 
 export default MainNavigation;

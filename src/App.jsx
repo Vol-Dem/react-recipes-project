@@ -61,7 +61,7 @@ const router = createBrowserRouter(
   )
 );
 
-function App() {
+const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -71,6 +71,6 @@ function App() {
   }, [dispatch]);
 
   return <RouterProvider router={router} />;
-}
+};
 
 export default App;

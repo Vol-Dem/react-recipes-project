@@ -1,7 +1,6 @@
 import classes from "./Tag.module.scss";
 
-const Tag = (props) => {
-  const { dataQuery, dataType, onTagClick } = props.tagCfg;
+const Tag = ({ children, tagCfg: { dataQuery, dataType, onTagClick } }) => {
   return (
     <span
       data-query={dataQuery}
@@ -9,7 +8,7 @@ const Tag = (props) => {
       className={classes.tag}
       onClick={onTagClick}
     >
-      {props.children}
+      {children}
     </span>
   );
 };

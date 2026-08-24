@@ -1,12 +1,12 @@
 import classes from "./ErrorMessage.module.scss";
 
-const ErrorMessage = (props) => {
+const ErrorMessage = ({ children, className }) => {
   return (
     <div
       data-testid="error-message"
-      className={`${classes.error} ${props.className || ""}`}
+      className={`${classes.error} ${className || ""}`}
     >
-      {props.children}
+      {children}
     </div>
   );
 };

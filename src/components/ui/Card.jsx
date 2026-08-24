@@ -1,11 +1,11 @@
 import classes from "./Card.module.scss";
 
-function Card(props) {
+const Card = ({ children, className }) => {
   return (
-    <div className={`${classes.card} ${props.className || ""}`}>
-      {props.children}
+    <div className={`${classes.card} ${className || ""}`}>
+      {children}
     </div>
   );
-}
+};
 
 export default Card;

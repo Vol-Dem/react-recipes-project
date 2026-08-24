@@ -6,7 +6,7 @@ import Filter from "./filter/Filter";
 import Tags from "./tags/Tags";
 import { motion } from "framer-motion";
 
-function SearchBox({ getFormData }) {
+const SearchBox = ({ getFormData }) => {
   const [searchInput, setSearchInput] = useState("");
   const [filterIsOpen, setFilterIsOpen] = useState(false);
 
@@ -111,6 +111,6 @@ function SearchBox({ getFormData }) {
       <Tags onTagClick={getQueryFromTag} />
     </div>
   );
-}
+};
 
 export default SearchBox;

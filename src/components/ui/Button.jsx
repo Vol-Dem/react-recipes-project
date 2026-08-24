@@ -1,18 +1,17 @@
 import classes from "./Button.module.scss";
 import { motion } from "framer-motion";
 
-const Button = (props) => {
-  const { className, disabled, onClick, button } = props;
+const Button = ({ button, children, className, disabled, onClick }) => {
   return (
     <motion.button
       whileHover={{ scale: 1.1, transition: { type: "spring" } }}
       whileTap={{ scale: 0.95 }}
-      className={`${classes.btn} ${props.className || ""}`}
-      onClick={props.onClick}
-      disabled={props.disabled}
+      className={`${classes.btn} ${className || ""}`}
+      onClick={onClick}
+      disabled={disabled}
       {...button}
     >
-      {props.children}
+      {children}
     </motion.button>
   );
 };

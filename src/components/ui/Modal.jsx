@@ -5,8 +5,7 @@ import { createPortal } from "react-dom";
 import CloseIcon from "../../assets/CloseIcon";
 import { motion } from "framer-motion";
 
-const Modal = (props) => {
-  const { title, className, onClose, disableClass } = props;
+const Modal = ({ children, className, disableClass, onClose, title }) => {
   useEffect(() => {
     const scrollTop = document.documentElement.scrollTop;
     const disableScrollHandler = (e) => {
@@ -50,7 +49,7 @@ const Modal = (props) => {
           >
             <Card>
               {title && <h2 className={classes.title}>{title}</h2>}
-              {props.children}
+              {children}
               <button className={classes["modal__close"]} onClick={onClose}>
                 <CloseIcon />
               </button>
