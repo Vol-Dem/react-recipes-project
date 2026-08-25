@@ -25,7 +25,7 @@ const Notification = ({ title, message }) => {
         >
           <Card className={classes.notification}>
             <TriangleIcon />
-            <div className={classes["notification__message"]}>
+            <div>
               <h4 className={classes["notification__title"]}>{title}</h4>
               <p className={classes["notification__text"]}>{message}</p>
             </div>

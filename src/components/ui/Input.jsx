@@ -39,7 +39,7 @@ const Input = ({
   }, [value, validation]);
 
   return (
-    <div className={classes.container}>
+    <div>
       {label && (
         <label htmlFor={id} className={classes.label}>
           {label || ""}
@@ -74,9 +74,7 @@ const Input = ({
         onFocus={onFocus}
         placeholder={placeholder}
         {...input}
-        className={`${classes.input} ${className || ""} ${
-          inputErrorMessage && showErrorMessage ? classes["input--error"] : ""
-        }`}
+        className={`${classes.input} ${className || ""}`}
         autoFocus={autoFocus}
         value={value}
       />

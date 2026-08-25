@@ -34,7 +34,7 @@ const LinkA = ({
       }}
     >
       {children}
-      {external && <ExternalLinkIcon className="w-6 h-6" />}
+      {external && <ExternalLinkIcon />}
     </a>
   );
 };

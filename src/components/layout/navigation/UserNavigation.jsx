@@ -34,10 +34,7 @@ const UserNavigation = () => {
               <NavLink to="favorites">Favorites</NavLink>
             </li>
           </ul>
-          <ButtonSecondary
-            onClick={logout}
-            className={classes["nav-btn-auth"]}
-          >
+          <ButtonSecondary onClick={logout}>
             Logout
           </ButtonSecondary>
         </div>

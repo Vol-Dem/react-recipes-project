@@ -88,7 +88,6 @@ const Profile = () => {
     <motion.div
       initial={ANIMATION_SLIDE_IN_INITIAL}
       animate={ANIMATION_SLIDE_IN}
-      className={classes.profile}
     >
       <Card>
         <div className={classes["profile__container"]}>
@@ -112,9 +111,7 @@ const Profile = () => {
               </div>
             </dl>
             {errorMessageAuth && (
-              <ErrorMessage className={classes["auth__error"]}>
-                {errorMessageAuth}
-              </ErrorMessage>
+              <ErrorMessage>{errorMessageAuth}</ErrorMessage>
             )}
           </div>
         </div>

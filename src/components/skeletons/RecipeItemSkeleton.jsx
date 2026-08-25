@@ -24,7 +24,7 @@ const RecipeItemSkeleton = () => {
             <ClockIcon /> <Skeleton classNames="text width-40" />
           </span>
         </div>
-        <div className={classes["recipe-card__title"]}>
+        <div>
           <Skeleton classNames="title" />
           <Skeleton classNames="title" />
           {!recipeIsOpen && <Skeleton classNames="btn" />}
