@@ -21,7 +21,8 @@ import {
   ERROR_MESSAGE_INVALID_INPUT,
   VALIDATION_EMAIL_MAX_LENGTH,
   VALIDATION_PASSWORD_MAX_LENGTH,
-} from "../../variables/constants";
+  GOOGLE_AUTH_ICON_URL,
+} from "../../constants";
 import Checkbox from "../ui/Checkbox";
 import LinkA from "../ui/LinkA";
 import SuccessMessage from "../ui/SuccessMessage";
@@ -166,7 +167,7 @@ const AuthForm = () => {
               <img
                 className={classes["icon"]}
                 alt="google-icon"
-                src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+                src={GOOGLE_AUTH_ICON_URL}
               ></img>{" "}
               Sign in with Google
             </Button>

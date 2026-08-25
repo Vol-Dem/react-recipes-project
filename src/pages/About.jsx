@@ -2,7 +2,7 @@ import Card from "../components/ui/Card";
 import {
   ANIMATION_SLIDE_IN,
   ANIMATION_SLIDE_IN_INITIAL,
-} from "../variables/constants";
+} from "../constants";
 import classes from "./About.module.scss";
 import { motion } from "framer-motion";
 

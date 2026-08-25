@@ -5,8 +5,13 @@ import { useEffect, useState } from "react";
 import {
   ANIMATION_SLIDE_IN,
   ANIMATION_SLIDE_IN_INITIAL,
+  FIRESTORE_COLLECTIONS,
+  INCLUDE_SEARCH_NUTRITION,
   RESULT_NUM,
-} from "../variables/constants";
+  RECIPES_PER_PAGE,
+  SPOONACULAR_API_KEY,
+  SPOONACULAR_API_URL,
+} from "../constants";
 import { lazy } from "react";
 import { Suspense } from "react";
 import Spinner from "../components/ui/Spinner";
@@ -24,7 +29,7 @@ const RecipeItemList = lazy(() =>
 );
 
 const firestore = getFirestore(firebaseApp);
-const recipeRef = collection(firestore, "recipes");
+const recipeRef = collection(firestore, FIRESTORE_COLLECTIONS.recipes);
 
 const Homepage = () => {
   const [title, setTitle] = useState("Search result");
@@ -55,19 +60,15 @@ const Homepage = () => {
     const minCalories = data.minCalories || "";
     const maxCalories = data.maxCalories || "";
 
-    const requestUrl = `${
-      import.meta.env.VITE_SPOONACULAR_API_URL
-    }/recipes/complexSearch?apiKey=${
-      import.meta.env.VITE_SPOONACULAR_API_KEY
-    }&query=${query}&cuisine=${cuisine}&diet=${diet}&intolerances=${intolerance}&type=${type}${
+    const requestUrl = `${SPOONACULAR_API_URL}/recipes/complexSearch?apiKey=${SPOONACULAR_API_KEY}&query=${query}&cuisine=${cuisine}&diet=${diet}&intolerances=${intolerance}&type=${type}${
       maxReadyTime && `&maxReadyTime=${maxReadyTime}`
     }${minCalories && `&minCalories=${minCalories}`}${
       maxCalories && `&maxCalories=${maxCalories}`
-    }&number=${RESULT_NUM}&addRecipeNutrition=true`;
+    }&number=${RESULT_NUM}&addRecipeNutrition=${INCLUDE_SEARCH_NUTRITION}`;
 
     const searchTitle = query || "Search result";
     const emptyMessage = `No results for "${query}". Try checking your spelling`;
-    const resultsAmount = limit(+import.meta.env.VITE_AMOUNT_PER_PAGE + 1);
+    const resultsAmount = limit(RECIPES_PER_PAGE + 1);
 
     setTitle(searchTitle);
     dispatch(

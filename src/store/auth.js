@@ -15,7 +15,7 @@ import {
   reauthenticateWithPopup,
   EmailAuthProvider,
 } from "firebase/auth";
-import { ERROR_MESSAGE_DEFAULT } from "../variables/constants";
+import { ERROR_MESSAGE_DEFAULT } from "../constants";
 import firebaseApp from "../config";
 import { loadFav } from "./fav";
 import { getFirestore } from "firebase/firestore";

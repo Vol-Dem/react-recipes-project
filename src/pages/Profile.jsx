@@ -11,7 +11,7 @@ import { motion } from "framer-motion";
 import {
   ANIMATION_SLIDE_IN,
   ANIMATION_SLIDE_IN_INITIAL,
-} from "../variables/constants";
+} from "../constants";
 
 const Profile = () => {
   const [changeNameIsActive, setChangeNameIsActive] = useState(false);

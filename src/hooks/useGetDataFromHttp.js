@@ -1,5 +1,5 @@
 import { useThrowAsyncError } from "./useThrowAsyncError";
-import { TIMEOUT_SEC } from "../variables/constants";
+import { TIMEOUT_SEC } from "../constants";
 import { timeout } from "../variables/utils";
 import { useCallback } from "react";
 import { useDispatch } from "react-redux";

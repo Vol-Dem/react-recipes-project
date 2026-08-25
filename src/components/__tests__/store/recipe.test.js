@@ -9,6 +9,7 @@ import {
 import configureStore from "redux-mock-store";
 import { thunk } from "redux-thunk";
 import axios from "axios";
+import { RECIPES_PER_PAGE } from "../../../constants";
 
 vi.mock("axios");
 const middlewares = [thunk];
@@ -327,7 +328,7 @@ describe("recipeSlice", () => {
       expect.assertions(3);
       const sortedRecipesData = [...Array(15).keys()];
       const expectedRecipesPerPage = [
-        ...Array(+import.meta.env.VITE_AMOUNT_PER_PAGE).keys(),
+        ...Array(RECIPES_PER_PAGE).keys(),
       ];
 
       const store = mockStore({
@@ -359,7 +360,7 @@ describe("recipeSlice", () => {
       expect.assertions(4);
       const sortedRecipesData = [...Array(8).keys()];
       const expectedRecipesPerPage = [
-        ...Array(+import.meta.env.VITE_AMOUNT_PER_PAGE).keys(),
+        ...Array(RECIPES_PER_PAGE).keys(),
       ];
 
       const store = mockStore({

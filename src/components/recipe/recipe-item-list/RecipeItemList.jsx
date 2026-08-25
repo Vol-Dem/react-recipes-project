@@ -15,6 +15,7 @@ import {
 } from "../../../store/recipe";
 import ErrorMessage from "../../ui/ErrorMessage";
 import { motion } from "framer-motion";
+import { RECIPES_PER_PAGE } from "../../../constants";
 
 const RecipeItemList = ({
   title,
@@ -42,7 +43,7 @@ const RecipeItemList = ({
 
   const recipeSkeleton = [
     ...Array(
-      skeletonItemsAmount || +import.meta.env.VITE_AMOUNT_PER_PAGE
+      skeletonItemsAmount || RECIPES_PER_PAGE
     ).keys(),
   ].map((i) => <RecipeItemSkeleton key={i} />);
 

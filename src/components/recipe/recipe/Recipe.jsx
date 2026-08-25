@@ -7,7 +7,12 @@ import Instructions from "./instructions/Instructions";
 import Credits from "./credits/Credits";
 import Info from "./info/Info";
 import Diets from "./diets/Diets";
-import { INCLUDE_NUTRITION } from "../../../variables/constants";
+import {
+  FIRESTORE_COLLECTIONS,
+  INCLUDE_NUTRITION,
+  SPOONACULAR_API_KEY,
+  SPOONACULAR_API_URL,
+} from "../../../constants";
 import ButtonBack from "../../ui/ButtonBack";
 import { useThrowAsyncError } from "../../../hooks/useThrowAsyncError";
 import { getDoc, getFirestore, doc } from "firebase/firestore";
@@ -55,7 +60,7 @@ const Recipe = () => {
     setRecipeIsLoading(true);
     setImgIsLoading(true);
     if (!dailyLimitReached) {
-      const url = `${import.meta.env.VITE_SPOONACULAR_API_URL}/recipes/${recipeId}/information?apiKey=${import.meta.env.VITE_SPOONACULAR_API_KEY}&includeNutrition=${INCLUDE_NUTRITION}`;
+      const url = `${SPOONACULAR_API_URL}/recipes/${recipeId}/information?apiKey=${SPOONACULAR_API_KEY}&includeNutrition=${INCLUDE_NUTRITION}`;
 
       const getRecipe = (data) => {
         setRecipe(data);
@@ -66,7 +71,11 @@ const Recipe = () => {
     } else {
       const getRecipe = async () => {
         try {
-          const recipeRef = doc(firestore, "recipes", `${recipeId}`);
+          const recipeRef = doc(
+            firestore,
+            FIRESTORE_COLLECTIONS.recipes,
+            `${recipeId}`,
+          );
           const recipeDoc = await getDoc(recipeRef);
           const recipe = recipeDoc.data();
 

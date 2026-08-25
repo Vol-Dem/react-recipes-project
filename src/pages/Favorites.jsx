@@ -11,11 +11,16 @@ import { motion } from "framer-motion";
 import {
   ANIMATION_SLIDE_IN,
   ANIMATION_SLIDE_IN_INITIAL,
+  FIRESTORE_COLLECTIONS,
+  INCLUDE_SEARCH_NUTRITION,
   MESSAGE_EMPTY_FAVORITES,
-} from "../variables/constants";
+  RECIPES_PER_PAGE,
+  SPOONACULAR_API_KEY,
+  SPOONACULAR_API_URL,
+} from "../constants";
 
 const firestore = getFirestore(firebaseApp);
-const favRef = collection(firestore, "recipes");
+const favRef = collection(firestore, FIRESTORE_COLLECTIONS.recipes);
 
 const Favorites = () => {
   const [filter, setFilter] = useState();
@@ -38,8 +43,8 @@ const Favorites = () => {
 
     dispatch(recipeActions.setEmptyMessage(""));
     const favListQuery = favList.join(",");
-    const requestUrl = `https://api.spoonacular.com/recipes/informationBulk?apiKey=${import.meta.env.VITE_SPOONACULAR_API_KEY}&ids=${favListQuery}&includeNutrition=true`;
-    const resultsAmount = limit(+import.meta.env.VITE_AMOUNT_PER_PAGE + 1);
+    const requestUrl = `${SPOONACULAR_API_URL}/recipes/informationBulk?apiKey=${SPOONACULAR_API_KEY}&ids=${favListQuery}&includeNutrition=${INCLUDE_SEARCH_NUTRITION}`;
+    const resultsAmount = limit(RECIPES_PER_PAGE + 1);
     const filter = where("id", "in", favList);
     setFilter(filter);
 

@@ -7,6 +7,12 @@ import configureStore from "redux-mock-store";
 import { thunk } from "redux-thunk";
 import axios from "axios";
 import { recipeActions } from "../../../store/recipe";
+import {
+  INCLUDE_SEARCH_NUTRITION,
+  RESULT_NUM,
+  SPOONACULAR_API_KEY,
+  SPOONACULAR_API_URL,
+} from "../../../constants";
 
 vi.mock("axios");
 const middlewares = [thunk];
@@ -77,7 +83,7 @@ describe("Homepage component", () => {
       </BrowserRouter>
     );
     const inputQuery = "pasta";
-    const expectedUrl = `${import.meta.env.VITE_SPOONACULAR_API_URL}/recipes/complexSearch?apiKey=${import.meta.env.VITE_SPOONACULAR_API_KEY}&query=${inputQuery}&cuisine=&diet=&intolerances=&type=&number=10&addRecipeNutrition=true`;
+    const expectedUrl = `${SPOONACULAR_API_URL}/recipes/complexSearch?apiKey=${SPOONACULAR_API_KEY}&query=${inputQuery}&cuisine=&diet=&intolerances=&type=&number=${RESULT_NUM}&addRecipeNutrition=${INCLUDE_SEARCH_NUTRITION}`;
     const searchInput = screen.getByTestId("search-input");
     const submitBtn = screen.getByTestId("search-submit");
 
