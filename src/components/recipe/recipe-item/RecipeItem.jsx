@@ -16,6 +16,13 @@ const RecipeItem = ({ recipe }) => {
   const favList = useSelector((state) => state.fav.favList);
   const isFav = isAuth && favList.includes(recipe.id);
   const classSide = recipeIsOpen ? classes["recipe-card--side"] : "";
+  const isActive = recipe.id === +recipeId;
+  const cardClassName = `${classes["recipe-card"]} ${classSide} ${
+    isActive ? classes.active : ""
+  }`;
+  const imageClassName = `${classes["recipe-card__img"]} ${
+    imgIsLoading ? classes["recipe-card__img--hidden"] : ""
+  }`;
 
   const imgloadingHandler = () => {
     setImgIsLoading(false);
@@ -36,9 +43,7 @@ const RecipeItem = ({ recipe }) => {
       }}
       animate="visible"
       whileHover={{ scale: 1.04, transition: { type: "tween" } }}
-      className={`${classes["recipe-card"]} ${classSide} ${
-        recipe.id === +recipeId ? classes.active : ""
-      }`}
+      className={cardClassName}
     >
       <Link
         to={`recipe/${recipe.id}`}
@@ -49,9 +54,7 @@ const RecipeItem = ({ recipe }) => {
             <StarIcon className={classes["recipe-card__img-container--fav"]} />
           )}
           <img
-            className={`${classes["recipe-card__img"]} ${
-              imgIsLoading ? classes["recipe-card__img--hidden"] : ""
-            }`}
+            className={imageClassName}
             src={recipe.img}
             alt={recipe.title}
             onLoad={imgloadingHandler}

@@ -45,6 +45,22 @@ const Homepage = () => {
   const recipesPerPageIsEmpty = !useSelector(
     (state) => state.recipe.recipesPerPage
   ).length;
+  const shouldShowLogo =
+    recipesPerPageIsEmpty &&
+    !recipesIsLoading &&
+    !recipeIsOpen &&
+    !errorMessage &&
+    !emptyMessage;
+  const shouldShowRecipeList =
+    recipesIsLoading || !recipesPerPageIsEmpty || emptyMessage;
+  const searchSectionClassName = `${classes["section-search"]} ${
+    !recipesPerPageIsEmpty || recipesIsLoading || recipeIsOpen
+      ? classes.mt0
+      : ""
+  }`;
+  const contentSectionClassName = `${classes["section-content"]} ${
+    recipeIsOpen && !recipesPerPageIsEmpty ? classes["recipe-columns"] : ""
+  }`;
 
   /**
    * Creates a request URL from form data, dispatches actions to fetch recipes, and redirects to `/`.
@@ -101,19 +117,9 @@ const Homepage = () => {
     >
       <section
         data-testid="section-search"
-        className={`${classes["section-search"]} ${
-          !recipesPerPageIsEmpty || recipesIsLoading || recipeIsOpen
-            ? classes.mt0
-            : ""
-        }`}
+        className={searchSectionClassName}
       >
-        <AnimatePresence>
-          {recipesPerPageIsEmpty &&
-            !recipesIsLoading &&
-            !recipeIsOpen &&
-            !errorMessage &&
-            !emptyMessage && <Logo />}
-        </AnimatePresence>
+        <AnimatePresence>{shouldShowLogo && <Logo />}</AnimatePresence>
         <SearchBox getFormData={getFormDataHandler} />
       </section>
       {errorMessage && (
@@ -121,14 +127,8 @@ const Homepage = () => {
           <ErrorMessage>{errorMessage}</ErrorMessage>
         </Card>
       )}
-      <section
-        className={`${classes["section-content"]} ${
-          recipeIsOpen && !recipesPerPageIsEmpty
-            ? classes["recipe-columns"]
-            : ""
-        }`}
-      >
-        {(recipesIsLoading || !recipesPerPageIsEmpty || emptyMessage) && (
+      <section className={contentSectionClassName}>
+        {shouldShowRecipeList && (
           <Suspense fallback={<Spinner />}>
             <RecipeItemList title={title} firebaseRef={recipeRef} />
           </Suspense>
