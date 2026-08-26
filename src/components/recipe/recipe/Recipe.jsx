@@ -143,11 +143,9 @@ const Recipe = () => {
                 <Nutrition nutrition={recipe.nutrition} nutrients={nutrients} />
               </section>
               <Credits
-                credits={{
-                  creditsText: recipe.creditsText,
-                  sourceUrl: recipe.sourceUrl,
-                  sourceName: recipe.sourceName,
-                }}
+                text={recipe.creditsText}
+                sourceName={recipe.sourceName}
+                sourceUrl={recipe.sourceUrl}
               />
             </div>
           )}

@@ -1,12 +1,10 @@
 import classes from "./Credits.module.scss";
 
-const Credits = ({ credits }) => {
-  const { creditsText, sourceUrl, sourceName } = credits;
-
+const Credits = ({ text, sourceName, sourceUrl }) => {
   return (
     <footer className={classes["recipe__credits"]}>
       <p>
-        Source: {creditsText} - <a href={sourceUrl}>{sourceName}</a>
+        Source: {text} - <a href={sourceUrl}>{sourceName}</a>
       </p>
     </footer>
   );
