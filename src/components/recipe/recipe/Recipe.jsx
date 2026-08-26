@@ -90,8 +90,7 @@ const Recipe = () => {
   }, [recipeId, throwAsyncError, dailyLimitReached, getDataFromHttp]);
 
   return (
-    <>
-      <Card>
+    <Card>
         <article data-testid="recipe">
           <div className={classes["recipe__head-container"]}>
             {recipeIsLoading && <RecipeHeadSkeleton />}
@@ -150,8 +149,7 @@ const Recipe = () => {
             </div>
           )}
         </article>
-      </Card>
-    </>
+    </Card>
   );
 };
 

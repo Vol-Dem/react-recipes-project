@@ -19,8 +19,7 @@ const UserNavigation = () => {
   };
 
   return (
-    <>
-      <div className={classes["nav-profile"]}>
+    <div className={classes["nav-profile"]}>
         <div className={classes["nav-profile__user"]}>
           <span className={classes["nav-profile__name"]}>{userName}</span>
           <UserIcon />
@@ -38,8 +37,7 @@ const UserNavigation = () => {
             Logout
           </ButtonSecondary>
         </div>
-      </div>
-    </>
+    </div>
   );
 };
 

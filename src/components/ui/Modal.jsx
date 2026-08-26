@@ -17,9 +17,7 @@ const Modal = ({ children, className, disableClass, onClose, title }) => {
     };
   }, []);
 
-  return (
-    <>
-      {createPortal(
+  return createPortal(
         <div className={`${disableClass || ""}`}>
           <motion.div
             variants={{
@@ -64,8 +62,7 @@ const Modal = ({ children, className, disableClass, onClose, title }) => {
           </motion.div>
         </div>,
         document.body
-      )}
-    </>
+      )
   );
 };
 

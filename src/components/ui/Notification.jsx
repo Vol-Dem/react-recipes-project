@@ -12,9 +12,7 @@ const Notification = ({ title, message }) => {
   const closeNotificationHandler = () => {
     dispatch(notificationActions.closeNotification());
   };
-  return (
-    <>
-      {createPortal(
+  return createPortal(
         <motion.div
           role="status"
           aria-live="polite"
@@ -38,8 +36,7 @@ const Notification = ({ title, message }) => {
           </Card>
         </motion.div>,
         document.body,
-      )}
-    </>
+      )
   );
 };
 

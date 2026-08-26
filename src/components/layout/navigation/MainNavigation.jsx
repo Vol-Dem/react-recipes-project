@@ -28,28 +28,26 @@ const MainNavigation = () => {
   const isAuth = useSelector((state) => state.auth.isLoggedIn);
 
   return (
-    <>
-      <nav className={classes.nav}>
-        <ul className={classes["nav__links"]}>
-          <NavItem to="/" className={classes.active}>
-            Home
-          </NavItem>
-          {isAuth && (
-            <>
-              <NavItem to="profile" className={classes.active}>
-                Profile
-              </NavItem>
-              <NavItem to="favorites" className={classes.active}>
-                Favorites
-              </NavItem>
-            </>
-          )}
-          <NavItem to="about" className={classes.active}>
-            About
-          </NavItem>
-        </ul>
-      </nav>
-    </>
+    <nav className={classes.nav}>
+      <ul className={classes["nav__links"]}>
+        <NavItem to="/" className={classes.active}>
+          Home
+        </NavItem>
+        {isAuth && (
+          <>
+            <NavItem to="profile" className={classes.active}>
+              Profile
+            </NavItem>
+            <NavItem to="favorites" className={classes.active}>
+              Favorites
+            </NavItem>
+          </>
+        )}
+        <NavItem to="about" className={classes.active}>
+          About
+        </NavItem>
+      </ul>
+    </nav>
   );
 };
 
