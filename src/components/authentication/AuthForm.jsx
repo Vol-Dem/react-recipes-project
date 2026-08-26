@@ -48,6 +48,41 @@ const AuthForm = () => {
     (state) => state.auth.showResetPassword,
   );
   const dispatch = useDispatch();
+  const emailIsInvalid = showErrorMessage && !email.isValid;
+  const passwordIsInvalid = showErrorMessage && !password.isValid;
+  const emailClassName = `${classes["auth__input"]} ${
+    emailIsInvalid ? classes.invalid : ""
+  }`;
+  const passwordClassName = `${classes["auth__input"]} ${
+    passwordIsInvalid ? classes.invalid : ""
+  }`;
+  const resetEmailValidation = {
+    required: true,
+    email: true,
+    maxLength: VALIDATION_EMAIL_MAX_LENGTH,
+  };
+  const emailValidation = {
+    ...resetEmailValidation,
+    disableErrorOnBlur: isLogin,
+  };
+  const passwordValidation = {
+    required: true,
+    password: true,
+    maxLength: VALIDATION_PASSWORD_MAX_LENGTH,
+    disableErrorOnBlur: isLogin,
+  };
+  const agreementLabel = (
+    <span>
+      I have read and agree to the{" "}
+      <Link className={classes.link} to="tos" target="blank">
+        Terms of Service
+      </Link>{" "}
+      and{" "}
+      <Link className={classes.link} to="privacy" target="blank">
+        Privacy Policy
+      </Link>
+    </span>
+  );
 
   useEffect(() => {
     return () => {
@@ -112,18 +147,12 @@ const AuthForm = () => {
         name="email"
         type="email"
         disabled={isLoading}
-        className={`${classes["auth__input"]} ${
-          showErrorMessage && !email.isValid ? classes.invalid : ""
-        }`}
+        className={emailClassName}
         autoFocus={true}
         onChange={(e, isValid) => {
           setEmail({ value: e.target.value, isValid });
         }}
-        validation={{
-          required: true,
-          email: true,
-          maxLength: VALIDATION_EMAIL_MAX_LENGTH,
-        }}
+        validation={resetEmailValidation}
         showError={showErrorMessage}
         value={email.value}
       />
@@ -178,19 +207,12 @@ const AuthForm = () => {
             name="email"
             type="email"
             disabled={isLoading}
-            className={`${classes["auth__input"]} ${
-              showErrorMessage && !email.isValid ? classes.invalid : ""
-            }`}
+            className={emailClassName}
             autoFocus={true}
             onChange={(e, isValid) => {
               setEmail({ value: e.target.value, isValid });
             }}
-            validation={{
-              required: true,
-              email: true,
-              maxLength: VALIDATION_EMAIL_MAX_LENGTH,
-              disableErrorOnBlur: !isLogin ? false : true,
-            }}
+            validation={emailValidation}
             showError={showErrorMessage}
             value={email.value}
           />
@@ -200,18 +222,11 @@ const AuthForm = () => {
             name="password"
             type="password"
             disabled={isLoading}
-            className={`${classes["auth__input"]} ${
-              showErrorMessage && !password.isValid ? classes.invalid : ""
-            }`}
+            className={passwordClassName}
             onChange={(e, isValid) => {
               setPassword({ value: e.target.value, isValid });
             }}
-            validation={{
-              required: true,
-              password: true,
-              maxLength: VALIDATION_PASSWORD_MAX_LENGTH,
-              disableErrorOnBlur: !isLogin ? false : true,
-            }}
+            validation={passwordValidation}
             showError={showErrorMessage}
             value={password.value}
           />
@@ -221,18 +236,7 @@ const AuthForm = () => {
               id="agreement"
               name="agreement"
               checked={agreement}
-              label={
-                <span>
-                  I have read and agree to the{" "}
-                  <Link className={classes.link} to="tos" target="blank">
-                    Terms of Service
-                  </Link>{" "}
-                  and{" "}
-                  <Link className={classes.link} to="privacy" target="blank">
-                    Privacy Policy
-                  </Link>
-                </span>
-              }
+              label={agreementLabel}
               onChange={agreementHandler}
             />
           )}
