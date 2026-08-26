@@ -18,20 +18,21 @@ const LinkA = ({
     window.scrollTo({ top: distToTop - headerHeight - 10, behavior: "smooth" });
   };
 
+  const clickHandler = (event) => {
+    onClick?.(event);
+
+    if (shouldSmoothScroll) {
+      smoothScroll(event);
+    }
+  };
+
   return (
     <a
       className={`${classes.link} ${className || ""}`}
       target={external ? "_blank" : ""}
       rel="noreferrer nofollow"
       href={href}
-      onClick={(e) => {
-        if (onClick) {
-          onClick(e);
-        }
-        if (shouldSmoothScroll) {
-          smoothScroll(e);
-        }
-      }}
+      onClick={clickHandler}
     >
       {children}
       {external && <ExternalLinkIcon />}

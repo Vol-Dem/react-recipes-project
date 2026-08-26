@@ -135,6 +135,24 @@ const AuthForm = () => {
     setAgreement((prevState) => !prevState);
   };
 
+  const emailChangeHandler = (event, isValid) => {
+    setEmail({ value: event.target.value, isValid });
+  };
+
+  const passwordChangeHandler = (event, isValid) => {
+    setPassword({ value: event.target.value, isValid });
+  };
+
+  const googleAuthHandler = () => {
+    dispatch(authWithGoogle());
+  };
+
+  const showResetPasswordHandler = () => {
+    dispatch(authActions.setErrorMessage(""));
+    dispatch(authActions.setSuccessMessage(""));
+    dispatch(authActions.setShowResetPassword(true));
+  };
+
   const resetPassHandler = (e) => {
     e.preventDefault();
     dispatch(resetUserPassword(email.value));
@@ -149,9 +167,7 @@ const AuthForm = () => {
         disabled={isLoading}
         className={emailClassName}
         autoFocus={true}
-        onChange={(e, isValid) => {
-          setEmail({ value: e.target.value, isValid });
-        }}
+        onChange={emailChangeHandler}
         validation={resetEmailValidation}
         showError={showErrorMessage}
         value={email.value}
@@ -189,9 +205,7 @@ const AuthForm = () => {
           {isLogin && (
             <Button
               type="button"
-              onClick={() => {
-                dispatch(authWithGoogle());
-              }}
+              onClick={googleAuthHandler}
             >
               <img
                 className={classes["icon"]}
@@ -209,9 +223,7 @@ const AuthForm = () => {
             disabled={isLoading}
             className={emailClassName}
             autoFocus={true}
-            onChange={(e, isValid) => {
-              setEmail({ value: e.target.value, isValid });
-            }}
+            onChange={emailChangeHandler}
             validation={emailValidation}
             showError={showErrorMessage}
             value={email.value}
@@ -223,9 +235,7 @@ const AuthForm = () => {
             type="password"
             disabled={isLoading}
             className={passwordClassName}
-            onChange={(e, isValid) => {
-              setPassword({ value: e.target.value, isValid });
-            }}
+            onChange={passwordChangeHandler}
             validation={passwordValidation}
             showError={showErrorMessage}
             value={password.value}
@@ -243,11 +253,7 @@ const AuthForm = () => {
           {isLogin && (
             <div className={classes["reset"]}>
               <LinkA
-                onClick={() => {
-                  dispatch(authActions.setErrorMessage(""));
-                  dispatch(authActions.setSuccessMessage(""));
-                  dispatch(authActions.setShowResetPassword(true));
-                }}
+                onClick={showResetPasswordHandler}
               >
                 Forgot your password?
               </LinkA>
