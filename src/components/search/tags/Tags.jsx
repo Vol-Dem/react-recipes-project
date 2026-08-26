@@ -1,6 +1,14 @@
 import classes from "./Tags.module.scss";
 import Tag from "../../ui/Tag";
 
+const QUICK_FILTERS = [
+  { label: "Vegetarian", query: "vegetarian", type: "diet" },
+  { label: "<300KCAL", query: "300", type: "maxCalories" },
+  { label: "Breakfast", query: "breakfast", type: "type" },
+  { label: "<15min", query: "15", type: "maxReadyTime" },
+  { label: "Gluten free", query: "Gluten free", type: "diet" },
+];
+
 const Tags = ({ onTagClick }) => {
   return (
     <div
@@ -8,21 +16,11 @@ const Tags = ({ onTagClick }) => {
       role="group"
       aria-label="Quick recipe filters"
     >
-      <Tag query="vegetarian" type="diet" onClick={onTagClick}>
-        Vegetarian
-      </Tag>
-      <Tag query="300" type="maxCalories" onClick={onTagClick}>
-        &#60;300KCAL
-      </Tag>
-      <Tag query="breakfast" type="type" onClick={onTagClick}>
-        Breakfast
-      </Tag>
-      <Tag query="15" type="maxReadyTime" onClick={onTagClick}>
-        &#60;15min
-      </Tag>
-      <Tag query="Gluten free" type="diet" onClick={onTagClick}>
-        Gluten free
-      </Tag>
+      {QUICK_FILTERS.map(({ label, query, type }) => (
+        <Tag key={`${type}-${query}`} query={query} type={type} onClick={onTagClick}>
+          {label}
+        </Tag>
+      ))}
     </div>
   );
 };
