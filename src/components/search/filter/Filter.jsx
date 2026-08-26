@@ -107,13 +107,11 @@ const Filter = () => {
           Max ready time (min.)
         </label>
         <Input
-          input={{
-            type: "number",
-            id: "max-ready-time",
-            name: "max-ready-time",
-            min: "0",
-            max: "999",
-          }}
+          type="number"
+          id="max-ready-time"
+          name="max-ready-time"
+          min="0"
+          max="999"
         />
         <label
           htmlFor="min-calories"
@@ -123,24 +121,20 @@ const Filter = () => {
         </label>
         <div className={classes["search__filter-calories"]}>
           <Input
-            input={{
-              type: "number",
-              id: "min-calories",
-              name: "min-calories",
-              min: "0",
-              max: "9999",
-              placeholder: "min",
-            }}
+            type="number"
+            id="min-calories"
+            name="min-calories"
+            min="0"
+            max="9999"
+            placeholder="min"
           />
           <Input
-            input={{
-              type: "number",
-              id: "max-calories",
-              name: "max-calories",
-              min: "0",
-              max: "9999",
-              placeholder: "max",
-            }}
+            type="number"
+            id="max-calories"
+            name="max-calories"
+            min="0"
+            max="9999"
+            placeholder="max"
           />
         </div>
       </fieldset>

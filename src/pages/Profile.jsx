@@ -53,11 +53,9 @@ const Profile = () => {
       {changeNameIsActive && (
         <>
           <Input
-            input={{
-              type: "text",
-              name: "name",
-              placeholder: `${userData.userName || ""}`,
-            }}
+            type="text"
+            name="name"
+            placeholder={`${userData.userName || ""}`}
             autoFocus={true}
           />
           <ButtonSecondary>Submit</ButtonSecondary>
@@ -74,7 +72,7 @@ const Profile = () => {
       {!changePassIsActive && <span>********</span>}
       {changePassIsActive && (
         <>
-          <Input input={{ type: "password", name: "pass" }} autoFocus={true} />
+          <Input type="password" name="pass" autoFocus={true} />
           <ButtonSecondary>Submit</ButtonSecondary>
         </>
       )}

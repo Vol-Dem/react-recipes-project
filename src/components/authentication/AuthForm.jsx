@@ -111,7 +111,7 @@ const AuthForm = () => {
         label="Email"
         name="email"
         type="email"
-        input={{ disabled: isLoading }}
+        disabled={isLoading}
         className={`${classes["auth__input"]} ${
           showErrorMessage && !email.isValid ? classes.invalid : ""
         }`}
@@ -177,7 +177,7 @@ const AuthForm = () => {
             id="email"
             name="email"
             type="email"
-            input={{ disabled: isLoading }}
+            disabled={isLoading}
             className={`${classes["auth__input"]} ${
               showErrorMessage && !email.isValid ? classes.invalid : ""
             }`}
@@ -199,7 +199,7 @@ const AuthForm = () => {
             id="password"
             name="password"
             type="password"
-            input={{ disabled: isLoading }}
+            disabled={isLoading}
             className={`${classes["auth__input"]} ${
               showErrorMessage && !password.isValid ? classes.invalid : ""
             }`}
