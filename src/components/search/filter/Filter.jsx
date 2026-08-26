@@ -107,9 +107,9 @@ const Filter = () => {
           Max ready time (min.)
         </label>
         <Input
-          type="number"
           id="max-ready-time"
           name="max-ready-time"
+          type="number"
           min="0"
           max="999"
         />
@@ -121,17 +121,17 @@ const Filter = () => {
         </label>
         <div className={classes["search__filter-calories"]}>
           <Input
-            type="number"
             id="min-calories"
             name="min-calories"
+            type="number"
             min="0"
             max="9999"
             placeholder="min"
           />
           <Input
-            type="number"
             id="max-calories"
             name="max-calories"
+            type="number"
             min="0"
             max="9999"
             placeholder="max"

@@ -48,13 +48,13 @@ const Profile = () => {
   };
 
   const nameForm = (
-    <form onSubmit={changeNameHandler} className={classes["profile__form"]}>
+    <form className={classes["profile__form"]} onSubmit={changeNameHandler}>
       {!changeNameIsActive && <span>{userData.userName}</span>}
       {changeNameIsActive && (
         <>
           <Input
-            type="text"
             name="name"
+            type="text"
             placeholder={`${userData.userName || ""}`}
             autoFocus={true}
           />
@@ -68,11 +68,11 @@ const Profile = () => {
   );
 
   const passForm = (
-    <form onSubmit={changePasswordHandler} className={classes["profile__form"]}>
+    <form className={classes["profile__form"]} onSubmit={changePasswordHandler}>
       {!changePassIsActive && <span>********</span>}
       {changePassIsActive && (
         <>
-          <Input type="password" name="pass" autoFocus={true} />
+          <Input name="pass" type="password" autoFocus={true} />
           <ButtonSecondary>Submit</ButtonSecondary>
         </>
       )}

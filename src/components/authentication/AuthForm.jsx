@@ -159,18 +159,18 @@ const AuthForm = () => {
   };
 
   const resetPasswordForm = (
-    <form onSubmit={resetPassHandler} className={classes["auth__form"]}>
+    <form className={classes["auth__form"]} onSubmit={resetPassHandler}>
       <Input
-        label="Email"
         name="email"
         type="email"
-        disabled={isLoading}
-        className={emailClassName}
-        autoFocus={true}
-        onChange={emailChangeHandler}
+        label="Email"
+        value={email.value}
         validation={resetEmailValidation}
         showError={showErrorMessage}
-        value={email.value}
+        disabled={isLoading}
+        autoFocus={true}
+        className={emailClassName}
+        onChange={emailChangeHandler}
       />
       {errorMessageAuth && (
         <ErrorMessage className={classes["auth__error"]}>
@@ -189,10 +189,10 @@ const AuthForm = () => {
   return (
     <motion.div
       key={isLogin}
+      className={classes.auth}
       initial={ANIMATION_SLIDE_IN_INITIAL}
       animate={ANIMATION_SLIDE_IN}
       exit={ANIMATION_SLIDE_IN_INITIAL}
-      className={classes.auth}
     >
       {!showResetPassword && (
         <h3 className={classes["auth__title"]}>
@@ -201,52 +201,52 @@ const AuthForm = () => {
       )}
       {showResetPassword && resetPasswordForm}
       {!showResetPassword && (
-        <form onSubmit={authHandler} className={classes["auth__form"]}>
+        <form className={classes["auth__form"]} onSubmit={authHandler}>
           {isLogin && (
             <Button
               type="button"
               onClick={googleAuthHandler}
             >
               <img
-                className={classes["icon"]}
-                alt="google-icon"
                 src={GOOGLE_AUTH_ICON_URL}
+                alt="google-icon"
+                className={classes["icon"]}
               ></img>{" "}
               Sign in with Google
             </Button>
           )}
           <Input
-            label="Email"
             id="email"
             name="email"
             type="email"
-            disabled={isLoading}
-            className={emailClassName}
-            autoFocus={true}
-            onChange={emailChangeHandler}
+            label="Email"
+            value={email.value}
             validation={emailValidation}
             showError={showErrorMessage}
-            value={email.value}
+            disabled={isLoading}
+            autoFocus={true}
+            className={emailClassName}
+            onChange={emailChangeHandler}
           />
           <Input
-            label="Password"
             id="password"
             name="password"
             type="password"
+            label="Password"
+            value={password.value}
+            validation={passwordValidation}
+            showError={showErrorMessage}
             disabled={isLoading}
             className={passwordClassName}
             onChange={passwordChangeHandler}
-            validation={passwordValidation}
-            showError={showErrorMessage}
-            value={password.value}
           />
 
           {!isLogin && (
             <Checkbox
               id="agreement"
               name="agreement"
-              checked={agreement}
               label={agreementLabel}
+              checked={agreement}
               onChange={agreementHandler}
             />
           )}
@@ -267,9 +267,9 @@ const AuthForm = () => {
           <div className={classes["auth__controls"]}>
             <ButtonSecondary
               type="button"
-              onClick={switchSignType}
               disabled={isLoading}
               className={classes["auth__btn--switch"]}
+              onClick={switchSignType}
             >
               {isLogin ? "Create Account" : "Log in"}
             </ButtonSecondary>
