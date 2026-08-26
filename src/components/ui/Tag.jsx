@@ -1,13 +1,13 @@
 import classes from "./Tag.module.scss";
 
-const Tag = ({ children, tagCfg: { dataQuery, dataType, onTagClick } }) => {
+const Tag = ({ children, query, type, onClick }) => {
   return (
     <button
       type="button"
-      data-query={dataQuery}
-      data-type={dataType}
+      data-query={query}
+      data-type={type}
       className={classes.tag}
-      onClick={onTagClick}
+      onClick={onClick}
     >
       {children}
     </button>

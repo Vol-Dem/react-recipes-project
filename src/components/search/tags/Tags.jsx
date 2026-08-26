@@ -8,49 +8,19 @@ const Tags = ({ onTagClick }) => {
       role="group"
       aria-label="Quick recipe filters"
     >
-      <Tag
-        tagCfg={{
-          dataQuery: "vegetarian",
-          dataType: "diet",
-          onTagClick,
-        }}
-      >
+      <Tag query="vegetarian" type="diet" onClick={onTagClick}>
         Vegetarian
       </Tag>
-      <Tag
-        tagCfg={{
-          dataQuery: "300",
-          dataType: "maxCalories",
-          onTagClick,
-        }}
-      >
+      <Tag query="300" type="maxCalories" onClick={onTagClick}>
         &#60;300KCAL
       </Tag>
-      <Tag
-        tagCfg={{
-          dataQuery: "breakfast",
-          dataType: "type",
-          onTagClick,
-        }}
-      >
+      <Tag query="breakfast" type="type" onClick={onTagClick}>
         Breakfast
       </Tag>
-      <Tag
-        tagCfg={{
-          dataQuery: "15",
-          dataType: "maxReadyTime",
-          onTagClick,
-        }}
-      >
+      <Tag query="15" type="maxReadyTime" onClick={onTagClick}>
         &#60;15min
       </Tag>
-      <Tag
-        tagCfg={{
-          dataQuery: "Gluten free",
-          dataType: "diet",
-          onTagClick,
-        }}
-      >
+      <Tag query="Gluten free" type="diet" onClick={onTagClick}>
         Gluten free
       </Tag>
     </div>
