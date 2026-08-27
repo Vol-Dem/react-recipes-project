@@ -1,12 +1,6 @@
 import Card from "../../../../shared/components/ui/Card/Card";
 import classes from "./Profile.module.scss";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  changeUserName,
-  changeUserPassword,
-} from "../../store/authThunks";
 import ErrorMessage from "../../../../shared/components/feedback/ErrorMessage/ErrorMessage";
-import { useState } from "react";
 import UserIcon from "../../../../assets/icons/user.svg?react";
 import { motion } from "framer-motion";
 import {
@@ -15,40 +9,10 @@ import {
 } from "../../../../shared/constants";
 import EditableProfileField from "../../components/EditableProfileField/EditableProfileField";
 import ProfileField from "../../components/ProfileField/ProfileField";
+import { useProfileController } from "../../hooks/useProfileController";
 
 const Profile = () => {
-  const [changeNameIsActive, setChangeNameIsActive] = useState(false);
-  const [changePassIsActive, setChangePassIsActive] = useState(false);
-  const dispatch = useDispatch();
-  const errorMessageAuth = useSelector((state) => state.auth.errorMessage);
-  const userData = useSelector((state) => state.auth.user);
-
-  // Toggle the change-name form.
-  const changeNameIsActiveHandler = () => {
-    setChangeNameIsActive((prevState) => !prevState);
-  };
-
-  // Toggle the change-password form.
-  const changePassIsActiveHandler = () => {
-    setChangePassIsActive((prevState) => !prevState);
-  };
-
-  // Retrieve the new password and dispatch the changeUserPassword action.
-  const changePasswordHandler = async (e) => {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    const password = formData.get("pass");
-    dispatch(changeUserPassword(password));
-  };
-
-  // Retrieve the new name and dispatch the changeUserName action.
-  const changeNameHandler = (e) => {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    const name = formData.get("name");
-    dispatch(changeUserName(name));
-    setChangeNameIsActive(false);
-  };
+  const { actions, editing, status, user } = useProfileController();
 
   return (
     <motion.div
@@ -65,29 +29,29 @@ const Profile = () => {
             <dl className={classes["profile__info"]}>
               <ProfileField label="Name">
                 <EditableProfileField
-                  displayValue={userData.userName}
+                  displayValue={user.userName}
                   inputName="name"
-                  inputPlaceholder={userData.userName || ""}
+                  inputPlaceholder={user.userName || ""}
                   inputType="text"
-                  isEditing={changeNameIsActive}
-                  onSubmit={changeNameHandler}
-                  onToggle={changeNameIsActiveHandler}
+                  isEditing={editing.name}
+                  onSubmit={actions.submitName}
+                  onToggle={actions.toggleNameEditing}
                 />
               </ProfileField>
-              <ProfileField label="Email">{userData.email}</ProfileField>
+              <ProfileField label="Email">{user.email}</ProfileField>
               <ProfileField label="Password">
                 <EditableProfileField
                   displayValue="********"
                   inputName="pass"
                   inputType="password"
-                  isEditing={changePassIsActive}
-                  onSubmit={changePasswordHandler}
-                  onToggle={changePassIsActiveHandler}
+                  isEditing={editing.password}
+                  onSubmit={actions.submitPassword}
+                  onToggle={actions.togglePasswordEditing}
                 />
               </ProfileField>
             </dl>
-            {errorMessageAuth && (
-              <ErrorMessage>{errorMessageAuth}</ErrorMessage>
+            {status.errorMessage && (
+              <ErrorMessage>{status.errorMessage}</ErrorMessage>
             )}
           </div>
         </div>
