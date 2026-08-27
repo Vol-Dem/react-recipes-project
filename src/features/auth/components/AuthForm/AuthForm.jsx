@@ -1,22 +1,8 @@
-import { useState } from "react";
 import classes from "./AuthForm.module.scss";
-import { useDispatch, useSelector } from "react-redux";
-import { authActions } from "../../store/authSlice";
-import {
-  authRequest,
-  authWithGoogle,
-  resetUserPassword,
-} from "../../store/authThunks";
 import Button from "../../../../shared/components/ui/Button/Button";
-import { useEffect } from "react";
 import {
   ANIMATION_SLIDE_IN,
   ANIMATION_SLIDE_IN_INITIAL,
-  MESSAGE_AGREEMENT,
-  ERROR_MESSAGE_OFFLINE,
-  ERROR_MESSAGE_INVALID_INPUT,
-  VALIDATION_EMAIL_MAX_LENGTH,
-  VALIDATION_PASSWORD_MAX_LENGTH,
   GOOGLE_AUTH_ICON_URL,
 } from "../../../../shared/constants";
 import LinkA from "../../../../shared/components/ui/LinkA/LinkA";
@@ -27,116 +13,33 @@ import AuthFields from "../AuthFields/AuthFields";
 import AuthLegalNotice from "../AuthLegalNotice/AuthLegalNotice";
 import AuthMessages from "../AuthMessages/AuthMessages";
 import ResetPasswordForm from "../ResetPasswordForm/ResetPasswordForm";
+import { useAuthForm } from "../../hooks/useAuthForm";
 
 const AuthForm = () => {
-  const [isLogin, setIsLogin] = useState(true);
-  const [email, setEmail] = useState({
-    value: "",
-    isValid: false,
-  });
-  const [password, setPassword] = useState({
-    value: "",
-    isValid: false,
-  });
-  const [agreement, setAgreement] = useState(false);
-  const [showErrorMessage, setShowErrorMessage] = useState(false);
-  const errorMessageAuth = useSelector((state) => state.auth.errorMessage);
-  const successMessage = useSelector((state) => state.auth.successMessage);
-  const isLoading = useSelector((state) => state.auth.isLoading);
-  const showResetPassword = useSelector(
-    (state) => state.auth.showResetPassword,
-  );
-  const dispatch = useDispatch();
-  const emailIsInvalid = showErrorMessage && !email.isValid;
-  const passwordIsInvalid = showErrorMessage && !password.isValid;
-  const resetEmailValidation = {
-    required: true,
-    email: true,
-    maxLength: VALIDATION_EMAIL_MAX_LENGTH,
-  };
-  const emailValidation = {
-    ...resetEmailValidation,
-    disableErrorOnBlur: isLogin,
-  };
-  const passwordValidation = {
-    required: true,
-    password: true,
-    maxLength: VALIDATION_PASSWORD_MAX_LENGTH,
-    disableErrorOnBlur: isLogin,
-  };
-  useEffect(() => {
-    return () => {
-      dispatch(authActions.setErrorMessage(""));
-      dispatch(authActions.setSuccessMessage(""));
-      dispatch(authActions.setShowResetPassword(false));
-    };
-  }, [dispatch]);
-
-  const authHandler = async (e) => {
-    e.preventDefault();
-    dispatch(authActions.setErrorMessage(""));
-    dispatch(authActions.setSuccessMessage(""));
-    setShowErrorMessage(true);
-    if (!navigator?.onLine) {
-      dispatch(authActions.setErrorMessage(ERROR_MESSAGE_OFFLINE));
-      return;
-    }
-
-    if (!agreement && !isLogin) {
-      dispatch(authActions.setErrorMessage(MESSAGE_AGREEMENT));
-      return;
-    }
-
-    if (email.isValid && password.isValid) {
-      dispatch(authRequest(isLogin, email.value, password.value));
-    } else {
-      dispatch(authActions.setErrorMessage(ERROR_MESSAGE_INVALID_INPUT));
-    }
-
-  };
-
-  const switchSignType = () => {
-    dispatch(authActions.setErrorMessage(""));
-    dispatch(authActions.setSuccessMessage(""));
-    dispatch(authActions.setShowResetPassword(false));
-    setIsLogin((state) => !state);
-    setEmail({
-      value: "",
-      isValid: false,
-    });
-    setPassword({
-      value: "",
-      isValid: false,
-    });
-    setShowErrorMessage(false);
-  };
-
-  const agreementHandler = () => {
-    setAgreement((prevState) => !prevState);
-  };
-
-  const emailChangeHandler = (event, isValid) => {
-    setEmail({ value: event.target.value, isValid });
-  };
-
-  const passwordChangeHandler = (event, isValid) => {
-    setPassword({ value: event.target.value, isValid });
-  };
-
-  const googleAuthHandler = () => {
-    dispatch(authWithGoogle());
-  };
-
-  const showResetPasswordHandler = () => {
-    dispatch(authActions.setErrorMessage(""));
-    dispatch(authActions.setSuccessMessage(""));
-    dispatch(authActions.setShowResetPassword(true));
-  };
-
-  const resetPassHandler = (e) => {
-    e.preventDefault();
-    dispatch(resetUserPassword(email.value));
-  };
+  const {
+    agreement,
+    changeAgreement,
+    changeEmail,
+    changePassword,
+    email,
+    emailIsInvalid,
+    emailValidation,
+    errorMessage,
+    isLoading,
+    isLogin,
+    openResetPassword,
+    password,
+    passwordIsInvalid,
+    passwordValidation,
+    resetEmailValidation,
+    showErrors,
+    showResetPassword,
+    signInWithGoogle,
+    submitAuth,
+    submitPasswordReset,
+    successMessage,
+    switchAuthMode,
+  } = useAuthForm();
 
   return (
     <motion.div
@@ -155,22 +58,19 @@ const AuthForm = () => {
         <ResetPasswordForm
           email={email.value}
           emailIsInvalid={emailIsInvalid}
-          errorMessage={errorMessageAuth}
+          errorMessage={errorMessage}
           isLoading={isLoading}
-          showError={showErrorMessage}
+          showError={showErrors}
           successMessage={successMessage}
           validation={resetEmailValidation}
-          onEmailChange={emailChangeHandler}
-          onSubmit={resetPassHandler}
+          onEmailChange={changeEmail}
+          onSubmit={submitPasswordReset}
         />
       )}
       {!showResetPassword && (
-        <form className={classes["auth__form"]} onSubmit={authHandler}>
+        <form className={classes["auth__form"]} onSubmit={submitAuth}>
           {isLogin && (
-            <Button
-              type="button"
-              onClick={googleAuthHandler}
-            >
+            <Button type="button" onClick={signInWithGoogle}>
               <img
                 src={GOOGLE_AUTH_ICON_URL}
                 alt="google-icon"
@@ -187,31 +87,26 @@ const AuthForm = () => {
             password={password.value}
             passwordIsInvalid={passwordIsInvalid}
             passwordValidation={passwordValidation}
-            showError={showErrorMessage}
-            onEmailChange={emailChangeHandler}
-            onPasswordChange={passwordChangeHandler}
+            showError={showErrors}
+            onEmailChange={changeEmail}
+            onPasswordChange={changePassword}
           />
 
           {!isLogin && (
-            <AuthAgreement
-              checked={agreement}
-              onChange={agreementHandler}
-            />
+            <AuthAgreement checked={agreement} onChange={changeAgreement} />
           )}
           {isLogin && (
             <div className={classes["reset"]}>
-              <LinkA
-                onClick={showResetPasswordHandler}
-              >
+              <LinkA onClick={openResetPassword}>
                 Forgot your password?
               </LinkA>
             </div>
           )}
-          <AuthMessages errorMessage={errorMessageAuth} />
+          <AuthMessages errorMessage={errorMessage} />
           <AuthControls
             isLoading={isLoading}
             isLogin={isLogin}
-            onSwitch={switchSignType}
+            onSwitch={switchAuthMode}
           />
         </form>
       )}
