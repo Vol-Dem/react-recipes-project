@@ -5,6 +5,7 @@ import SearchIcon from "../../../../assets/icons/search.svg?react";
 import Filter from "../Filter/Filter";
 import Tags from "../Tags/Tags";
 import { motion } from "framer-motion";
+import { parseSearchFormData } from "../../utils/searchForm";
 
 const SearchBox = ({ getFormData }) => {
   const [searchInput, setSearchInput] = useState("");
@@ -23,34 +24,8 @@ const SearchBox = ({ getFormData }) => {
 
   const submitFormHandler = (e) => {
     e.preventDefault();
-    const formData = new FormData(e.target);
+    const formQuery = parseSearchFormData(new FormData(e.currentTarget));
 
-    const query = formData
-      .get("query")
-      .replace(/<[^>]*>|[^a-zA-Z0-9,;\-.!?<> ]/g, "")
-      .toLowerCase()
-      .trim();
-    const cuisine = formData.getAll("cuisine").toString();
-    const diet = formData.getAll("diet").toString();
-    const intolerance = formData.getAll("intolerance").toString();
-    const type = formData.getAll("type").toString();
-    const maxReadyTime =
-      formData.get("max-ready-time")?.replace(/[^0-9 ]/g, "") || "";
-    const minCalories =
-      formData.get("min-calories")?.replace(/[^0-9 ]/g, "") || "";
-    const maxCalories =
-      formData.get("max-calories")?.replace(/[^0-9 ]/g, "") || "";
-
-    const formQuery = {
-      query,
-      cuisine,
-      diet,
-      intolerance,
-      type,
-      maxReadyTime,
-      minCalories,
-      maxCalories,
-    };
     getFormData(formQuery);
     setSearchInput("");
     setFilterIsOpen(false);
