@@ -1,0 +1,112 @@
+import { ERROR_MESSAGE_DEFAULT } from "../../../shared/constants";
+import { loadFav } from "../../favorites/store/favoritesSlice";
+import {
+  authenticateWithEmail,
+  authenticateWithGoogle,
+  sendUserPasswordResetEmail,
+  signOutUser,
+  subscribeToAuthChanges,
+  updateCurrentUserName,
+  updateCurrentUserPassword,
+} from "../api/authApi";
+import {
+  getAuthErrorMessage,
+  getPasswordResetErrorMessage,
+} from "../utils/authErrors";
+import { authActions } from "./authSlice";
+
+const createUserPayload = (user) => ({
+  accessToken: user.accessToken,
+  uid: user.uid,
+  email: user.email,
+  displayName: user.displayName,
+  emailVerified: user.emailVerified,
+});
+
+export const initAuth = () => {
+  return (dispatch) =>
+    subscribeToAuthChanges((user) => {
+      if (user) {
+        dispatch(authActions.login(createUserPayload(user)));
+        dispatch(loadFav(user.uid));
+      }
+
+      dispatch(authActions.completeAuthInitialization());
+    });
+};
+
+export const authRequest = (isLogin, email, password) => {
+  return async (dispatch) => {
+    dispatch(authActions.setIsLoading(true));
+
+    try {
+      const userCredential = await authenticateWithEmail(
+        isLogin,
+        email,
+        password,
+      );
+
+      dispatch(authActions.login(createUserPayload(userCredential.user)));
+      dispatch(authActions.closeAuthForm());
+    } catch (error) {
+      dispatch(authActions.setErrorMessage(getAuthErrorMessage(error)));
+    } finally {
+      dispatch(authActions.setIsLoading(false));
+    }
+  };
+};
+
+export const logoutUser = () => {
+  return (dispatch) => {
+    dispatch(authActions.logout());
+
+    return signOutUser();
+  };
+};
+
+export const changeUserPassword = (password) => {
+  return async (dispatch) => {
+    try {
+      await updateCurrentUserPassword(password);
+    } catch (error) {
+      dispatch(authActions.setErrorMessage(error.message));
+    }
+  };
+};
+
+export const changeUserName = (name) => {
+  return async (dispatch) => {
+    try {
+      const user = await updateCurrentUserName(name);
+      dispatch(authActions.login(createUserPayload(user)));
+    } catch (error) {
+      dispatch(authActions.setErrorMessage(error.message));
+    }
+  };
+};
+
+export const authWithGoogle = () => {
+  return async (dispatch) => {
+    try {
+      const result = await authenticateWithGoogle();
+
+      dispatch(authActions.login(createUserPayload(result.user)));
+      dispatch(authActions.closeAuthForm());
+    } catch {
+      dispatch(authActions.setErrorMessage(ERROR_MESSAGE_DEFAULT));
+    }
+  };
+};
+
+export const resetUserPassword = (email) => {
+  return async (dispatch) => {
+    try {
+      await sendUserPasswordResetEmail(email);
+      dispatch(authActions.setSuccessMessage("Password reset email sent!"));
+    } catch (error) {
+      dispatch(
+        authActions.setErrorMessage(getPasswordResetErrorMessage(error)),
+      );
+    }
+  };
+};

@@ -3,7 +3,7 @@ import UserIcon from "../../../../assets/icons/user.svg?react";
 import ButtonSecondary from "../../../../shared/components/ui/ButtonSecondary/ButtonSecondary";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { authActions } from "../../../../features/auth/store/authSlice";
+import { logoutUser } from "../../../../features/auth/store/authThunks";
 
 const UserNavigation = () => {
   const email = useSelector((state) => state.auth.user.email);
@@ -14,7 +14,7 @@ const UserNavigation = () => {
   const dispatch = useDispatch();
 
   const logout = () => {
-    dispatch(authActions.logout());
+    dispatch(logoutUser());
     navigate("/", { replace: true });
   };
 

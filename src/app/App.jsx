@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { initAuth } from "../features/auth/store/authSlice";
+import { initAuth } from "../features/auth/store/authThunks";
 import AppRouter from "./AppRouter";
 
 const App = () => {

@@ -1,12 +1,12 @@
 import { useState } from "react";
 import classes from "./AuthForm.module.scss";
 import { useDispatch, useSelector } from "react-redux";
+import { authActions } from "../../store/authSlice";
 import {
-  authActions,
   authRequest,
   authWithGoogle,
   resetUserPassword,
-} from "../../store/authSlice";
+} from "../../store/authThunks";
 import Button from "../../../../shared/components/ui/Button/Button";
 import { useEffect } from "react";
 import {

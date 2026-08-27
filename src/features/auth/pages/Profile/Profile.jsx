@@ -1,7 +1,10 @@
 import Card from "../../../../shared/components/ui/Card/Card";
 import classes from "./Profile.module.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { changeUserName, changeUserPassword } from "../../store/authSlice";
+import {
+  changeUserName,
+  changeUserPassword,
+} from "../../store/authThunks";
 import ErrorMessage from "../../../../shared/components/feedback/ErrorMessage/ErrorMessage";
 import { useState } from "react";
 import UserIcon from "../../../../assets/icons/user.svg?react";
