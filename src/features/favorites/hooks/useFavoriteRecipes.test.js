@@ -28,7 +28,6 @@ vi.mock("../../recipes/api/recipeUrls", () => ({
   buildFavoriteRecipesUrl: hookMocks.buildUrl,
 }));
 vi.mock("../../recipes/store/recipesSlice", () => ({
-  getRecipes: hookMocks.getRecipes,
   recipeActions: {
     resetRecipes: () => ({ type: "recipe/resetRecipes" }),
     setCurrentPage: (payload) => ({
@@ -41,6 +40,9 @@ vi.mock("../../recipes/store/recipesSlice", () => ({
     }),
     setOrderBy: (payload) => ({ type: "recipe/setOrderBy", payload }),
   },
+}));
+vi.mock("../../recipes/store/recipesThunks", () => ({
+  getRecipes: hookMocks.getRecipes,
 }));
 
 describe("useFavoriteRecipes", () => {

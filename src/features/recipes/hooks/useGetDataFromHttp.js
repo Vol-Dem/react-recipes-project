@@ -3,7 +3,8 @@ import { TIMEOUT_SEC } from "../../../shared/constants";
 import { timeout } from "../../../shared/utils/async";
 import { useCallback } from "react";
 import { useDispatch } from "react-redux";
-import { getRecipes, recipeActions } from "../store/recipesSlice";
+import { recipeActions } from "../store/recipesSlice";
+import { getRecipes } from "../store/recipesThunks";
 import { notificationActions } from "../../notifications/store/notificationSlice";
 import { useMatches, useNavigate } from "react-router-dom";
 

@@ -6,7 +6,8 @@ import {
   getRecipesCollection,
 } from "../api/recipeRepository";
 import { buildRecipeSearchUrl } from "../api/recipeUrls";
-import { getRecipes, recipeActions } from "../store/recipesSlice";
+import { recipeActions } from "../store/recipesSlice";
+import { getRecipes } from "../store/recipesThunks";
 
 const recipeReference = getRecipesCollection();
 

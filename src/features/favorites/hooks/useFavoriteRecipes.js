@@ -6,10 +6,8 @@ import {
   getRecipesCollection,
 } from "../../recipes/api/recipeRepository";
 import { buildFavoriteRecipesUrl } from "../../recipes/api/recipeUrls";
-import {
-  getRecipes,
-  recipeActions,
-} from "../../recipes/store/recipesSlice";
+import { recipeActions } from "../../recipes/store/recipesSlice";
+import { getRecipes } from "../../recipes/store/recipesThunks";
 import { MESSAGE_EMPTY_FAVORITES } from "../../../shared/constants";
 
 const favoritesReference = getRecipesCollection();

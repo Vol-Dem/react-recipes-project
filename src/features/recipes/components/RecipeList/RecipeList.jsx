@@ -5,9 +5,9 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   nextPage,
   prevPage,
-  recipeActions,
   sortRecipes,
-} from "../../store/recipesSlice";
+} from "../../store/recipesThunks";
+import { recipeActions } from "../../store/recipesSlice";
 import ErrorMessage from "../../../../shared/components/feedback/ErrorMessage/ErrorMessage";
 import { motion } from "framer-motion";
 import RecipeCards from "../RecipeCards/RecipeCards";
