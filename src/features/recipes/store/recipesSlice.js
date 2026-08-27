@@ -11,6 +11,9 @@ import {
 import { notificationActions } from "../../notifications/store/notificationSlice";
 import axios from "axios";
 import { RECIPES_PER_PAGE } from "../../../shared/constants";
+import { mapRecipe } from "../utils/mapRecipe";
+import { paginateRecipes } from "../utils/paginateRecipes";
+import { sortRecipeCollection } from "../utils/sortRecipes";
 
 const recipeInitialState = {
   searchResult: [],
@@ -86,37 +89,18 @@ export const splitRecipesPerPage = () => {
     const sortedRecipes = getState().recipe.sortedRecipes;
     if (!dailyLimitIsReached) {
       const currentPage = getState().recipe.currentPage;
-      const start = (currentPage - 1) * RECIPES_PER_PAGE;
-      const end = currentPage * RECIPES_PER_PAGE;
-      const recipes = sortedRecipes.slice(start, end);
-      const amountOfPages = Math.ceil(
-        sortedRecipes.length / RECIPES_PER_PAGE
+      const { recipes, isLastPage } = paginateRecipes(
+        sortedRecipes,
+        currentPage,
       );
 
       dispatch(recipeActions.setRecipesPerPage(recipes));
-      if (currentPage === amountOfPages) {
+      if (isLastPage) {
         dispatch(recipeActions.setIsLastPage(true));
       }
     } else {
       dispatch(recipeActions.setRecipesPerPage(sortedRecipes));
     }
-  };
-};
-
-/**
- * Retrieves data from a recipe object.
- * @param {Object} recipe Recipe data to transform
- * @returns {Object} Transformed data (recipe)
- */
-const transformRecipe = (recipe) => {
-  return {
-    id: recipe.id,
-    title: recipe.title,
-    img: recipe.image,
-    readyInMinutes: recipe.readyInMinutes,
-    calories: recipe.nutrition.nutrients.find(({ name }) => name === "Calories")
-      .amount,
-    servings: recipe.servings,
   };
 };
 
@@ -220,7 +204,7 @@ export const getRecipes = ({
         );
       }
       const recipesArr = searchResult.results || searchResult;
-      const recipes = recipesArr.map((recipe) => transformRecipe(recipe));
+      const recipes = recipesArr.map(mapRecipe);
 
       dispatch(recipeActions.setSearchResult(recipes));
       dispatch(recipeActions.setSortedRecipes(recipes));
@@ -319,14 +303,9 @@ export const sortRecipes = (firebaseRef, filter) => {
     const dailyLimitIsReached = getState().recipe.dailyLimitIsReached;
 
     if (!dailyLimitIsReached) {
-      const sortedRecipes = searchResult.slice().sort((a, b) => {
-        if (sortType === "asc") {
-          return a[sortBy] - b[sortBy];
-        }
-        if (sortType === "desc") {
-          return b[sortBy] - a[sortBy];
-        }
-        return true;
+      const sortedRecipes = sortRecipeCollection(searchResult, {
+        sortBy,
+        sortType,
       });
 
       dispatch(recipeActions.setSortedRecipes(sortedRecipes));
