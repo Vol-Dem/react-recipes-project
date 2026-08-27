@@ -1,12 +1,7 @@
 import classes from "./RecipeDetailsPage.module.scss";
 import { useState, useEffect } from "react";
 import Card from "../../../../shared/components/ui/Card/Card";
-import {
-  FIRESTORE_COLLECTIONS,
-  INCLUDE_NUTRITION,
-  SPOONACULAR_API_KEY,
-  SPOONACULAR_API_URL,
-} from "../../../../shared/constants";
+import { FIRESTORE_COLLECTIONS } from "../../../../shared/constants";
 import { useThrowAsyncError } from "../../../../shared/hooks/useThrowAsyncError";
 import { getDoc, getFirestore, doc } from "firebase/firestore";
 import firebaseApp from "../../../../config/firebase";
@@ -17,6 +12,7 @@ import { useMatches, useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import RecipeDetails from "../../components/RecipeDetails/RecipeDetails";
 import RecipeHeader from "../../components/RecipeHeader/RecipeHeader";
+import { buildRecipeDetailsUrl } from "../../api/recipeUrls";
 
 const firestore = getFirestore(firebaseApp);
 
@@ -42,7 +38,7 @@ const RecipeDetailsPage = () => {
   useEffect(() => {
     setRecipeIsLoading(true);
     if (!dailyLimitReached) {
-      const url = `${SPOONACULAR_API_URL}/recipes/${recipeId}/information?apiKey=${SPOONACULAR_API_KEY}&includeNutrition=${INCLUDE_NUTRITION}`;
+      const url = buildRecipeDetailsUrl(recipeId);
 
       const getRecipe = (data) => {
         setRecipe(data);

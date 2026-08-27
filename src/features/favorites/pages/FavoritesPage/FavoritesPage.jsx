@@ -12,12 +12,10 @@ import {
   ANIMATION_SLIDE_IN,
   ANIMATION_SLIDE_IN_INITIAL,
   FIRESTORE_COLLECTIONS,
-  INCLUDE_SEARCH_NUTRITION,
   MESSAGE_EMPTY_FAVORITES,
   RECIPES_PER_PAGE,
-  SPOONACULAR_API_KEY,
-  SPOONACULAR_API_URL,
 } from "../../../../shared/constants";
+import { buildFavoriteRecipesUrl } from "../../../recipes/api/recipeUrls";
 
 const firestore = getFirestore(firebaseApp);
 const favRef = collection(firestore, FIRESTORE_COLLECTIONS.recipes);
@@ -42,8 +40,7 @@ const FavoritesPage = () => {
     }
 
     dispatch(recipeActions.setEmptyMessage(""));
-    const favListQuery = favList.join(",");
-    const requestUrl = `${SPOONACULAR_API_URL}/recipes/informationBulk?apiKey=${SPOONACULAR_API_KEY}&ids=${favListQuery}&includeNutrition=${INCLUDE_SEARCH_NUTRITION}`;
+    const requestUrl = buildFavoriteRecipesUrl(favList);
     const resultsAmount = limit(RECIPES_PER_PAGE + 1);
     const filter = where("id", "in", favList);
     setFilter(filter);

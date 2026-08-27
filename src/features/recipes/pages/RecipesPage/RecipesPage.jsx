@@ -6,11 +6,7 @@ import {
   ANIMATION_SLIDE_IN,
   ANIMATION_SLIDE_IN_INITIAL,
   FIRESTORE_COLLECTIONS,
-  INCLUDE_SEARCH_NUTRITION,
-  RESULT_NUM,
   RECIPES_PER_PAGE,
-  SPOONACULAR_API_KEY,
-  SPOONACULAR_API_URL,
 } from "../../../../shared/constants";
 import { lazy } from "react";
 import { Suspense } from "react";
@@ -23,6 +19,7 @@ import firebaseApp from "../../../../config/firebase";
 import ErrorMessage from "../../../../shared/components/feedback/ErrorMessage/ErrorMessage";
 import Card from "../../../../shared/components/ui/Card/Card";
 import { AnimatePresence, motion } from "framer-motion";
+import { buildRecipeSearchUrl } from "../../api/recipeUrls";
 
 const RecipeList = lazy(() =>
   import("../../components/RecipeList/RecipeList")
@@ -76,11 +73,7 @@ const RecipesPage = () => {
     const minCalories = data.minCalories || "";
     const maxCalories = data.maxCalories || "";
 
-    const requestUrl = `${SPOONACULAR_API_URL}/recipes/complexSearch?apiKey=${SPOONACULAR_API_KEY}&query=${query}&cuisine=${cuisine}&diet=${diet}&intolerances=${intolerance}&type=${type}${
-      maxReadyTime && `&maxReadyTime=${maxReadyTime}`
-    }${minCalories && `&minCalories=${minCalories}`}${
-      maxCalories && `&maxCalories=${maxCalories}`
-    }&number=${RESULT_NUM}&addRecipeNutrition=${INCLUDE_SEARCH_NUTRITION}`;
+    const requestUrl = buildRecipeSearchUrl(data);
 
     const searchTitle = query || "Search result";
     const emptyMessage = `No results for "${query}". Try checking your spelling`;
