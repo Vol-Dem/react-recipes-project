@@ -49,7 +49,7 @@ const formReducer = (state, action) => {
   }
 };
 
-export const useAuthForm = () => {
+export const useAuthFormController = () => {
   const [formState, updateFormState] = useReducer(
     formReducer,
     initialFormState,
@@ -140,27 +140,37 @@ export const useAuthForm = () => {
   };
 
   return {
-    agreement,
-    changeAgreement,
-    changeEmail,
-    changePassword,
-    email,
-    emailIsInvalid: showErrors && !email.isValid,
-    emailValidation: EMAIL_VALIDATION[validationMode],
-    errorMessage,
-    isLoading,
-    isLogin,
-    openResetPassword,
-    password,
-    passwordIsInvalid: showErrors && !password.isValid,
-    passwordValidation: PASSWORD_VALIDATION[validationMode],
-    resetEmailValidation: RESET_EMAIL_VALIDATION,
-    showErrors,
-    showResetPassword,
-    signInWithGoogle,
-    submitAuth,
-    submitPasswordReset,
-    successMessage,
-    switchAuthMode,
+    actions: {
+      changeAgreement,
+      changeEmail,
+      changePassword,
+      openResetPassword,
+      signInWithGoogle,
+      submitAuth,
+      submitPasswordReset,
+      switchAuthMode,
+    },
+    fields: {
+      agreement,
+      email,
+      emailIsInvalid: showErrors && !email.isValid,
+      password,
+      passwordIsInvalid: showErrors && !password.isValid,
+    },
+    mode: {
+      isLogin,
+      showErrors,
+      showResetPassword,
+    },
+    status: {
+      errorMessage,
+      isLoading,
+      successMessage,
+    },
+    validation: {
+      email: EMAIL_VALIDATION[validationMode],
+      password: PASSWORD_VALIDATION[validationMode],
+      resetEmail: RESET_EMAIL_VALIDATION,
+    },
   };
 };

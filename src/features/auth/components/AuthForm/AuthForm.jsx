@@ -13,64 +13,45 @@ import AuthFields from "../AuthFields/AuthFields";
 import AuthLegalNotice from "../AuthLegalNotice/AuthLegalNotice";
 import AuthMessages from "../AuthMessages/AuthMessages";
 import ResetPasswordForm from "../ResetPasswordForm/ResetPasswordForm";
-import { useAuthForm } from "../../hooks/useAuthForm";
+import { useAuthFormController } from "../../hooks/useAuthFormController";
 
 const AuthForm = () => {
-  const {
-    agreement,
-    changeAgreement,
-    changeEmail,
-    changePassword,
-    email,
-    emailIsInvalid,
-    emailValidation,
-    errorMessage,
-    isLoading,
-    isLogin,
-    openResetPassword,
-    password,
-    passwordIsInvalid,
-    passwordValidation,
-    resetEmailValidation,
-    showErrors,
-    showResetPassword,
-    signInWithGoogle,
-    submitAuth,
-    submitPasswordReset,
-    successMessage,
-    switchAuthMode,
-  } = useAuthForm();
+  const { actions, fields, mode, status, validation } =
+    useAuthFormController();
 
   return (
     <motion.div
-      key={isLogin}
+      key={mode.isLogin}
       className={classes.auth}
       initial={ANIMATION_SLIDE_IN_INITIAL}
       animate={ANIMATION_SLIDE_IN}
       exit={ANIMATION_SLIDE_IN_INITIAL}
     >
-      {!showResetPassword && (
+      {!mode.showResetPassword && (
         <h3 className={classes["auth__title"]}>
-          {isLogin ? "Log in" : "Sign Up"}
+          {mode.isLogin ? "Log in" : "Sign Up"}
         </h3>
       )}
-      {showResetPassword && (
+      {mode.showResetPassword && (
         <ResetPasswordForm
-          email={email.value}
-          emailIsInvalid={emailIsInvalid}
-          errorMessage={errorMessage}
-          isLoading={isLoading}
-          showError={showErrors}
-          successMessage={successMessage}
-          validation={resetEmailValidation}
-          onEmailChange={changeEmail}
-          onSubmit={submitPasswordReset}
+          email={fields.email.value}
+          emailIsInvalid={fields.emailIsInvalid}
+          errorMessage={status.errorMessage}
+          isLoading={status.isLoading}
+          showError={mode.showErrors}
+          successMessage={status.successMessage}
+          validation={validation.resetEmail}
+          onEmailChange={actions.changeEmail}
+          onSubmit={actions.submitPasswordReset}
         />
       )}
-      {!showResetPassword && (
-        <form className={classes["auth__form"]} onSubmit={submitAuth}>
-          {isLogin && (
-            <Button type="button" onClick={signInWithGoogle}>
+      {!mode.showResetPassword && (
+        <form
+          className={classes["auth__form"]}
+          onSubmit={actions.submitAuth}
+        >
+          {mode.isLogin && (
+            <Button type="button" onClick={actions.signInWithGoogle}>
               <img
                 src={GOOGLE_AUTH_ICON_URL}
                 alt="google-icon"
@@ -80,37 +61,40 @@ const AuthForm = () => {
             </Button>
           )}
           <AuthFields
-            email={email.value}
-            emailIsInvalid={emailIsInvalid}
-            emailValidation={emailValidation}
-            isLoading={isLoading}
-            password={password.value}
-            passwordIsInvalid={passwordIsInvalid}
-            passwordValidation={passwordValidation}
-            showError={showErrors}
-            onEmailChange={changeEmail}
-            onPasswordChange={changePassword}
+            email={fields.email.value}
+            emailIsInvalid={fields.emailIsInvalid}
+            emailValidation={validation.email}
+            isLoading={status.isLoading}
+            password={fields.password.value}
+            passwordIsInvalid={fields.passwordIsInvalid}
+            passwordValidation={validation.password}
+            showError={mode.showErrors}
+            onEmailChange={actions.changeEmail}
+            onPasswordChange={actions.changePassword}
           />
 
-          {!isLogin && (
-            <AuthAgreement checked={agreement} onChange={changeAgreement} />
+          {!mode.isLogin && (
+            <AuthAgreement
+              checked={fields.agreement}
+              onChange={actions.changeAgreement}
+            />
           )}
-          {isLogin && (
+          {mode.isLogin && (
             <div className={classes["reset"]}>
-              <LinkA onClick={openResetPassword}>
+              <LinkA onClick={actions.openResetPassword}>
                 Forgot your password?
               </LinkA>
             </div>
           )}
-          <AuthMessages errorMessage={errorMessage} />
+          <AuthMessages errorMessage={status.errorMessage} />
           <AuthControls
-            isLoading={isLoading}
-            isLogin={isLogin}
-            onSwitch={switchAuthMode}
+            isLoading={status.isLoading}
+            isLogin={mode.isLogin}
+            onSwitch={actions.switchAuthMode}
           />
         </form>
       )}
-      {isLogin && <AuthLegalNotice />}
+      {mode.isLogin && <AuthLegalNotice />}
     </motion.div>
   );
 };

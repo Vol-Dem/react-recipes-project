@@ -1,6 +1,6 @@
 import { act, renderHook } from "@testing-library/react";
 import { MESSAGE_AGREEMENT } from "../../../shared/constants";
-import { useAuthForm } from "./useAuthForm";
+import { useAuthFormController } from "./useAuthFormController";
 
 const hookMocks = vi.hoisted(() => ({
   authRequest: vi.fn((...payload) => ({ type: "auth/request", payload })),
@@ -30,7 +30,7 @@ vi.mock("../store/authThunks", () => ({
   resetUserPassword: hookMocks.resetUserPassword,
 }));
 
-describe("useAuthForm", () => {
+describe("useAuthFormController", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     Object.defineProperty(window.navigator, "onLine", {
@@ -40,34 +40,38 @@ describe("useAuthForm", () => {
   });
 
   it("provides the initial login state and stable validation", () => {
-    const { result } = renderHook(() => useAuthForm());
+    const { result } = renderHook(() => useAuthFormController());
 
     expect(result.current).toMatchObject({
-      agreement: false,
-      email: { value: "", isValid: false },
-      isLogin: true,
-      password: { value: "", isValid: false },
-      showErrors: false,
+      fields: {
+        agreement: false,
+        email: { value: "", isValid: false },
+        password: { value: "", isValid: false },
+      },
+      mode: {
+        isLogin: true,
+        showErrors: false,
+      },
     });
-    expect(result.current.emailValidation.disableErrorOnBlur).toBe(true);
-    expect(result.current.passwordValidation.disableErrorOnBlur).toBe(true);
+    expect(result.current.validation.email.disableErrorOnBlur).toBe(true);
+    expect(result.current.validation.password.disableErrorOnBlur).toBe(true);
   });
 
   it("submits valid credentials through the auth thunk", () => {
-    const { result } = renderHook(() => useAuthForm());
+    const { result } = renderHook(() => useAuthFormController());
 
     act(() => {
-      result.current.changeEmail(
+      result.current.actions.changeEmail(
         { target: { value: "user@example.com" } },
         true,
       );
-      result.current.changePassword(
+      result.current.actions.changePassword(
         { target: { value: "password" } },
         true,
       );
     });
     act(() => {
-      result.current.submitAuth({ preventDefault: vi.fn() });
+      result.current.actions.submitAuth({ preventDefault: vi.fn() });
     });
 
     expect(hookMocks.authRequest).toHaveBeenCalledWith(
@@ -82,22 +86,25 @@ describe("useAuthForm", () => {
   });
 
   it("resets fields when switching mode and requires signup agreement", () => {
-    const { result } = renderHook(() => useAuthForm());
+    const { result } = renderHook(() => useAuthFormController());
 
     act(() => {
-      result.current.changeEmail(
+      result.current.actions.changeEmail(
         { target: { value: "user@example.com" } },
         true,
       );
-      result.current.switchAuthMode();
+      result.current.actions.switchAuthMode();
     });
 
-    expect(result.current.isLogin).toBe(false);
-    expect(result.current.email).toEqual({ value: "", isValid: false });
-    expect(result.current.emailValidation.disableErrorOnBlur).toBe(false);
+    expect(result.current.mode.isLogin).toBe(false);
+    expect(result.current.fields.email).toEqual({
+      value: "",
+      isValid: false,
+    });
+    expect(result.current.validation.email.disableErrorOnBlur).toBe(false);
 
     act(() => {
-      result.current.submitAuth({ preventDefault: vi.fn() });
+      result.current.actions.submitAuth({ preventDefault: vi.fn() });
     });
 
     expect(hookMocks.dispatch).toHaveBeenCalledWith({
@@ -107,16 +114,18 @@ describe("useAuthForm", () => {
   });
 
   it("submits password reset requests for the current email", () => {
-    const { result } = renderHook(() => useAuthForm());
+    const { result } = renderHook(() => useAuthFormController());
 
     act(() => {
-      result.current.changeEmail(
+      result.current.actions.changeEmail(
         { target: { value: "user@example.com" } },
         true,
       );
     });
     act(() => {
-      result.current.submitPasswordReset({ preventDefault: vi.fn() });
+      result.current.actions.submitPasswordReset({
+        preventDefault: vi.fn(),
+      });
     });
 
     expect(hookMocks.resetUserPassword).toHaveBeenCalledWith(
