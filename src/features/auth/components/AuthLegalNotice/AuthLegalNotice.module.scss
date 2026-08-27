@@ -1,0 +1,12 @@
+@use "../../../../styles/_variables.scss" as var;
+
+.privacy {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(var.$color-text-white, 0.6);
+  line-height: 1.4;
+}
+
+.link {
+  @include var.linkA;
+}

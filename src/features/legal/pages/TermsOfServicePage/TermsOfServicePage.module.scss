@@ -1,0 +1,42 @@
+@use "../../../../styles/_variables.scss" as var;
+
+.tos {
+  margin: 3rem auto;
+  max-width: 93rem;
+  font-size: 1.6rem;
+  line-height: 1.2;
+
+  &__h1 {
+    margin-bottom: 2rem;
+    padding-left: 1rem;
+    border-left: 5px solid var.$color-primary;
+  }
+
+
+  &__h4 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+  }
+
+  &__text {
+    margin-bottom: 2rem;
+  }
+
+  &__list {
+    list-style: "— ";
+    padding-left: 2rem;
+    margin-bottom: 1rem;
+
+    &-item {
+      font-size: 1.6rem;
+      margin-bottom: 0.4rem;
+      &--sub {
+        list-style: none;
+      }
+    }
+  }
+
+  &__link {
+    @include var.linkA;
+  }
+}

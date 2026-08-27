@@ -1,0 +1,24 @@
+@use "../../../styles/_variables.scss" as var;
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  height: 18rem;
+}
+
+@media (max-width: 1024px) {
+  .header {
+    height: 14rem;
+  }
+}
+
+@media (max-width: 375px) {
+  .header {
+    height: 11rem;
+  }
+
+  .logo {
+    font-size: 3.4rem;
+  }
+}

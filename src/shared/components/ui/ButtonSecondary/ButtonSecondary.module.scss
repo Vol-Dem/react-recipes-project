@@ -1,0 +1,22 @@
+@use "sass:color";
+@use "../../../../styles/_variables.scss" as var;
+
+.btn-secondary {
+  background-color: transparent;
+  border: none;
+  font-size: 1.8rem;
+  color: color.adjust(var.$color-primary, $lightness: -10%);
+  font-weight: 600;
+  font-family: inherit;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.3s;
+
+  &:hover {
+    color: color.adjust(var.$color-primary, $lightness: -15%);
+  }
+
+  &:disabled {
+    color: var.$color-gray;
+  }
+}

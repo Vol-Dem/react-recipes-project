@@ -1,0 +1,31 @@
+@use "../../../../styles/_variables.scss" as var;
+
+.search-result__pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 5rem;
+}
+
+.search-result__btn {
+  width: 2rem;
+  background-color: transparent;
+  border: none;
+
+  & button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+  }
+
+  & svg {
+    width: 2rem;
+    height: 2rem;
+  }
+}
+
+.search-result__page {
+  font-size: 2rem;
+  font-family: var.$font-family-secondary;
+}

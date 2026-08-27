@@ -1,0 +1,21 @@
+@use "../../../styles/_variables.scss" as var;
+
+.logo {
+  font-size: 10rem;
+  color: var.$color-text-light;
+  font-weight: 400;
+  font-family: var.$font-family-secondary;
+  margin: 2rem auto;
+}
+
+@media (max-width: 520px) {
+  .logo {
+    font-size: 7.6rem;
+  }
+}
+
+@media (max-width: 415px) {
+  .logo {
+    font-size: 5.6rem;
+  }
+}

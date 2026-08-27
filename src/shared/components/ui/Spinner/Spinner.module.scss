@@ -1,0 +1,56 @@
+@use "../../../../styles/_variables.scss" as var;
+
+.spinner {
+  display: flex;
+  position: relative;
+  margin: 0 auto;
+
+  &.big {
+    width: 80px;
+    height: 80px;
+  }
+
+  &.small {
+    position: absolute;
+    width: 2rem;
+    height: 2rem;
+    left: 50%;
+    transform: translate(-50%, 0);
+    & div {
+      width: 2rem;
+      height: 2rem;
+      border-width: 2px;
+    }
+  }
+
+  & div {
+    box-sizing: border-box;
+    display: block;
+    position: absolute;
+    width: 64px;
+    height: 64px;
+    border: 8px solid var.$color-text-primary;
+    border-radius: 50%;
+    animation: spinner 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    border-color: var.$color-text-light transparent transparent transparent;
+  }
+
+  & div:nth-child(1) {
+    animation-delay: -0.45s;
+  }
+  & div:nth-child(2) {
+    animation-delay: -0.3s;
+  }
+  & div:nth-child(3) {
+    animation-delay: -0.15s;
+  }
+}
+
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

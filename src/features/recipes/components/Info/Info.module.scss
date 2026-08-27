@@ -1,0 +1,60 @@
+@use "../../../../styles/_variables.scss" as var;
+
+.recipe__info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8rem;
+  font-size: 2rem;
+}
+
+.recipe__params {
+  display: flex;
+  gap: 8rem;
+}
+
+.recipe__param {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+
+  & svg {
+    width: 2rem;
+    height: 2rem;
+  }
+}
+
+.recipe__fav {
+  color: var.$color-info-muted;
+  cursor: pointer;
+
+  & svg {
+    width: 3.6rem;
+    height: 3.6rem;
+  }
+
+  &--active {
+    fill: var.$color-primary;
+  }
+}
+
+.recipe__actions {
+  & svg {
+    width: 3.6rem;
+    height: 3.6rem;
+  }
+
+  &--active {
+    color: var.$color-primary;
+  }
+}
+
+@media (max-width: 470px) {
+  .recipe__info {
+    gap: 3rem;
+  }
+
+  .recipe__params {
+    gap: 3rem;
+  }
+}
