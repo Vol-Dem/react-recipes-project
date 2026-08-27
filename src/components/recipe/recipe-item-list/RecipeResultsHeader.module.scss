@@ -1,0 +1,22 @@
+@use "./../../../variables/variables.scss" as var;
+
+.search-result__head {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4.6rem;
+  flex-wrap: wrap;
+  gap: 1.6rem;
+}
+
+.search-result__title {
+  font-size: 4.6rem;
+  font-weight: 500;
+  font-family: var.$font-family-secondary;
+  text-transform: capitalize;
+}
+
+@media (max-width: 495px) {
+  .search-result__head {
+    justify-content: center;
+  }
+}

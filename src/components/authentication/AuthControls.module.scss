@@ -1,0 +1,33 @@
+@use "sass:color";
+@use "./../../variables/variables.scss" as var;
+
+.auth__controls {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+}
+
+.auth__btn--switch {
+  background-color: transparent;
+  border: none;
+  color: color.adjust(var.$color-primary, $lightness: -10%);
+  font-weight: 600;
+
+  &:hover {
+    color: color.adjust(var.$color-primary, $lightness: -15%);
+  }
+
+  &:disabled {
+    color: var.$color-gray;
+  }
+}
+
+.auth__btn--submit {
+  position: relative;
+
+  &:disabled {
+    color: transparent;
+    background-color: var.$color-gray;
+    box-shadow: none;
+  }
+}

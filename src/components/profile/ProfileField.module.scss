@@ -1,0 +1,21 @@
+.profile__element {
+  display: flex;
+  align-items: center;
+  font-size: 2.4rem;
+  gap: 0;
+  margin-left: 1rem;
+
+  & dt {
+    margin-right: 0.25em;
+  }
+
+  & dd {
+    margin: 0;
+  }
+}
+
+@media (max-width: 700px) {
+  .profile__element {
+    font-size: 2rem;
+  }
+}

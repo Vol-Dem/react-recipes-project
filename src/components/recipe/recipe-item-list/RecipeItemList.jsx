@@ -1,10 +1,5 @@
 import classes from "./RecipeItemList.module.scss";
 import Card from "../../ui/Card";
-import RecipeItem from "../recipe-item/RecipeItem";
-import Sort from "../sort/Sort";
-import ArrowLeftIcon from "./../../../assets/arrow-left.svg?react";
-import ArrowRightIcon from "./../../../assets/arrow-right.svg?react";
-import RecipeItemSkeleton from "../../skeletons/RecipeItemSkeleton";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -15,7 +10,9 @@ import {
 } from "../../../store/recipe";
 import ErrorMessage from "../../ui/ErrorMessage";
 import { motion } from "framer-motion";
-import { RECIPES_PER_PAGE } from "../../../constants";
+import RecipeCards from "./RecipeCards";
+import RecipePagination from "./RecipePagination";
+import RecipeResultsHeader from "./RecipeResultsHeader";
 
 const RecipeItemList = ({
   title,
@@ -36,16 +33,6 @@ const RecipeItemList = ({
   const options = useSelector((state) => state.recipe.options);
   const emptyMessage = useSelector((state) => state.recipe.emptyMessage);
   const errorMessage = useSelector((state) => state.recipe.errorMessage);
-
-  const recipes = recipesPerPage.map((recipe) => (
-    <RecipeItem key={recipe.id} recipe={recipe} />
-  ));
-
-  const recipeSkeleton = [
-    ...Array(
-      skeletonItemsAmount || RECIPES_PER_PAGE
-    ).keys(),
-  ].map((i) => <RecipeItemSkeleton key={i} />);
 
   const nextPageHandler = () => {
     dispatch(nextPage(firebaseRef, filter));
@@ -88,56 +75,28 @@ const RecipeItemList = ({
           )}
 
           {(recipesPerPageIsNotEmpty || recipesIsLoading) && (
-            <div className={classes["search-result__head"]}>
-              {!recipeIsOpen && (
-                <h1 className={classes["search-result__title"]}>
-                  {title} {options.map((option) => ` | ${option}`)}
-                </h1>
-              )}
-              <Sort onSort={sortHandler} />
-            </div>
+            <RecipeResultsHeader
+              options={options}
+              showTitle={!recipeIsOpen}
+              title={title}
+              onSort={sortHandler}
+            />
           )}
-          <motion.ul
-            variants={{ visible: { transition: { staggerChildren: 0.5 } } }}
-            className={`${classes["cards-container"]} ${
-              recipeIsOpen ? classes["cards-container--side"] : ""
-            }`}
-          >
-            {recipesPerPageIsNotEmpty && !recipesIsLoading && recipes}
-            {recipesIsLoading && recipeSkeleton}
-          </motion.ul>
+          <RecipeCards
+            isLoading={recipesIsLoading}
+            isRecipeOpen={recipeIsOpen}
+            recipes={recipesPerPage}
+            skeletonItemsAmount={skeletonItemsAmount}
+          />
 
           {recipesPerPageIsNotEmpty && (
-            <nav
-              className={classes["search-result__pagination"]}
-              aria-label="Recipe results pages"
-            >
-              {currentPage > 1 && (
-                <div className={classes["search-result__btn"]}>
-                  <button
-                    onClick={prevPageHandler}
-                    disabled={recipesIsLoading}
-                    aria-label="Previous results page"
-                  >
-                    <ArrowLeftIcon />
-                  </button>
-                </div>
-              )}
-              <span className={classes["search-result__page"]}>
-                {currentPage}
-              </span>
-              {!isLastPage && (
-                <div className={classes["search-result__btn"]}>
-                  <button
-                    onClick={nextPageHandler}
-                    disabled={recipesIsLoading}
-                    aria-label="Next results page"
-                  >
-                    <ArrowRightIcon />
-                  </button>
-                </div>
-              )}
-            </nav>
+            <RecipePagination
+              currentPage={currentPage}
+              isLastPage={isLastPage}
+              isLoading={recipesIsLoading}
+              onNextPage={nextPageHandler}
+              onPreviousPage={prevPageHandler}
+            />
           )}
         </Card>
       </div>

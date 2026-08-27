@@ -1,5 +1,3 @@
-@use "./../../../variables/variables.scss" as var;
-
 .search-result {
   height: inherit;
 
@@ -7,95 +5,13 @@
     height: 100%;
   }
 
-  &__head {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 4.6rem;
-    flex-wrap: wrap;
-    gap: 1.6rem;
-  }
-
   &__empty {
     font-size: 2.4rem;
-  }
-
-  &__title {
-    font-size: 4.6rem;
-    font-weight: 500;
-    font-family: var.$font-family-secondary;
-    text-transform: capitalize;
-  }
-
-  &__pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
-    margin-top: 5rem;
-  }
-
-  &__btn {
-    width: 2rem;
-    background-color: transparent;
-    border: none;
-
-    & button {
-      background-color: transparent;
-      border: none;
-      cursor: pointer;
-    }
-
-    & svg {
-      width: 2rem;
-      height: 2rem;
-    }
-  }
-
-  &__page {
-    font-size: 2rem;
-    font-family: var.$font-family-secondary;
-  }
-}
-
-.cards-container {
-  display: grid;
-  gap: 5.4rem;
-  grid-template-columns: repeat(4, 1fr);
-  justify-items: center;
-
-  &--side {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-    justify-items: normal;
   }
 }
 
 @media (max-width: 768px) {
-  .cards-container {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
   .hidden-md {
     display: none;
-  }
-}
-
-@media (max-width: 600px) {
-  .cards-container {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 495px) {
-  .search-result__head {
-    justify-content: center;
-  }
-}
-
-@media (max-width: 425px) {
-  .cards-container {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-    justify-items: normal;
   }
 }

@@ -1,8 +1,5 @@
 import { useState } from "react";
-import Input from "../ui/Input";
 import classes from "./AuthForm.module.scss";
-import Spinner from "../ui/Spinner";
-import ErrorMessage from "../ui/ErrorMessage";
 import { useDispatch, useSelector } from "react-redux";
 import {
   authActions,
@@ -12,7 +9,6 @@ import {
 } from "../../store/auth";
 import Button from "../ui/Button";
 import { useEffect } from "react";
-import ButtonSecondary from "../ui/ButtonSecondary";
 import {
   ANIMATION_SLIDE_IN,
   ANIMATION_SLIDE_IN_INITIAL,
@@ -23,11 +19,14 @@ import {
   VALIDATION_PASSWORD_MAX_LENGTH,
   GOOGLE_AUTH_ICON_URL,
 } from "../../constants";
-import Checkbox from "../ui/Checkbox";
 import LinkA from "../ui/LinkA";
-import SuccessMessage from "../ui/SuccessMessage";
-import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import AuthAgreement from "./AuthAgreement";
+import AuthControls from "./AuthControls";
+import AuthFields from "./AuthFields";
+import AuthLegalNotice from "./AuthLegalNotice";
+import AuthMessages from "./AuthMessages";
+import ResetPasswordForm from "./ResetPasswordForm";
 
 const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -50,12 +49,6 @@ const AuthForm = () => {
   const dispatch = useDispatch();
   const emailIsInvalid = showErrorMessage && !email.isValid;
   const passwordIsInvalid = showErrorMessage && !password.isValid;
-  const emailClassName = `${classes["auth__input"]} ${
-    emailIsInvalid ? classes.invalid : ""
-  }`;
-  const passwordClassName = `${classes["auth__input"]} ${
-    passwordIsInvalid ? classes.invalid : ""
-  }`;
   const resetEmailValidation = {
     required: true,
     email: true,
@@ -71,19 +64,6 @@ const AuthForm = () => {
     maxLength: VALIDATION_PASSWORD_MAX_LENGTH,
     disableErrorOnBlur: isLogin,
   };
-  const agreementLabel = (
-    <span>
-      I have read and agree to the{" "}
-      <Link className={classes.link} to="tos" target="blank">
-        Terms of Service
-      </Link>{" "}
-      and{" "}
-      <Link className={classes.link} to="privacy" target="blank">
-        Privacy Policy
-      </Link>
-    </span>
-  );
-
   useEffect(() => {
     return () => {
       dispatch(authActions.setErrorMessage(""));
@@ -158,34 +138,6 @@ const AuthForm = () => {
     dispatch(resetUserPassword(email.value));
   };
 
-  const resetPasswordForm = (
-    <form className={classes["auth__form"]} onSubmit={resetPassHandler}>
-      <Input
-        name="email"
-        type="email"
-        label="Email"
-        value={email.value}
-        validation={resetEmailValidation}
-        showError={showErrorMessage}
-        disabled={isLoading}
-        autoFocus={true}
-        className={emailClassName}
-        onChange={emailChangeHandler}
-      />
-      {errorMessageAuth && (
-        <ErrorMessage className={classes["auth__error"]}>
-          {errorMessageAuth}
-        </ErrorMessage>
-      )}
-      {successMessage && (
-        <SuccessMessage className={classes["auth__error"]}>
-          {successMessage}
-        </SuccessMessage>
-      )}
-      <Button>Reset password</Button>
-    </form>
-  );
-
   return (
     <motion.div
       key={isLogin}
@@ -199,7 +151,19 @@ const AuthForm = () => {
           {isLogin ? "Log in" : "Sign Up"}
         </h3>
       )}
-      {showResetPassword && resetPasswordForm}
+      {showResetPassword && (
+        <ResetPasswordForm
+          email={email.value}
+          emailIsInvalid={emailIsInvalid}
+          errorMessage={errorMessageAuth}
+          isLoading={isLoading}
+          showError={showErrorMessage}
+          successMessage={successMessage}
+          validation={resetEmailValidation}
+          onEmailChange={emailChangeHandler}
+          onSubmit={resetPassHandler}
+        />
+      )}
       {!showResetPassword && (
         <form className={classes["auth__form"]} onSubmit={authHandler}>
           {isLogin && (
@@ -215,37 +179,21 @@ const AuthForm = () => {
               Sign in with Google
             </Button>
           )}
-          <Input
-            id="email"
-            name="email"
-            type="email"
-            label="Email"
-            value={email.value}
-            validation={emailValidation}
+          <AuthFields
+            email={email.value}
+            emailIsInvalid={emailIsInvalid}
+            emailValidation={emailValidation}
+            isLoading={isLoading}
+            password={password.value}
+            passwordIsInvalid={passwordIsInvalid}
+            passwordValidation={passwordValidation}
             showError={showErrorMessage}
-            disabled={isLoading}
-            autoFocus={true}
-            className={emailClassName}
-            onChange={emailChangeHandler}
-          />
-          <Input
-            id="password"
-            name="password"
-            type="password"
-            label="Password"
-            value={password.value}
-            validation={passwordValidation}
-            showError={showErrorMessage}
-            disabled={isLoading}
-            className={passwordClassName}
-            onChange={passwordChangeHandler}
+            onEmailChange={emailChangeHandler}
+            onPasswordChange={passwordChangeHandler}
           />
 
           {!isLogin && (
-            <Checkbox
-              id="agreement"
-              name="agreement"
-              label={agreementLabel}
+            <AuthAgreement
               checked={agreement}
               onChange={agreementHandler}
             />
@@ -259,42 +207,15 @@ const AuthForm = () => {
               </LinkA>
             </div>
           )}
-          {errorMessageAuth && (
-            <ErrorMessage className={classes["auth__error"]}>
-              {errorMessageAuth}
-            </ErrorMessage>
-          )}
-          <div className={classes["auth__controls"]}>
-            <ButtonSecondary
-              type="button"
-              disabled={isLoading}
-              className={classes["auth__btn--switch"]}
-              onClick={switchSignType}
-            >
-              {isLogin ? "Create Account" : "Log in"}
-            </ButtonSecondary>
-            <Button
-              disabled={isLoading}
-              className={classes["auth__btn--submit"]}
-            >
-              {isLoading && <Spinner size="small" />}
-              <span>{isLogin ? "Log in" : "Sign up"}</span>
-            </Button>
-          </div>
+          <AuthMessages errorMessage={errorMessageAuth} />
+          <AuthControls
+            isLoading={isLoading}
+            isLogin={isLogin}
+            onSwitch={switchSignType}
+          />
         </form>
       )}
-      {isLogin && (
-        <div className={classes["privacy"]}>
-          By continuing, you are indicating that you accept our
-          <Link className={classes.link} to="tos" target="blank">
-            Terms of Service
-          </Link>{" "}
-          and{" "}
-          <Link className={classes.link} to="privacy" target="blank">
-            Privacy Policy
-          </Link>
-        </div>
-      )}
+      {isLogin && <AuthLegalNotice />}
     </motion.div>
   );
 };

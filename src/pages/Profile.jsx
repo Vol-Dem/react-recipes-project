@@ -1,17 +1,17 @@
 import Card from "../components/ui/Card";
-import Input from "../components/ui/Input";
 import classes from "./Profile.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { changeUserName, changeUserPassword } from "../store/auth";
 import ErrorMessage from "../components/ui/ErrorMessage";
 import { useState } from "react";
-import ButtonSecondary from "../components/ui/ButtonSecondary";
 import UserIcon from "./../assets/user.svg?react";
 import { motion } from "framer-motion";
 import {
   ANIMATION_SLIDE_IN,
   ANIMATION_SLIDE_IN_INITIAL,
 } from "../constants";
+import EditableProfileField from "../components/profile/EditableProfileField";
+import ProfileField from "../components/profile/ProfileField";
 
 const Profile = () => {
   const [changeNameIsActive, setChangeNameIsActive] = useState(false);
@@ -47,41 +47,6 @@ const Profile = () => {
     setChangeNameIsActive(false);
   };
 
-  const nameForm = (
-    <form className={classes["profile__form"]} onSubmit={changeNameHandler}>
-      {!changeNameIsActive && <span>{userData.userName}</span>}
-      {changeNameIsActive && (
-        <>
-          <Input
-            name="name"
-            type="text"
-            placeholder={`${userData.userName || ""}`}
-            autoFocus={true}
-          />
-          <ButtonSecondary>Submit</ButtonSecondary>
-        </>
-      )}
-      <ButtonSecondary type="button" onClick={changeNameIsActiveHandler}>
-        {!changeNameIsActive ? "Change" : "Cancel"}
-      </ButtonSecondary>
-    </form>
-  );
-
-  const passForm = (
-    <form className={classes["profile__form"]} onSubmit={changePasswordHandler}>
-      {!changePassIsActive && <span>********</span>}
-      {changePassIsActive && (
-        <>
-          <Input name="pass" type="password" autoFocus={true} />
-          <ButtonSecondary>Submit</ButtonSecondary>
-        </>
-      )}
-      <ButtonSecondary type="button" onClick={changePassIsActiveHandler}>
-        {!changePassIsActive ? "Change" : "Cancel"}
-      </ButtonSecondary>
-    </form>
-  );
-
   return (
     <motion.div
       initial={ANIMATION_SLIDE_IN_INITIAL}
@@ -95,18 +60,28 @@ const Profile = () => {
           <div>
             <h1 className={classes["profile__title"]}>Profile</h1>
             <dl className={classes["profile__info"]}>
-              <div className={classes["profile__element"]}>
-                <dt>Name:</dt>
-                <dd>{nameForm}</dd>
-              </div>
-              <div className={classes["profile__element"]}>
-                <dt>Email:</dt>
-                <dd>{userData.email}</dd>
-              </div>
-              <div className={classes["profile__element"]}>
-                <dt>Password:</dt>
-                <dd>{passForm}</dd>
-              </div>
+              <ProfileField label="Name">
+                <EditableProfileField
+                  displayValue={userData.userName}
+                  inputName="name"
+                  inputPlaceholder={userData.userName || ""}
+                  inputType="text"
+                  isEditing={changeNameIsActive}
+                  onSubmit={changeNameHandler}
+                  onToggle={changeNameIsActiveHandler}
+                />
+              </ProfileField>
+              <ProfileField label="Email">{userData.email}</ProfileField>
+              <ProfileField label="Password">
+                <EditableProfileField
+                  displayValue="********"
+                  inputName="pass"
+                  inputType="password"
+                  isEditing={changePassIsActive}
+                  onSubmit={changePasswordHandler}
+                  onToggle={changePassIsActiveHandler}
+                />
+              </ProfileField>
             </dl>
             {errorMessageAuth && (
               <ErrorMessage>{errorMessageAuth}</ErrorMessage>
