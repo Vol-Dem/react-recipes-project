@@ -1,5 +1,5 @@
 import CheckboxFilterGroup from "./CheckboxFilterGroup";
-import { CHECKBOX_FILTERS } from "./filterOptions";
+import { CHECKBOX_FILTERS } from "../../../constants";
 import NumericFilters from "./NumericFilters";
 
 const Filter = () => {
