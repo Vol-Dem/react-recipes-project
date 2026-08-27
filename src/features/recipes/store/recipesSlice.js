@@ -1,19 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {
-  endAt,
-  getDocs,
-  limit,
-  limitToLast,
-  orderBy,
-  query,
-  startAt,
-} from "firebase/firestore";
 import { notificationActions } from "../../notifications/store/notificationSlice";
-import axios from "axios";
-import { RECIPES_PER_PAGE } from "../../../shared/constants";
 import { mapRecipe } from "../utils/mapRecipe";
 import { paginateRecipes } from "../utils/paginateRecipes";
 import { sortRecipeCollection } from "../utils/sortRecipes";
+import { fetchRecipesFromApi } from "../api/recipeApi";
+import {
+  createNextPageRequest,
+  createPreviousPageRequest,
+  createRecipeResultsLimit,
+  fetchRecipesFromFirestore,
+} from "../api/recipeRepository";
 
 const recipeInitialState = {
   searchResult: [],
@@ -29,9 +25,6 @@ const recipeInitialState = {
   emptyMessage: "",
   errorMessage: "",
 };
-
-let firstVisible;
-let lastVisible;
 
 const recipeSlice = createSlice({
   name: "recipe",
@@ -105,71 +98,6 @@ export const splitRecipesPerPage = () => {
 };
 
 /**
- * Fetches data from Firestore.
- * @param {Array} queryParameters Array of parameters for the Firestore query function: Firebase reference, filters, resultsAmount, etc.
- * Requires a Firebase reference to be present.
- * @param {Object} [position] Result of Firestore startAt() or endAt() for the Firestore query.
- * @returns {Array} Array with fetched data
- */
-export const getDataFromFirebase = (queryParameters, position) => {
-  return async (dispatch, getState) => {
-    try {
-      const { sortBy, sortType } = getState().recipe.orderBy;
-      const order = sortBy
-        ? orderBy(`${sortBy}`, `${sortType}`)
-        : orderBy("nutrition");
-
-      let firebaseQuery;
-      if (position) {
-        firebaseQuery = query(...queryParameters, order, position);
-      } else {
-        firebaseQuery = query(...queryParameters, order);
-      }
-
-      const recipesData = await getDocs(firebaseQuery);
-
-      const isLast =
-        recipesData.docs.length <= RECIPES_PER_PAGE;
-
-      const recipes = recipesData.docs.flatMap((entry, i) => {
-        const recipe = entry.data();
-
-        if (i === RECIPES_PER_PAGE) {
-          return [];
-        }
-        return recipe;
-      });
-
-      const lastVisibleRecipe = recipesData.docs[recipesData.docs.length - 1];
-      const firstVisibleRecipe = recipesData.docs[0];
-      firstVisible = firstVisibleRecipe;
-      lastVisible = lastVisibleRecipe;
-      dispatch(recipeActions.setIsLastPage(isLast));
-      return recipes;
-    } catch (error) {
-      console.log(error);
-      throw new Error(error);
-    }
-  };
-};
-
-/**
- *Fetch data from API
- * @param {string} requestUrl The URL for API with parameters
- * @returns {Array} Array with fetched data
- */
-export const getDataFromApi = async (requestUrl) => {
-  try {
-    const response = await axios.get(requestUrl);
-    const data = response.data;
-
-    return data;
-  } catch (error) {
-    throw new Error(error);
-  }
-};
-
-/**
  *Fetch data from API if daily limit is not reached or from firestore if it was reached and dispatch actions to set recipe data.
  Dispatch notification about daily limit when a 402 error occurs.
  Dispatch error message if error occurs.
@@ -197,11 +125,18 @@ export const getRecipes = ({
       let searchResult;
 
       if (!dailyLimitIsReached) {
-        searchResult = await getDataFromApi(requestUrl);
+        searchResult = await fetchRecipesFromApi(requestUrl);
       } else {
-        searchResult = await dispatch(
-          getDataFromFirebase([firebaseRef, filter, resultsAmount], position)
-        );
+        const { sortBy, sortType } = getState().recipe.orderBy;
+        const firestoreResult = await fetchRecipesFromFirestore({
+          queryParameters: [firebaseRef, filter, resultsAmount],
+          position,
+          sortBy,
+          sortType,
+        });
+
+        dispatch(recipeActions.setIsLastPage(firestoreResult.isLastPage));
+        searchResult = firestoreResult.recipes;
       }
       const recipesArr = searchResult.results || searchResult;
       const recipes = recipesArr.map(mapRecipe);
@@ -254,8 +189,7 @@ export const nextPage = (firebaseRef, filter) => {
     if (!dailyLimitIsReached) {
       dispatch(splitRecipesPerPage());
     } else {
-      const position = startAt(lastVisible);
-      const resultsAmount = limit(RECIPES_PER_PAGE + 1);
+      const { position, resultsAmount } = createNextPageRequest();
       dispatch(getRecipes({ firebaseRef, filter, resultsAmount, position }));
     }
   };
@@ -278,10 +212,7 @@ export const prevPage = (firebaseRef, filter) => {
       dispatch(splitRecipesPerPage());
       dispatch(recipeActions.setIsLastPage(false));
     } else {
-      const position = endAt(firstVisible);
-      const resultsAmount = limitToLast(
-        RECIPES_PER_PAGE + 1
-      );
+      const { position, resultsAmount } = createPreviousPageRequest();
       dispatch(getRecipes({ firebaseRef, filter, resultsAmount, position }));
     }
   };
@@ -311,7 +242,7 @@ export const sortRecipes = (firebaseRef, filter) => {
       dispatch(recipeActions.setSortedRecipes(sortedRecipes));
       dispatch(splitRecipesPerPage());
     } else {
-      const resultsAmount = limit(RECIPES_PER_PAGE + 1);
+      const resultsAmount = createRecipeResultsLimit();
       dispatch(getRecipes({ firebaseRef, filter, resultsAmount }));
     }
   };

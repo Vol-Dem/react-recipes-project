@@ -1,6 +1,5 @@
 import {
   splitRecipesPerPage,
-  getDataFromApi,
   getRecipes,
   nextPage,
   prevPage,
@@ -81,33 +80,6 @@ describe("recipeSlice", () => {
   });
 
   afterAll(() => {});
-
-  describe("getDataFromApi", () => {
-    beforeEach(() => {});
-
-    const requestUrl = "https://test.com/api";
-
-    it("should return the data if the request is successful", async () => {
-      expect.assertions(2);
-
-      axios.get.mockResolvedValue({ data: responseData });
-      const result = await getDataFromApi(requestUrl);
-
-      expect(axios.get).toHaveBeenCalledWith(requestUrl);
-      expect(result).toEqual(responseData);
-    });
-
-    it("should throw an error if the request fails", async () => {
-      expect.assertions(1);
-
-      const expectedError = new Error("Network error");
-      axios.get.mockRejectedValue(expectedError);
-
-      await expect(getDataFromApi(requestUrl)).rejects.toThrow(
-        "Error: Network error"
-      );
-    });
-  });
 
   describe("getRecipes", () => {
     const requestUrl = "https://test.com/api";

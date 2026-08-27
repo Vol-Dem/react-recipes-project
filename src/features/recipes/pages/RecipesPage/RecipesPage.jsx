@@ -5,8 +5,6 @@ import { useEffect, useState } from "react";
 import {
   ANIMATION_SLIDE_IN,
   ANIMATION_SLIDE_IN_INITIAL,
-  FIRESTORE_COLLECTIONS,
-  RECIPES_PER_PAGE,
 } from "../../../../shared/constants";
 import { lazy } from "react";
 import { Suspense } from "react";
@@ -14,19 +12,20 @@ import Spinner from "../../../../shared/components/ui/Spinner/Spinner";
 import { Outlet, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { recipeActions, getRecipes } from "../../store/recipesSlice";
-import { collection, getFirestore, limit } from "firebase/firestore";
-import firebaseApp from "../../../../config/firebase";
 import ErrorMessage from "../../../../shared/components/feedback/ErrorMessage/ErrorMessage";
 import Card from "../../../../shared/components/ui/Card/Card";
 import { AnimatePresence, motion } from "framer-motion";
 import { buildRecipeSearchUrl } from "../../api/recipeUrls";
+import {
+  createRecipeResultsLimit,
+  getRecipesCollection,
+} from "../../api/recipeRepository";
 
 const RecipeList = lazy(() =>
   import("../../components/RecipeList/RecipeList")
 );
 
-const firestore = getFirestore(firebaseApp);
-const recipeRef = collection(firestore, FIRESTORE_COLLECTIONS.recipes);
+const recipeRef = getRecipesCollection();
 
 const RecipesPage = () => {
   const [title, setTitle] = useState("Search result");
@@ -77,7 +76,7 @@ const RecipesPage = () => {
 
     const searchTitle = query || "Search result";
     const emptyMessage = `No results for "${query}". Try checking your spelling`;
-    const resultsAmount = limit(RECIPES_PER_PAGE + 1);
+    const resultsAmount = createRecipeResultsLimit();
 
     setTitle(searchTitle);
     dispatch(

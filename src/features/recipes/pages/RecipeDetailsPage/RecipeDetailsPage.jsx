@@ -1,10 +1,7 @@
 import classes from "./RecipeDetailsPage.module.scss";
 import { useState, useEffect } from "react";
 import Card from "../../../../shared/components/ui/Card/Card";
-import { FIRESTORE_COLLECTIONS } from "../../../../shared/constants";
 import { useThrowAsyncError } from "../../../../shared/hooks/useThrowAsyncError";
-import { getDoc, getFirestore, doc } from "firebase/firestore";
-import firebaseApp from "../../../../config/firebase";
 import { useGetDataFromHttp } from "../../hooks/useGetDataFromHttp";
 import RecipeHeadSkeleton from "../../components/skeletons/RecipeHeadSkeleton/RecipeHeadSkeleton";
 import RecipeDescriptionSkeleton from "../../components/skeletons/RecipeDescriptionSkeleton/RecipeDescriptionSkeleton";
@@ -13,8 +10,7 @@ import { useSelector } from "react-redux";
 import RecipeDetails from "../../components/RecipeDetails/RecipeDetails";
 import RecipeHeader from "../../components/RecipeHeader/RecipeHeader";
 import { buildRecipeDetailsUrl } from "../../api/recipeUrls";
-
-const firestore = getFirestore(firebaseApp);
+import { fetchRecipeFromFirestore } from "../../api/recipeRepository";
 
 const RecipeDetailsPage = () => {
   const [recipe, setRecipe] = useState({});
@@ -49,13 +45,7 @@ const RecipeDetailsPage = () => {
     } else {
       const getRecipe = async () => {
         try {
-          const recipeRef = doc(
-            firestore,
-            FIRESTORE_COLLECTIONS.recipes,
-            `${recipeId}`,
-          );
-          const recipeDoc = await getDoc(recipeRef);
-          const recipe = recipeDoc.data();
+          const recipe = await fetchRecipeFromFirestore(recipeId);
 
           setRecipe(recipe);
           setRecipeIsLoading(false);

@@ -2,23 +2,23 @@ import RecipeList from "../../../recipes/components/RecipeList/RecipeList";
 import classes from "./FavoritesPage.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { collection, getFirestore, limit, where } from "firebase/firestore";
 import { Outlet, useParams } from "react-router-dom";
 import { getRecipes, recipeActions } from "../../../recipes/store/recipesSlice";
-import firebaseApp from "../../../../config/firebase";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import {
   ANIMATION_SLIDE_IN,
   ANIMATION_SLIDE_IN_INITIAL,
-  FIRESTORE_COLLECTIONS,
   MESSAGE_EMPTY_FAVORITES,
-  RECIPES_PER_PAGE,
 } from "../../../../shared/constants";
 import { buildFavoriteRecipesUrl } from "../../../recipes/api/recipeUrls";
+import {
+  createFavoriteRecipesFilter,
+  createRecipeResultsLimit,
+  getRecipesCollection,
+} from "../../../recipes/api/recipeRepository";
 
-const firestore = getFirestore(firebaseApp);
-const favRef = collection(firestore, FIRESTORE_COLLECTIONS.recipes);
+const favRef = getRecipesCollection();
 
 const FavoritesPage = () => {
   const [filter, setFilter] = useState();
@@ -41,8 +41,8 @@ const FavoritesPage = () => {
 
     dispatch(recipeActions.setEmptyMessage(""));
     const requestUrl = buildFavoriteRecipesUrl(favList);
-    const resultsAmount = limit(RECIPES_PER_PAGE + 1);
-    const filter = where("id", "in", favList);
+    const resultsAmount = createRecipeResultsLimit();
+    const filter = createFavoriteRecipesFilter(favList);
     setFilter(filter);
 
     dispatch(recipeActions.setCurrentPage(1));
