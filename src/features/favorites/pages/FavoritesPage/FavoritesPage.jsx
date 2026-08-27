@@ -1,67 +1,22 @@
 import RecipeList from "../../../recipes/components/RecipeList/RecipeList";
 import classes from "./FavoritesPage.module.scss";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
 import { Outlet, useParams } from "react-router-dom";
-import { getRecipes, recipeActions } from "../../../recipes/store/recipesSlice";
-import { useState } from "react";
 import { motion } from "framer-motion";
 import {
   ANIMATION_SLIDE_IN,
   ANIMATION_SLIDE_IN_INITIAL,
-  MESSAGE_EMPTY_FAVORITES,
 } from "../../../../shared/constants";
-import { buildFavoriteRecipesUrl } from "../../../recipes/api/recipeUrls";
-import {
-  createFavoriteRecipesFilter,
-  createRecipeResultsLimit,
-  getRecipesCollection,
-} from "../../../recipes/api/recipeRepository";
-
-const favRef = getRecipesCollection();
+import { useFavoriteRecipes } from "../../hooks/useFavoriteRecipes";
 
 const FavoritesPage = () => {
-  const [filter, setFilter] = useState();
-  const isAuth = useSelector((state) => state.auth.isLoggedIn);
-  const favList = useSelector((state) => state.fav.favList);
-
-  const dailyLimitIsReached = useSelector(
-    (state) => state.recipe.dailyLimitIsReached
-  );
+  const {
+    favoriteIds,
+    favoritesReference,
+    filter,
+    isAuthenticated,
+  } = useFavoriteRecipes();
   const { recipeId } = useParams();
   const recipeIsOpen = !!recipeId;
-  const dispatch = useDispatch();
-
-  // Load the user's favorites.
-  useEffect(() => {
-    if (!favList.length) {
-      dispatch(recipeActions.setEmptyMessage(MESSAGE_EMPTY_FAVORITES));
-      return;
-    }
-
-    dispatch(recipeActions.setEmptyMessage(""));
-    const requestUrl = buildFavoriteRecipesUrl(favList);
-    const resultsAmount = createRecipeResultsLimit();
-    const filter = createFavoriteRecipesFilter(favList);
-    setFilter(filter);
-
-    dispatch(recipeActions.setCurrentPage(1));
-    dispatch(
-      getRecipes({
-        requestUrl,
-        firebaseRef: favRef,
-        filter,
-        resultsAmount,
-      })
-    );
-
-    return () => {
-      // Reset the current recipe data and sort order when the component unmounts.
-      dispatch(recipeActions.setOrderBy([]));
-      dispatch(recipeActions.resetRecipes());
-      dispatch(recipeActions.setEmptyMessage(""));
-    };
-  }, [favList, dispatch, dailyLimitIsReached]);
 
   return (
     <motion.div
@@ -71,12 +26,12 @@ const FavoritesPage = () => {
         recipeIsOpen ? classes["recipe-columns"] : ""
       }`}
     >
-      {isAuth && (
+      {isAuthenticated && (
         <RecipeList
           title="Favorites"
-          firebaseRef={favRef}
+          firebaseRef={favoritesReference}
           filter={filter}
-          skeletonItemsAmount={favList?.length}
+          skeletonItemsAmount={favoriteIds.length}
         />
       )}
 
