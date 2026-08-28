@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import Card from "../Card/Card";
 import classes from "./Modal.module.scss";
 import { createPortal } from "react-dom";
@@ -6,17 +5,6 @@ import CloseIcon from "../../../../assets/icons/CloseIcon";
 import { motion } from "framer-motion";
 
 const Modal = ({ children, className, disableClass, onClose, title }) => {
-  useEffect(() => {
-    const scrollTop = document.documentElement.scrollTop;
-    const disableScrollHandler = (e) => {
-      window.scrollTo(0, scrollTop);
-    };
-    window.addEventListener("scroll", disableScrollHandler);
-    return () => {
-      window.removeEventListener("scroll", disableScrollHandler);
-    };
-  }, []);
-
   return createPortal(
     <div className={`${disableClass || ""}`}>
       <motion.div

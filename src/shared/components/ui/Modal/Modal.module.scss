@@ -4,6 +4,8 @@
 .modal {
   position: fixed;
   box-shadow: var.$box-shadow;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 
   &--backdrop {
     top: 0;
