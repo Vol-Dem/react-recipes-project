@@ -9,6 +9,7 @@ import { buildFavoriteRecipesUrl } from "../../recipes/api/recipeUrls";
 import { recipeActions } from "../../recipes/store/recipesSlice";
 import { getRecipes } from "../../recipes/store/recipesThunks";
 import { MESSAGE_EMPTY_FAVORITES } from "../../../shared/constants";
+import { selectRecipeDailyLimitIsReached } from "../../recipes/store/recipesSelectors";
 
 const favoritesReference = getRecipesCollection();
 
@@ -18,7 +19,7 @@ export const useFavoriteRecipes = () => {
   const isAuthenticated = useSelector((state) => state.auth.isLoggedIn);
   const favoriteIds = useSelector((state) => state.fav.favList);
   const dailyLimitIsReached = useSelector(
-    (state) => state.recipe.dailyLimitIsReached,
+    selectRecipeDailyLimitIsReached,
   );
 
   useEffect(() => {

@@ -3,13 +3,14 @@ import { useSelector } from "react-redux";
 import { useThrowAsyncError } from "../../../shared/hooks/useThrowAsyncError";
 import { fetchRecipeFromFirestore } from "../api/recipeRepository";
 import { buildRecipeDetailsUrl } from "../api/recipeUrls";
+import { selectRecipeDailyLimitIsReached } from "../store/recipesSelectors";
 import { useGetDataFromHttp } from "./useGetDataFromHttp";
 
 export const useRecipeDetails = (recipeId) => {
   const [recipe, setRecipe] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const dailyLimitIsReached = useSelector(
-    (state) => state.recipe.dailyLimitIsReached,
+    selectRecipeDailyLimitIsReached,
   );
   const throwAsyncError = useThrowAsyncError();
   const getDataFromHttp = useGetDataFromHttp();

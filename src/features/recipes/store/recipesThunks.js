@@ -9,6 +9,7 @@ import {
 import { mapRecipe } from "../utils/mapRecipe";
 import { paginateRecipes } from "../utils/paginateRecipes";
 import { sortRecipeCollection } from "../utils/sortRecipes";
+import { selectRecipeState } from "./recipesSelectors";
 import { recipeActions } from "./recipesSlice";
 
 export const splitRecipesPerPage = () => (dispatch, getState) => {
@@ -16,7 +17,7 @@ export const splitRecipesPerPage = () => (dispatch, getState) => {
     currentPage,
     dailyLimitIsReached,
     sortedRecipes,
-  } = getState().recipe;
+  } = selectRecipeState(getState());
 
   if (dailyLimitIsReached) {
     dispatch(recipeActions.setRecipesPerPage(sortedRecipes));
@@ -42,7 +43,7 @@ export const getRecipes = ({
   resultsAmount,
 }) => {
   return async (dispatch, getState) => {
-    const dailyLimitIsReached = getState().recipe.dailyLimitIsReached;
+    const { dailyLimitIsReached } = selectRecipeState(getState());
 
     dispatch(recipeActions.setIsLastPage(false));
     dispatch(recipeActions.setRecipesIsLoading(true));
@@ -53,7 +54,7 @@ export const getRecipes = ({
       if (!dailyLimitIsReached) {
         searchResult = await fetchRecipesFromApi(requestUrl);
       } else {
-        const { sortBy, sortType } = getState().recipe.orderBy;
+        const { sortBy, sortType } = selectRecipeState(getState()).orderBy;
         const firestoreResult = await fetchRecipesFromFirestore({
           queryParameters: [firebaseRef, filter, resultsAmount],
           position,
@@ -104,7 +105,9 @@ export const getRecipes = ({
 
 export const nextPage = (firebaseRef, filter) => {
   return async (dispatch, getState) => {
-    const { currentPage, dailyLimitIsReached } = getState().recipe;
+    const { currentPage, dailyLimitIsReached } = selectRecipeState(
+      getState(),
+    );
 
     dispatch(recipeActions.setCurrentPage(currentPage + 1));
 
@@ -120,7 +123,9 @@ export const nextPage = (firebaseRef, filter) => {
 
 export const prevPage = (firebaseRef, filter) => {
   return async (dispatch, getState) => {
-    const { currentPage, dailyLimitIsReached } = getState().recipe;
+    const { currentPage, dailyLimitIsReached } = selectRecipeState(
+      getState(),
+    );
 
     dispatch(recipeActions.setCurrentPage(currentPage - 1));
 
@@ -144,7 +149,7 @@ export const sortRecipes = (firebaseRef, filter) => {
       dailyLimitIsReached,
       orderBy: { sortBy, sortType },
       searchResult,
-    } = getState().recipe;
+    } = selectRecipeState(getState());
 
     if (!dailyLimitIsReached) {
       const sortedRecipes = sortRecipeCollection(searchResult, {

@@ -17,6 +17,16 @@ import {
   RECIPE_LIST_INITIAL_ANIMATION,
   RECIPE_LIST_VISIBLE_ANIMATION,
 } from "../../constants/animations";
+import {
+  selectHasRecipesPerPage,
+  selectRecipeCurrentPage,
+  selectRecipeEmptyMessage,
+  selectRecipeErrorMessage,
+  selectRecipeIsLastPage,
+  selectRecipeIsLoading,
+  selectRecipeOptions,
+  selectRecipesPerPage,
+} from "../../store/recipesSelectors";
 
 const RecipeList = ({
   title,
@@ -27,16 +37,14 @@ const RecipeList = ({
   const dispatch = useDispatch();
   const { recipeId } = useParams();
   const recipeIsOpen = !!recipeId;
-  const recipesPerPage = useSelector((state) => state.recipe.recipesPerPage);
-  const recipesPerPageIsNotEmpty = !!recipesPerPage.length;
-  const currentPage = useSelector((state) => state.recipe.currentPage);
-  const isLastPage = useSelector((state) => state.recipe.isLastPage);
-  const recipesIsLoading = useSelector(
-    (state) => state.recipe.recipesIsLoading
-  );
-  const options = useSelector((state) => state.recipe.options);
-  const emptyMessage = useSelector((state) => state.recipe.emptyMessage);
-  const errorMessage = useSelector((state) => state.recipe.errorMessage);
+  const recipesPerPage = useSelector(selectRecipesPerPage);
+  const hasRecipesPerPage = useSelector(selectHasRecipesPerPage);
+  const currentPage = useSelector(selectRecipeCurrentPage);
+  const isLastPage = useSelector(selectRecipeIsLastPage);
+  const recipesIsLoading = useSelector(selectRecipeIsLoading);
+  const options = useSelector(selectRecipeOptions);
+  const emptyMessage = useSelector(selectRecipeEmptyMessage);
+  const errorMessage = useSelector(selectRecipeErrorMessage);
 
   const nextPageHandler = () => {
     dispatch(nextPage(firebaseRef, filter));
@@ -74,11 +82,11 @@ const RecipeList = ({
         }`}
       >
         <Card>
-          {!recipesPerPageIsNotEmpty && !recipesIsLoading && (
+          {!hasRecipesPerPage && !recipesIsLoading && (
             <p className={classes["search-result__empty"]}>{emptyMessage}</p>
           )}
 
-          {(recipesPerPageIsNotEmpty || recipesIsLoading) && (
+          {(hasRecipesPerPage || recipesIsLoading) && (
             <RecipeResultsHeader
               options={options}
               showTitle={!recipeIsOpen}
@@ -93,7 +101,7 @@ const RecipeList = ({
             skeletonItemsAmount={skeletonItemsAmount}
           />
 
-          {recipesPerPageIsNotEmpty && (
+          {hasRecipesPerPage && (
             <RecipePagination
               currentPage={currentPage}
               isLastPage={isLastPage}

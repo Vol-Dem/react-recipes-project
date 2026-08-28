@@ -14,6 +14,12 @@ import ErrorMessage from "../../../../shared/components/feedback/ErrorMessage/Er
 import Card from "../../../../shared/components/ui/Card/Card";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRecipeSearch } from "../../hooks/useRecipeSearch";
+import {
+  selectHasRecipesPerPage,
+  selectRecipeEmptyMessage,
+  selectRecipeErrorMessage,
+  selectRecipeIsLoading,
+} from "../../store/recipesSelectors";
 
 const RecipeList = lazy(() =>
   import("../../components/RecipeList/RecipeList")
@@ -23,29 +29,25 @@ const RecipesPage = () => {
   const { recipeReference, searchTitle, submitSearch } = useRecipeSearch();
   const { recipeId } = useParams();
   const recipeIsOpen = !!recipeId;
-  const errorMessage = useSelector((state) => state.recipe.errorMessage);
-  const emptyMessage = useSelector((state) => state.recipe.emptyMessage);
-  const recipesIsLoading = useSelector(
-    (state) => state.recipe.recipesIsLoading
-  );
-  const recipesPerPageIsEmpty = !useSelector(
-    (state) => state.recipe.recipesPerPage
-  ).length;
+  const errorMessage = useSelector(selectRecipeErrorMessage);
+  const emptyMessage = useSelector(selectRecipeEmptyMessage);
+  const recipesIsLoading = useSelector(selectRecipeIsLoading);
+  const hasRecipesPerPage = useSelector(selectHasRecipesPerPage);
   const shouldShowLogo =
-    recipesPerPageIsEmpty &&
+    !hasRecipesPerPage &&
     !recipesIsLoading &&
     !recipeIsOpen &&
     !errorMessage &&
     !emptyMessage;
   const shouldShowRecipeList =
-    recipesIsLoading || !recipesPerPageIsEmpty || emptyMessage;
+    recipesIsLoading || hasRecipesPerPage || emptyMessage;
   const searchSectionClassName = `${classes["section-search"]} ${
-    !recipesPerPageIsEmpty || recipesIsLoading || recipeIsOpen
+    hasRecipesPerPage || recipesIsLoading || recipeIsOpen
       ? classes.mt0
       : ""
   }`;
   const contentSectionClassName = `${classes["section-content"]} ${
-    recipeIsOpen && !recipesPerPageIsEmpty ? classes["recipe-columns"] : ""
+    recipeIsOpen && hasRecipesPerPage ? classes["recipe-columns"] : ""
   }`;
 
   return (

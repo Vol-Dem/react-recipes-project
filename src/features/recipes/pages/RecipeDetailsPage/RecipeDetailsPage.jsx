@@ -7,14 +7,13 @@ import { useSelector } from "react-redux";
 import RecipeDetails from "../../components/RecipeDetails/RecipeDetails";
 import RecipeHeader from "../../components/RecipeHeader/RecipeHeader";
 import { useRecipeDetails } from "../../hooks/useRecipeDetails";
+import { selectHasRecipesPerPage } from "../../store/recipesSelectors";
 
 const RecipeDetailsPage = () => {
   const navigate = useNavigate();
   const { recipeId } = useParams();
   const { isLoading: recipeIsLoading, recipe } = useRecipeDetails(recipeId);
-  const recipesPerPageIsEmpty = !!useSelector(
-    (state) => state.recipe.recipesPerPage
-  ).length;
+  const hasRecipesPerPage = useSelector(selectHasRecipesPerPage);
   const matches = useMatches()[1].pathname;
 
   const backToListHandler = () => {
@@ -30,7 +29,7 @@ const RecipeDetailsPage = () => {
             <RecipeHeader
               diets={recipe.diets}
               image={recipe.image}
-              showBackButton={recipesPerPageIsEmpty}
+              showBackButton={hasRecipesPerPage}
               title={recipe.title}
               onBack={backToListHandler}
             />
