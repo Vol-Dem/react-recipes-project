@@ -4,6 +4,10 @@ import {
   changeUserName,
   changeUserPassword,
 } from "../store/authThunks";
+import {
+  selectAuthErrorMessage,
+  selectAuthUser,
+} from "../store/authSelectors";
 
 export const useProfileController = () => {
   const [editing, setEditing] = useState({
@@ -11,8 +15,8 @@ export const useProfileController = () => {
     password: false,
   });
   const dispatch = useDispatch();
-  const errorMessage = useSelector((state) => state.auth.errorMessage);
-  const user = useSelector((state) => state.auth.user);
+  const errorMessage = useSelector(selectAuthErrorMessage);
+  const user = useSelector(selectAuthUser);
 
   const toggleNameEditing = () => {
     setEditing((currentEditing) => ({

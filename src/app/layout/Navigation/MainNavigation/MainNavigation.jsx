@@ -2,6 +2,7 @@ import { NavLink, useLocation } from "react-router-dom";
 import classes from "./MainNavigation.module.scss";
 import { useSelector } from "react-redux";
 import { motion } from "framer-motion";
+import { selectAuthIsLoggedIn } from "../../../../features/auth/store/authSelectors";
 
 const NavItem = ({ children, className, to }) => {
   const location = useLocation();
@@ -25,7 +26,7 @@ const NavItem = ({ children, className, to }) => {
 };
 
 const MainNavigation = () => {
-  const isAuth = useSelector((state) => state.auth.isLoggedIn);
+  const isAuth = useSelector(selectAuthIsLoggedIn);
 
   return (
     <nav className={classes.nav}>

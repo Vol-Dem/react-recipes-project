@@ -12,11 +12,12 @@ import {
   RECIPE_CARD_INITIAL_ANIMATION,
   RECIPE_CARD_VARIANTS,
 } from "../../constants/animations";
+import { selectAuthIsLoggedIn } from "../../../auth/store/authSelectors";
 
 const RecipeCard = ({ recipe }) => {
   const { recipeId } = useParams();
   const recipeIsOpen = !!recipeId;
-  const isAuth = useSelector((state) => state.auth.isLoggedIn);
+  const isAuth = useSelector(selectAuthIsLoggedIn);
   const favList = useSelector((state) => state.fav.favList);
   const isFav = isAuth && favList.includes(recipe.id);
   const classSide = recipeIsOpen ? classes["recipe-card--side"] : "";

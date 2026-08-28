@@ -1,8 +1,13 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
+import {
+  selectAuthIsInitialized,
+  selectAuthIsLoggedIn,
+} from "../../store/authSelectors";
 
 const ProtectedRoute = () => {
-  const { isInitialized, isLoggedIn } = useSelector((state) => state.auth);
+  const isInitialized = useSelector(selectAuthIsInitialized);
+  const isLoggedIn = useSelector(selectAuthIsLoggedIn);
   const location = useLocation();
 
   if (!isInitialized) {

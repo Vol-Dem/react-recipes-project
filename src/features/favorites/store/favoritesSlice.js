@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { getFirestore, setDoc, doc, getDoc } from "firebase/firestore";
 import firebaseApp from "../../../config/firebase";
 import { FIRESTORE_COLLECTIONS } from "../../../shared/constants";
+import { selectAuthUserId } from "../../auth/store/authSelectors";
 
 const firestore = getFirestore(firebaseApp);
 
@@ -30,7 +31,7 @@ const favSlice = createSlice({
 export const sendFav = (id) => {
   return async (dispatch, getState) => {
     dispatch(favActions.addToFav(id));
-    const userId = getState().auth.user.uid;
+    const userId = selectAuthUserId(getState());
     const favList = getState().fav.favList;
     const favRef = doc(firestore, FIRESTORE_COLLECTIONS.favorites, userId);
     try {
@@ -47,7 +48,7 @@ export const sendFav = (id) => {
  */
 export const loadFav = () => {
   return async (dispatch, getState) => {
-    const uid = getState().auth.user.uid;
+    const uid = selectAuthUserId(getState());
     const favRef = doc(firestore, FIRESTORE_COLLECTIONS.favorites, uid);
     const favSnap = await getDoc(favRef);
     if (favSnap.exists()) {

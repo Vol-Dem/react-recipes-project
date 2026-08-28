@@ -16,6 +16,12 @@ import {
   PASSWORD_VALIDATION,
   RESET_EMAIL_VALIDATION,
 } from "../utils/authValidation";
+import {
+  selectAuthErrorMessage,
+  selectAuthIsLoading,
+  selectAuthShowResetPassword,
+  selectAuthSuccessMessage,
+} from "../store/authSelectors";
 
 const emptyField = Object.freeze({ value: "", isValid: false });
 const initialFormState = {
@@ -55,12 +61,10 @@ export const useAuthFormController = () => {
     initialFormState,
   );
   const dispatch = useDispatch();
-  const errorMessage = useSelector((state) => state.auth.errorMessage);
-  const successMessage = useSelector((state) => state.auth.successMessage);
-  const isLoading = useSelector((state) => state.auth.isLoading);
-  const showResetPassword = useSelector(
-    (state) => state.auth.showResetPassword,
-  );
+  const errorMessage = useSelector(selectAuthErrorMessage);
+  const successMessage = useSelector(selectAuthSuccessMessage);
+  const isLoading = useSelector(selectAuthIsLoading);
+  const showResetPassword = useSelector(selectAuthShowResetPassword);
   const { agreement, email, isLogin, password, showErrors } = formState;
   const validationMode = isLogin ? "login" : "signup";
 

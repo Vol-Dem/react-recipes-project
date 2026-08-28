@@ -10,13 +10,14 @@ import { recipeActions } from "../../recipes/store/recipesSlice";
 import { getRecipes } from "../../recipes/store/recipesThunks";
 import { MESSAGE_EMPTY_FAVORITES } from "../../../shared/constants";
 import { selectRecipeDailyLimitIsReached } from "../../recipes/store/recipesSelectors";
+import { selectAuthIsLoggedIn } from "../../auth/store/authSelectors";
 
 const favoritesReference = getRecipesCollection();
 
 export const useFavoriteRecipes = () => {
   const [filter, setFilter] = useState();
   const dispatch = useDispatch();
-  const isAuthenticated = useSelector((state) => state.auth.isLoggedIn);
+  const isAuthenticated = useSelector(selectAuthIsLoggedIn);
   const favoriteIds = useSelector((state) => state.fav.favList);
   const dailyLimitIsReached = useSelector(
     selectRecipeDailyLimitIsReached,

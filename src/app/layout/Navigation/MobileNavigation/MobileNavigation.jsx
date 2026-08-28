@@ -2,10 +2,11 @@ import { useState } from "react";
 import classes from "./MobileNavigation.module.scss";
 import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { selectAuthIsLoggedIn } from "../../../../features/auth/store/authSelectors";
 
 const MobileNavigation = () => {
   const [navIsOpen, setNavIsOpen] = useState(false);
-  const isAuth = useSelector((state) => state.auth.isLoggedIn);
+  const isAuth = useSelector(selectAuthIsLoggedIn);
 
   const navSwitch = () => {
     setNavIsOpen((prevState) => !prevState);

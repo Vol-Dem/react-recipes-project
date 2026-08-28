@@ -13,10 +13,14 @@ import { Suspense } from "react";
 import Spinner from "../../../shared/components/ui/Spinner/Spinner";
 import Notification from "../../../features/notifications/components/Notification/Notification";
 import { AnimatePresence, motion } from "framer-motion";
+import {
+  selectAuthFormIsOpen,
+  selectAuthIsLoggedIn,
+} from "../../../features/auth/store/authSelectors";
 
 const Layout = () => {
-  const isAuth = useSelector((state) => state.auth.isLoggedIn);
-  const authIsOpen = useSelector((state) => state.auth.authFormIsOpen);
+  const isAuth = useSelector(selectAuthIsLoggedIn);
+  const authIsOpen = useSelector(selectAuthFormIsOpen);
   const notificationIsShown = useSelector(
     (state) => state.notification.isShown,
   );

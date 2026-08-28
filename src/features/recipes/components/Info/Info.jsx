@@ -5,9 +5,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { sendFav } from "../../../favorites/store/favoritesSlice";
 import { authActions } from "../../../auth/store/authSlice";
 import StarIcon from "../../../../assets/icons/star.svg?react";
+import { selectAuthIsLoggedIn } from "../../../auth/store/authSelectors";
 
 const Info = ({ readyInMinutes, servings, recipeId }) => {
-  const isAuth = useSelector((state) => state.auth.isLoggedIn);
+  const isAuth = useSelector(selectAuthIsLoggedIn);
   const dispatch = useDispatch();
   const addToFavoristes = () => {
     if (!isAuth) {

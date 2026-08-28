@@ -4,11 +4,10 @@ import ButtonSecondary from "../../../../shared/components/ui/ButtonSecondary/Bu
 import { NavLink, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutUser } from "../../../../features/auth/store/authThunks";
+import { selectAuthDisplayName } from "../../../../features/auth/store/authSelectors";
 
 const UserNavigation = () => {
-  const email = useSelector((state) => state.auth.user.email);
-  const userName =
-    useSelector((state) => state.auth.user.userName) || email.split("@")[0];
+  const userName = useSelector(selectAuthDisplayName);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
