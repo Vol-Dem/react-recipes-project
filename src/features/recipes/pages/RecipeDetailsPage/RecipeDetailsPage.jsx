@@ -8,8 +8,11 @@ import RecipeDetails from "../../components/RecipeDetails/RecipeDetails";
 import RecipeHeader from "../../components/RecipeHeader/RecipeHeader";
 import { useRecipeDetails } from "../../hooks/useRecipeDetails";
 import { selectHasRecipesPerPage } from "../../store/recipesSelectors";
+import { usePageSetup } from "../../../../shared/hooks/usePageSetup";
 
-const RecipeDetailsPage = () => {
+const RecipeDetailsPage = ({ title }) => {
+  usePageSetup(title);
+
   const navigate = useNavigate();
   const { recipeId } = useParams();
   const { isLoading: recipeIsLoading, recipe } = useRecipeDetails(recipeId);

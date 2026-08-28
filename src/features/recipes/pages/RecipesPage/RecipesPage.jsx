@@ -20,12 +20,15 @@ import {
   selectRecipeErrorMessage,
   selectRecipeIsLoading,
 } from "../../store/recipesSelectors";
+import { usePageSetup } from "../../../../shared/hooks/usePageSetup";
 
 const RecipeList = lazy(() =>
   import("../../components/RecipeList/RecipeList")
 );
 
-const RecipesPage = () => {
+const RecipesPage = ({ title }) => {
+  usePageSetup(title);
+
   const { recipeReference, searchTitle, submitSearch } = useRecipeSearch();
   const { recipeId } = useParams();
   const recipeIsOpen = !!recipeId;

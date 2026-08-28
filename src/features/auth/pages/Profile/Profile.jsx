@@ -10,8 +10,11 @@ import {
 import EditableProfileField from "../../components/EditableProfileField/EditableProfileField";
 import ProfileField from "../../components/ProfileField/ProfileField";
 import { useProfileController } from "../../hooks/useProfileController";
+import { usePageSetup } from "../../../../shared/hooks/usePageSetup";
 
-const Profile = () => {
+const Profile = ({ title }) => {
+  usePageSetup(title);
+
   const { actions, editing, status, user } = useProfileController();
 
   return (

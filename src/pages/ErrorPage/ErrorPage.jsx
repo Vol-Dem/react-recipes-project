@@ -1,9 +1,11 @@
 import { NavLink, useRouteError } from "react-router-dom";
 import Card from "../../shared/components/ui/Card/Card";
 import classes from "./ErrorPage.module.scss";
+import { usePageSetup } from "../../shared/hooks/usePageSetup";
 
-const ErrorPage = () => {
+const ErrorPage = ({ title }) => {
   const error = useRouteError();
+  usePageSetup(title);
 
   return (
     <section className={classes["error-page"]}>

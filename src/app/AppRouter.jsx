@@ -6,61 +6,63 @@ import ProtectedRoute from "../features/auth/components/ProtectedRoute/Protected
 
 const AboutPage = lazy(() => import("../pages/AboutPage/AboutPage"));
 const ErrorPage = lazy(() => import("../pages/ErrorPage/ErrorPage"));
-const FavoritesPage = lazy(() =>
-  import("../features/favorites/pages/FavoritesPage/FavoritesPage")
+const FavoritesPage = lazy(
+  () => import("../features/favorites/pages/FavoritesPage/FavoritesPage"),
 );
-const RecipesPage = lazy(() =>
-  import("../features/recipes/pages/RecipesPage/RecipesPage")
+const RecipesPage = lazy(
+  () => import("../features/recipes/pages/RecipesPage/RecipesPage"),
 );
 const NotFoundPage = lazy(() => import("../pages/NotFoundPage/NotFoundPage"));
-const PrivacyPolicyPage = lazy(() =>
-  import("../features/legal/pages/PrivacyPolicyPage/PrivacyPolicyPage")
+const PrivacyPolicyPage = lazy(
+  () => import("../features/legal/pages/PrivacyPolicyPage/PrivacyPolicyPage"),
 );
 const Profile = lazy(() => import("../features/auth/pages/Profile/Profile"));
-const RecipeDetailsPage = lazy(() =>
-  import("../features/recipes/pages/RecipeDetailsPage/RecipeDetailsPage")
+const RecipeDetailsPage = lazy(
+  () => import("../features/recipes/pages/RecipeDetailsPage/RecipeDetailsPage"),
 );
-const TermsOfServicePage = lazy(() =>
-  import("../features/legal/pages/TermsOfServicePage/TermsOfServicePage")
+const TermsOfServicePage = lazy(
+  () => import("../features/legal/pages/TermsOfServicePage/TermsOfServicePage"),
 );
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Layout />,
-    errorElement: <ErrorPage />,
+    errorElement: <ErrorPage title="Error" />,
     children: [
       {
         path: "",
-        element: <RecipesPage />,
+        element: (
+          <RecipesPage title="Your recipe book - find and share everyday cooking inspiration" />
+        ),
         children: [
           {
             path: "recipe/:recipeId",
-            element: <RecipeDetailsPage />,
-            errorElement: <ErrorPage />,
+            element: <RecipeDetailsPage title="Recipe Details" />,
+            errorElement: <ErrorPage title="Error" />,
           },
         ],
       },
       {
         path: "about",
-        element: <AboutPage />,
+        element: <AboutPage title="About" />,
       },
       {
         element: <ProtectedRoute />,
         children: [
           {
             path: "profile",
-            element: <Profile />,
+            element: <Profile title="Profile" />,
           },
           {
             path: "favorites",
-            element: <FavoritesPage />,
-            errorElement: <ErrorPage />,
+            element: <FavoritesPage title="Favorites" />,
+            errorElement: <ErrorPage title="Error" />,
             children: [
               {
                 path: "recipe/:recipeId",
-                element: <RecipeDetailsPage />,
-                errorElement: <ErrorPage />,
+                element: <RecipeDetailsPage title="Recipe Details" />,
+                errorElement: <ErrorPage title="Error" />,
               },
             ],
           },
@@ -69,16 +71,16 @@ const router = createBrowserRouter([
       {
         path: "tos",
         element: <TermsOfServicePage title="Terms of Service" />,
-        errorElement: <ErrorPage />,
+        errorElement: <ErrorPage title="Error" />,
       },
       {
         path: "privacy",
         element: <PrivacyPolicyPage title="Privacy Policy" />,
-        errorElement: <ErrorPage />,
+        errorElement: <ErrorPage title="Error" />,
       },
       {
         path: "*",
-        element: <NotFoundPage />,
+        element: <NotFoundPage title="Page Not Found" />,
       },
     ],
   },

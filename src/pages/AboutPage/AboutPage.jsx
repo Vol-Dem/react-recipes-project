@@ -5,8 +5,11 @@ import {
 } from "../../shared/constants";
 import classes from "./AboutPage.module.scss";
 import { motion } from "framer-motion";
+import { usePageSetup } from "../../shared/hooks/usePageSetup";
 
-const AboutPage = () => {
+const AboutPage = ({ title }) => {
+  usePageSetup(title);
+
   return (
     <motion.div
       initial={ANIMATION_SLIDE_IN_INITIAL}

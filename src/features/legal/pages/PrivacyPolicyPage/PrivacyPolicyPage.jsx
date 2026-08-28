@@ -1,22 +1,14 @@
-import { Link } from "react-router-dom";
 import classes from "./PrivacyPolicyPage.module.scss";
-import { useEffect } from "react";
-import LinkA from "../../../../shared/components/ui/LinkA/LinkA";
 import Card from "../../../../shared/components/ui/Card/Card";
 import { motion } from "framer-motion";
 import {
   ANIMATION_SLIDE_IN,
   ANIMATION_SLIDE_IN_INITIAL,
 } from "../../../../shared/constants";
+import { usePageSetup } from "../../../../shared/hooks/usePageSetup";
 
 const PrivacyPolicyPage = ({ title }) => {
-  useEffect(() => {
-    document.title = title;
-  }, [title]);
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  usePageSetup(title);
 
   return (
     <motion.div

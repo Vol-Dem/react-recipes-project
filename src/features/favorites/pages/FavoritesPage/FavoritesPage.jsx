@@ -7,8 +7,11 @@ import {
   ANIMATION_SLIDE_IN_INITIAL,
 } from "../../../../shared/constants";
 import { useFavoriteRecipes } from "../../hooks/useFavoriteRecipes";
+import { usePageSetup } from "../../../../shared/hooks/usePageSetup";
 
-const FavoritesPage = () => {
+const FavoritesPage = ({ title }) => {
+  usePageSetup(title);
+
   const {
     favoriteIds,
     favoritesReference,
