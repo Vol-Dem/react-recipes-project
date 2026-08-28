@@ -1,13 +1,5 @@
 import classes from "./RecipeList.module.scss";
 import Card from "../../../../shared/components/ui/Card/Card";
-import { useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  nextPage,
-  prevPage,
-  sortRecipes,
-} from "../../store/recipesThunks";
-import { recipeActions } from "../../store/recipesSlice";
 import ErrorMessage from "../../../../shared/components/feedback/ErrorMessage/ErrorMessage";
 import { motion } from "framer-motion";
 import RecipeCards from "../RecipeCards/RecipeCards";
@@ -17,16 +9,7 @@ import {
   RECIPE_LIST_INITIAL_ANIMATION,
   RECIPE_LIST_VISIBLE_ANIMATION,
 } from "../../constants/animations";
-import {
-  selectHasRecipesPerPage,
-  selectRecipeCurrentPage,
-  selectRecipeEmptyMessage,
-  selectRecipeErrorMessage,
-  selectRecipeIsLastPage,
-  selectRecipeIsLoading,
-  selectRecipeOptions,
-  selectRecipesPerPage,
-} from "../../store/recipesSelectors";
+import { useRecipeListController } from "../../hooks/useRecipeListController";
 
 const RecipeList = ({
   title,
@@ -34,37 +17,15 @@ const RecipeList = ({
   filter,
   skeletonItemsAmount,
 }) => {
-  const dispatch = useDispatch();
-  const { recipeId } = useParams();
-  const recipeIsOpen = !!recipeId;
-  const recipesPerPage = useSelector(selectRecipesPerPage);
-  const hasRecipesPerPage = useSelector(selectHasRecipesPerPage);
-  const currentPage = useSelector(selectRecipeCurrentPage);
-  const isLastPage = useSelector(selectRecipeIsLastPage);
-  const recipesIsLoading = useSelector(selectRecipeIsLoading);
-  const options = useSelector(selectRecipeOptions);
-  const emptyMessage = useSelector(selectRecipeEmptyMessage);
-  const errorMessage = useSelector(selectRecipeErrorMessage);
+  const { actions, list } = useRecipeListController({
+    firebaseRef,
+    filter,
+  });
 
-  const nextPageHandler = () => {
-    dispatch(nextPage(firebaseRef, filter));
-  };
-
-  const prevPageHandler = () => {
-    dispatch(prevPage(firebaseRef, filter));
-  };
-
-  const sortHandler = (e) => {
-    const sort = e.target.value;
-    const [sortBy, sortType] = sort.split("-");
-    dispatch(recipeActions.setOrderBy({ sortBy, sortType }));
-    dispatch(sortRecipes(firebaseRef, filter));
-  };
-
-  if (errorMessage) {
+  if (list.errorMessage) {
     return (
       <Card>
-        <ErrorMessage>{errorMessage}</ErrorMessage>
+        <ErrorMessage>{list.errorMessage}</ErrorMessage>
       </Card>
     );
   }
@@ -78,36 +39,38 @@ const RecipeList = ({
     >
       <div
         className={`${classes["search-result"]} ${
-          recipeIsOpen ? classes["hidden-md"] : ""
+          list.isRecipeOpen ? classes["hidden-md"] : ""
         }`}
       >
         <Card>
-          {!hasRecipesPerPage && !recipesIsLoading && (
-            <p className={classes["search-result__empty"]}>{emptyMessage}</p>
+          {!list.hasRecipes && !list.isLoading && (
+            <p className={classes["search-result__empty"]}>
+              {list.emptyMessage}
+            </p>
           )}
 
-          {(hasRecipesPerPage || recipesIsLoading) && (
+          {(list.hasRecipes || list.isLoading) && (
             <RecipeResultsHeader
-              options={options}
-              showTitle={!recipeIsOpen}
+              options={list.options}
+              showTitle={!list.isRecipeOpen}
               title={title}
-              onSort={sortHandler}
+              onSort={actions.sortBySelection}
             />
           )}
           <RecipeCards
-            isLoading={recipesIsLoading}
-            isRecipeOpen={recipeIsOpen}
-            recipes={recipesPerPage}
+            isLoading={list.isLoading}
+            isRecipeOpen={list.isRecipeOpen}
+            recipes={list.recipes}
             skeletonItemsAmount={skeletonItemsAmount}
           />
 
-          {hasRecipesPerPage && (
+          {list.hasRecipes && (
             <RecipePagination
-              currentPage={currentPage}
-              isLastPage={isLastPage}
-              isLoading={recipesIsLoading}
-              onNextPage={nextPageHandler}
-              onPreviousPage={prevPageHandler}
+              currentPage={list.currentPage}
+              isLastPage={list.isLastPage}
+              isLoading={list.isLoading}
+              onNextPage={actions.goToNextPage}
+              onPreviousPage={actions.goToPreviousPage}
             />
           )}
         </Card>
