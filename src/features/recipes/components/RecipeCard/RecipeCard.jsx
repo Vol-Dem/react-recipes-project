@@ -7,6 +7,11 @@ import { useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import Image from "../../../../shared/components/ui/Image/Image";
+import {
+  RECIPE_CARD_HOVER_ANIMATION,
+  RECIPE_CARD_INITIAL_ANIMATION,
+  RECIPE_CARD_VARIANTS,
+} from "../../constants/animations";
 
 const RecipeCard = ({ recipe }) => {
   const { recipeId } = useParams();
@@ -24,17 +29,10 @@ const RecipeCard = ({ recipe }) => {
     <motion.li
       key={recipe.id}
       layout
-      initial={{ opacity: 0, scale: 0.8 }}
-      variants={{
-        hidden: { opacity: 0, scale: 0.5 },
-        visible: {
-          opacity: 1,
-          scale: 1,
-          transition: { type: "spring" },
-        },
-      }}
+      initial={RECIPE_CARD_INITIAL_ANIMATION}
+      variants={RECIPE_CARD_VARIANTS}
       animate="visible"
-      whileHover={{ scale: 1.04, transition: { type: "tween" } }}
+      whileHover={RECIPE_CARD_HOVER_ANIMATION}
       className={cardClassName}
     >
       <Link

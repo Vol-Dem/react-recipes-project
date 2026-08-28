@@ -3,6 +3,7 @@ import { RECIPES_PER_PAGE } from "../../../../shared/constants";
 import RecipeItemSkeleton from "../skeletons/RecipeItemSkeleton/RecipeItemSkeleton";
 import RecipeCard from "../RecipeCard/RecipeCard";
 import classes from "./RecipeCards.module.scss";
+import { RECIPE_CARDS_VARIANTS } from "../../constants/animations";
 
 const RecipeCards = ({
   isLoading,
@@ -20,7 +21,7 @@ const RecipeCards = ({
 
   return (
     <motion.ul
-      variants={{ visible: { transition: { staggerChildren: 0.5 } } }}
+      variants={RECIPE_CARDS_VARIANTS}
       className={cardClassName}
     >
       {!isLoading &&

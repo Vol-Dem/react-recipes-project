@@ -7,6 +7,17 @@ import { useDispatch } from "react-redux";
 import { notificationActions } from "../../store/notificationSlice";
 import { motion } from "framer-motion";
 
+const NOTIFICATION_HIDDEN_ANIMATION = {
+  opacity: 0,
+  x: "-50%",
+  y: 30,
+};
+const NOTIFICATION_VISIBLE_ANIMATION = {
+  opacity: 1,
+  x: "-50%",
+  y: 0,
+};
+
 const Notification = ({ title, message }) => {
   const dispatch = useDispatch();
   const closeNotificationHandler = () => {
@@ -17,9 +28,9 @@ const Notification = ({ title, message }) => {
     <motion.div
       role="status"
       aria-live="polite"
-      initial={{ opacity: 0, y: 30, x: "-50%" }}
-      animate={{ opacity: 1, y: 0, x: "-50%" }}
-      exit={{ opacity: 0, y: 30, x: "-50%" }}
+      initial={NOTIFICATION_HIDDEN_ANIMATION}
+      animate={NOTIFICATION_VISIBLE_ANIMATION}
+      exit={NOTIFICATION_HIDDEN_ANIMATION}
       className={classes["notification-container"]}
     >
       <Card className={classes.notification}>

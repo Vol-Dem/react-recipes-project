@@ -13,6 +13,10 @@ import { motion } from "framer-motion";
 import RecipeCards from "../RecipeCards/RecipeCards";
 import RecipePagination from "../RecipePagination/RecipePagination";
 import RecipeResultsHeader from "../RecipeResultsHeader/RecipeResultsHeader";
+import {
+  RECIPE_LIST_INITIAL_ANIMATION,
+  RECIPE_LIST_VISIBLE_ANIMATION,
+} from "../../constants/animations";
 
 const RecipeList = ({
   title,
@@ -59,8 +63,8 @@ const RecipeList = ({
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 0 }}
-      animate={{ opacity: 1, y: 0 }}
+      initial={RECIPE_LIST_INITIAL_ANIMATION}
+      animate={RECIPE_LIST_VISIBLE_ANIMATION}
       className={classes["search-result__container"]}
       data-testid="recipe-item-list"
     >
