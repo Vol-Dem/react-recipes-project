@@ -62,17 +62,6 @@
     }
   }
 
-  &__img {
-    max-width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 1;
-    transition: all 0.8s;
-    &--hidden {
-      opacity: 0;
-    }
-  }
-
   &__description {
     width: 100%;
     padding: 0.9rem 2rem 2rem;
@@ -129,11 +118,6 @@
 }
 
 .food {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  fill: var.$color-icon-muted;
   height: 10rem;
   width: 10rem;
 }

@@ -1,15 +1,14 @@
 import classes from "./RecipeCard.module.scss";
 import ClockIcon from "../../../../assets/icons/clock.svg?react";
 import CaloriesIcon from "../../../../assets/icons/calories.svg?react";
-import { useState } from "react";
 import StarIcon from "../../../../assets/icons/star.svg?react";
 import FoodIcon from "../../../../assets/icons/food.svg?react";
 import { useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
+import Image from "../../../../shared/components/ui/Image/Image";
 
 const RecipeCard = ({ recipe }) => {
-  const [imgIsLoading, setImgIsLoading] = useState(true);
   const { recipeId } = useParams();
   const recipeIsOpen = !!recipeId;
   const isAuth = useSelector((state) => state.auth.isLoggedIn);
@@ -20,13 +19,6 @@ const RecipeCard = ({ recipe }) => {
   const cardClassName = `${classes["recipe-card"]} ${classSide} ${
     isActive ? classes.active : ""
   }`;
-  const imageClassName = `${classes["recipe-card__img"]} ${
-    imgIsLoading ? classes["recipe-card__img--hidden"] : ""
-  }`;
-
-  const imgloadingHandler = () => {
-    setImgIsLoading(false);
-  };
 
   return (
     <motion.li
@@ -53,13 +45,12 @@ const RecipeCard = ({ recipe }) => {
           {isFav && (
             <StarIcon className={classes["recipe-card__img-container--fav"]} />
           )}
-          <img
-            className={imageClassName}
+          <Image
+            className={classes["recipe-card__img"]}
             src={recipe.img}
             alt={recipe.title}
-            onLoad={imgloadingHandler}
+            fallback={<FoodIcon className={classes.food} />}
           />
-          {imgIsLoading && <FoodIcon className={classes["food"]} />}
         </div>
         <div className={classes["recipe-card__description"]}>
           <div className={classes["recipe-card__info"]}>
