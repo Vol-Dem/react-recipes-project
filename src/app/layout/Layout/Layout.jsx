@@ -17,17 +17,18 @@ import {
   selectAuthFormIsOpen,
   selectAuthIsLoggedIn,
 } from "../../../features/auth/store/authSelectors";
+import {
+  selectNotificationIsShown,
+  selectNotificationMessage,
+  selectNotificationTitle,
+} from "../../../features/notifications/store/notificationSelectors";
 
 const Layout = () => {
   const isAuth = useSelector(selectAuthIsLoggedIn);
   const authIsOpen = useSelector(selectAuthFormIsOpen);
-  const notificationIsShown = useSelector(
-    (state) => state.notification.isShown,
-  );
-  const notificationTitle = useSelector((state) => state.notification.title);
-  const notificationMessage = useSelector(
-    (state) => state.notification.message,
-  );
+  const notificationIsShown = useSelector(selectNotificationIsShown);
+  const notificationTitle = useSelector(selectNotificationTitle);
+  const notificationMessage = useSelector(selectNotificationMessage);
   const dispatch = useDispatch();
 
   const openAuth = () => {
