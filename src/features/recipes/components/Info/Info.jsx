@@ -6,6 +6,7 @@ import { sendFav } from "../../../favorites/store/favoritesSlice";
 import { authActions } from "../../../auth/store/authSlice";
 import StarIcon from "../../../../assets/icons/star.svg?react";
 import { selectAuthIsLoggedIn } from "../../../auth/store/authSelectors";
+import { selectIsFavorite } from "../../../favorites/store/favoritesSelectors";
 
 const Info = ({ readyInMinutes, servings, recipeId }) => {
   const isAuth = useSelector(selectAuthIsLoggedIn);
@@ -17,8 +18,10 @@ const Info = ({ readyInMinutes, servings, recipeId }) => {
       dispatch(sendFav(+recipeId));
     }
   };
-  const favList = useSelector((state) => state.fav.favList);
-  const isFav = isAuth && favList.includes(+recipeId);
+  const isFavorite = useSelector((state) =>
+    selectIsFavorite(state, +recipeId),
+  );
+  const isFav = isAuth && isFavorite;
 
   return (
     <div className={classes["recipe__info"]}>

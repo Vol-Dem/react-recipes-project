@@ -3,6 +3,7 @@ import { getFirestore, setDoc, doc, getDoc } from "firebase/firestore";
 import firebaseApp from "../../../config/firebase";
 import { FIRESTORE_COLLECTIONS } from "../../../shared/constants";
 import { selectAuthUserId } from "../../auth/store/authSelectors";
+import { selectFavoriteIds } from "./favoritesSelectors";
 
 const firestore = getFirestore(firebaseApp);
 
@@ -32,7 +33,7 @@ export const sendFav = (id) => {
   return async (dispatch, getState) => {
     dispatch(favActions.addToFav(id));
     const userId = selectAuthUserId(getState());
-    const favList = getState().fav.favList;
+    const favList = selectFavoriteIds(getState());
     const favRef = doc(firestore, FIRESTORE_COLLECTIONS.favorites, userId);
     try {
       await setDoc(favRef, { favList: favList });

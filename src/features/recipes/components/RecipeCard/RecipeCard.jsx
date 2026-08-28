@@ -13,13 +13,16 @@ import {
   RECIPE_CARD_VARIANTS,
 } from "../../constants/animations";
 import { selectAuthIsLoggedIn } from "../../../auth/store/authSelectors";
+import { selectIsFavorite } from "../../../favorites/store/favoritesSelectors";
 
 const RecipeCard = ({ recipe }) => {
   const { recipeId } = useParams();
   const recipeIsOpen = !!recipeId;
   const isAuth = useSelector(selectAuthIsLoggedIn);
-  const favList = useSelector((state) => state.fav.favList);
-  const isFav = isAuth && favList.includes(recipe.id);
+  const isFavorite = useSelector((state) =>
+    selectIsFavorite(state, recipe.id),
+  );
+  const isFav = isAuth && isFavorite;
   const classSide = recipeIsOpen ? classes["recipe-card--side"] : "";
   const isActive = recipe.id === +recipeId;
   const cardClassName = `${classes["recipe-card"]} ${classSide} ${
