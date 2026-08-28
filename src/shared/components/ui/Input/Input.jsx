@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
 import classes from "./Input.module.scss";
-import { validateInput } from "../../../utils/validation";
+import { useInputValidation } from "../../../hooks/useInputValidation";
 
 const Input = ({
   label,
@@ -14,46 +13,18 @@ const Input = ({
   ...inputProps
 }) => {
   const { id, value } = inputProps;
-  const [inputErrorMessage, setInputErrorMessage] = useState("");
-  const [showErrorMessage, setShowErrorMessage] = useState(false);
-
-  useEffect(() => {
-    setShowErrorMessage(showError);
-  }, [showError]);
-
-  useEffect(() => {
-    if (!!validation) {
-      const { errorMessage } = validateInput(validation, value);
-
-      setInputErrorMessage(errorMessage);
-    }
-    if (!validation) {
-      setShowErrorMessage(false);
-    }
-  }, [value, validation]);
-
-  const blurHandler = (event) => {
-    onBlur?.(event);
-
-    if (validation && !validation.disableErrorOnBlur) {
-      setShowErrorMessage(true);
-    }
-  };
-
-  const changeHandler = (event) => {
-    if (validation) {
-      const { isValid, errorMessage } = validateInput(
-        validation,
-        event.target.value,
-      );
-
-      onChange?.(event, isValid, errorMessage);
-      setInputErrorMessage(errorMessage);
-      return;
-    }
-
-    onChange?.(event);
-  };
+  const {
+    errorMessage: validationErrorMessage,
+    handleBlur,
+    handleChange,
+    shouldShowError,
+  } = useInputValidation({
+    onBlur,
+    onChange,
+    showError,
+    validation,
+    value,
+  });
 
   return (
     <div>
@@ -64,16 +35,16 @@ const Input = ({
       )}
       <input
         {...inputProps}
-        onBlur={blurHandler}
-        onChange={changeHandler}
+        onBlur={handleBlur}
+        onChange={handleChange}
         placeholder={placeholder}
         className={`${classes.input} ${className || ""}`}
       />
-      {showErrorMessage && error && (
+      {shouldShowError && error && (
         <div className={classes.error}>{error}</div>
       )}
-      {showErrorMessage && inputErrorMessage && (
-        <div className={classes.error}>{inputErrorMessage}</div>
+      {shouldShowError && validationErrorMessage && (
+        <div className={classes.error}>{validationErrorMessage}</div>
       )}
     </div>
   );
