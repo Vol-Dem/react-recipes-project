@@ -22,7 +22,7 @@ describe("Image", () => {
     expect(onLoad).toHaveBeenCalledOnce();
   });
 
-  it("shows its fallback again when the source changes", () => {
+  it("tracks loading independently for each source", () => {
     const { rerender } = render(
       <Image
         src="image-one.jpg"
@@ -41,5 +41,9 @@ describe("Image", () => {
     );
 
     expect(screen.getByText("Loading image")).toBeInTheDocument();
+
+    fireEvent.load(screen.getByRole("img", { name: "Recipe" }));
+
+    expect(screen.queryByText("Loading image")).not.toBeInTheDocument();
   });
 });

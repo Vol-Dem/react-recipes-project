@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import classes from "./Image.module.scss";
 
 const Image = ({
@@ -9,17 +9,14 @@ const Image = ({
   src,
   ...imageProps
 }) => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [loadedSource, setLoadedSource] = useState(null);
+  const isLoading = loadedSource !== src;
   const imageClassName = `${classes.image} ${
     isLoading ? classes["image--hidden"] : ""
   } ${className || ""}`;
 
-  useEffect(() => {
-    setIsLoading(true);
-  }, [src]);
-
   const handleLoad = (event) => {
-    setIsLoading(false);
+    setLoadedSource(src);
     onLoad?.(event);
   };
 
