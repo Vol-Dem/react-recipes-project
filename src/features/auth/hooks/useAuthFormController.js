@@ -5,6 +5,7 @@ import {
   ERROR_MESSAGE_OFFLINE,
   MESSAGE_AGREEMENT,
 } from "../../../shared/constants";
+import { validateInput } from "../../../shared/utils/validation";
 import { authActions } from "../store/authSlice";
 import {
   authRequest,
@@ -23,12 +24,11 @@ import {
   selectAuthSuccessMessage,
 } from "../store/authSelectors";
 
-const emptyField = Object.freeze({ value: "", isValid: false });
 const initialFormState = {
   agreement: false,
-  email: emptyField,
+  email: "",
   isLogin: true,
-  password: emptyField,
+  password: "",
   showErrors: false,
 };
 
@@ -45,9 +45,9 @@ const formReducer = (state, action) => {
     case "switchMode":
       return {
         ...state,
-        email: emptyField,
+        email: "",
         isLogin: !state.isLogin,
-        password: emptyField,
+        password: "",
         showErrors: false,
       };
     default:
@@ -65,8 +65,24 @@ export const useAuthFormController = () => {
   const successMessage = useSelector(selectAuthSuccessMessage);
   const isLoading = useSelector(selectAuthIsLoading);
   const showResetPassword = useSelector(selectAuthShowResetPassword);
-  const { agreement, email, isLogin, password, showErrors } = formState;
+  const {
+    agreement,
+    email: emailValue,
+    isLogin,
+    password: passwordValue,
+    showErrors,
+  } = formState;
   const validationMode = isLogin ? "login" : "signup";
+  const emailValidation = EMAIL_VALIDATION[validationMode];
+  const passwordValidation = PASSWORD_VALIDATION[validationMode];
+  const email = {
+    value: emailValue,
+    isValid: validateInput(emailValidation, emailValue).isValid,
+  };
+  const password = {
+    value: passwordValue,
+    isValid: validateInput(passwordValidation, passwordValue).isValid,
+  };
 
   const clearMessages = () => {
     dispatch(authActions.setErrorMessage(""));
@@ -115,17 +131,17 @@ export const useAuthFormController = () => {
     updateFormState({ type: "changeAgreement" });
   };
 
-  const changeEmail = (event, isValid) => {
+  const changeEmail = (event) => {
     updateFormState({
       type: "changeEmail",
-      payload: { value: event.target.value, isValid },
+      payload: event.target.value,
     });
   };
 
-  const changePassword = (event, isValid) => {
+  const changePassword = (event) => {
     updateFormState({
       type: "changePassword",
-      payload: { value: event.target.value, isValid },
+      payload: event.target.value,
     });
   };
 
@@ -172,8 +188,8 @@ export const useAuthFormController = () => {
       successMessage,
     },
     validation: {
-      email: EMAIL_VALIDATION[validationMode],
-      password: PASSWORD_VALIDATION[validationMode],
+      email: emailValidation,
+      password: passwordValidation,
       resetEmail: RESET_EMAIL_VALIDATION,
     },
   };

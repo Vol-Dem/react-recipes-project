@@ -63,13 +63,15 @@ describe("useAuthFormController", () => {
     act(() => {
       result.current.actions.changeEmail(
         { target: { value: "user@example.com" } },
-        true,
       );
       result.current.actions.changePassword(
         { target: { value: "password" } },
-        true,
       );
     });
+
+    expect(result.current.fields.email.isValid).toBe(true);
+    expect(result.current.fields.password.isValid).toBe(true);
+
     act(() => {
       result.current.actions.submitAuth({ preventDefault: vi.fn() });
     });
@@ -91,7 +93,6 @@ describe("useAuthFormController", () => {
     act(() => {
       result.current.actions.changeEmail(
         { target: { value: "user@example.com" } },
-        true,
       );
       result.current.actions.switchAuthMode();
     });
@@ -119,7 +120,6 @@ describe("useAuthFormController", () => {
     act(() => {
       result.current.actions.changeEmail(
         { target: { value: "user@example.com" } },
-        true,
       );
     });
     act(() => {
