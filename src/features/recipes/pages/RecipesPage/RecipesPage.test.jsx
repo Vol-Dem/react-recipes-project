@@ -29,8 +29,6 @@ const expectedResult = [
 ];
 const initialState = {
   searchResult: [],
-  sortedRecipes: [],
-  recipesPerPage: [],
   orderBy: {},
   recipesIsLoading: false,
   currentPage: 1,
@@ -142,8 +140,6 @@ describe("RecipesPage component", () => {
     const currentState = {
       ...initialState,
       searchResult: expectedResult,
-      sortedRecipes: expectedResult,
-      recipesPerPage: expectedResult,
     };
     const store = mockStore({
       recipe: currentState,

@@ -15,12 +15,14 @@ const hookMocks = vi.hoisted(() => ({
   state: {
     recipe: {
       currentPage: 2,
+      dailyLimitIsReached: true,
       emptyMessage: "",
       errorMessage: "",
       isLastPage: false,
       options: ["vegan"],
+      orderBy: {},
       recipesIsLoading: false,
-      recipesPerPage: [{ id: 1 }],
+      searchResult: [{ id: 1 }],
     },
   },
 }));

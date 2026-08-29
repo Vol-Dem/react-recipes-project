@@ -6,8 +6,6 @@ describe("recipesSlice", () => {
   it("provides the initial recipe state", () => {
     expect(reducer(undefined, { type: "unknown" })).toEqual({
       searchResult: [],
-      sortedRecipes: [],
-      recipesPerPage: [],
       orderBy: {},
       recipesIsLoading: false,
       currentPage: 1,
@@ -32,17 +30,15 @@ describe("recipesSlice", () => {
     });
   });
 
-  it("clears only the currently displayed recipes", () => {
+  it("clears the canonical recipe collection", () => {
     const state = reducer(
       {
         ...reducer(undefined, { type: "unknown" }),
         searchResult: [{ id: 1 }],
-        recipesPerPage: [{ id: 1 }],
       },
       recipeActions.resetRecipes(),
     );
 
-    expect(state.searchResult).toEqual([{ id: 1 }]);
-    expect(state.recipesPerPage).toEqual([]);
+    expect(state.searchResult).toEqual([]);
   });
 });

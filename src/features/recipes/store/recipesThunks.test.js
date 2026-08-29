@@ -1,37 +1,46 @@
+import configureStore from "redux-mock-store";
+import { thunk } from "redux-thunk";
+import axios from "axios";
 import {
-  splitRecipesPerPage,
   getRecipes,
   nextPage,
   prevPage,
   sortRecipes,
 } from "./recipesThunks";
-import configureStore from "redux-mock-store";
-import { thunk } from "redux-thunk";
-import axios from "axios";
-import { RECIPES_PER_PAGE } from "../../../shared/constants";
 
-vi.mock("axios");
-const middlewares = [thunk];
-const mockStore = configureStore(middlewares);
-const initialState = {
-  searchResult: [],
-  sortedRecipes: [],
-  recipesPerPage: [],
-  orderBy: {},
-  recipesIsLoading: false,
-  currentPage: 1,
-  isLastPage: false,
-  dailyLimitIsReached: false,
-  title: "",
-  emptyMessage: "",
-  errorMessage: "",
-};
-
-vi.mock("firebase/firestore", () => ({
-  query: vi.fn(),
-  getDocs: vi.fn(),
+const repositoryMocks = vi.hoisted(() => ({
+  createLimit: vi.fn(() => "results-limit"),
+  createNextPageRequest: vi.fn(() => ({
+    position: "next-position",
+    resultsAmount: "next-limit",
+  })),
+  createPreviousPageRequest: vi.fn(() => ({
+    position: "previous-position",
+    resultsAmount: "previous-limit",
+  })),
+  fetchFromFirestore: vi.fn(),
 }));
 
+vi.mock("axios");
+vi.mock("../api/recipeRepository", () => ({
+  createNextPageRequest: repositoryMocks.createNextPageRequest,
+  createPreviousPageRequest: repositoryMocks.createPreviousPageRequest,
+  createRecipeResultsLimit: repositoryMocks.createLimit,
+  fetchRecipesFromFirestore: repositoryMocks.fetchFromFirestore,
+}));
+
+const mockStore = configureStore([thunk]);
+const initialState = {
+  currentPage: 1,
+  dailyLimitIsReached: false,
+  emptyMessage: "",
+  errorMessage: "",
+  isLastPage: false,
+  orderBy: {},
+  recipesIsLoading: false,
+  searchResult: [],
+  title: "",
+};
 const responseData = {
   results: [
     {
@@ -52,7 +61,6 @@ const responseData = {
     },
   ],
 };
-
 const expectedResult = [
   {
     id: 1,
@@ -73,322 +81,136 @@ const expectedResult = [
 ];
 
 describe("recipe thunks", () => {
-  beforeAll(() => {});
-
   afterEach(() => {
     vi.clearAllMocks();
   });
 
-  afterAll(() => {});
-
   describe("getRecipes", () => {
-    const requestUrl = "https://test.com/api";
-    const firebaseRef = "firebaseRef";
-    const filter = "filter";
-    const position = null;
-    const resultsAmount = 10;
-    beforeEach(() => {});
+    const request = {
+      requestUrl: "https://test.com/api",
+      firebaseRef: "firebaseRef",
+      filter: "filter",
+      position: null,
+      resultsAmount: 10,
+    };
 
-    afterEach(() => {
-      vi.clearAllMocks();
+    it("stores the canonical API result", async () => {
+      const store = mockStore({ recipe: initialState });
+      axios.get.mockResolvedValue({ data: responseData });
+
+      await store.dispatch(getRecipes(request));
+
+      expect(axios.get).toHaveBeenCalledWith(request.requestUrl);
+      expect(store.getActions()).toEqual([
+        { type: "recipe/setRecipesIsLoading", payload: true },
+        { type: "recipe/setSearchResult", payload: expectedResult },
+        { type: "recipe/setRecipesIsLoading", payload: false },
+      ]);
     });
 
-    it("should dispatch setSearchResult and setSortedResult with the API result if daily limit is not reached", async () => {
-      expect.assertions(13);
-
+    it("stores the fetched page and last-page flag in fallback mode", async () => {
       const store = mockStore({
-        recipe: initialState,
+        recipe: { ...initialState, dailyLimitIsReached: true },
       });
-      axios.get.mockImplementation(() =>
-        Promise.resolve({ data: responseData })
-      );
-      await store.dispatch(
-        getRecipes({ requestUrl, firebaseRef, filter, position, resultsAmount })
-      );
-      const actions = store.getActions();
+      repositoryMocks.fetchFromFirestore.mockResolvedValue({
+        recipes: responseData.results,
+        isLastPage: true,
+      });
 
-      expect(axios.get).toHaveBeenCalledWith(requestUrl);
-      expect(actions[0].type).toEqual("recipe/setIsLastPage");
-      expect(actions[0].payload).toEqual(false);
-      expect(actions[1].type).toEqual("recipe/setRecipesIsLoading");
-      expect(actions[1].payload).toEqual(true);
-      expect(actions[2].type).toEqual("recipe/setSearchResult");
-      expect(actions[2].payload).toEqual(expectedResult);
-      expect(actions[3].type).toEqual("recipe/setSortedRecipes");
-      expect(actions[3].payload).toEqual(expectedResult);
-      expect(actions[4].type).toEqual("recipe/setRecipesPerPage");
-      expect(actions[4].payload).toEqual([]);
-      expect(actions[5].type).toEqual("recipe/setRecipesIsLoading");
-      expect(actions[5].payload).toEqual(false);
+      await store.dispatch(getRecipes(request));
+
+      expect(repositoryMocks.fetchFromFirestore).toHaveBeenCalledWith({
+        queryParameters: [
+          request.firebaseRef,
+          request.filter,
+          request.resultsAmount,
+        ],
+        position: request.position,
+        sortBy: undefined,
+        sortType: undefined,
+      });
+      expect(store.getActions()).toEqual([
+        { type: "recipe/setIsLastPage", payload: false },
+        { type: "recipe/setRecipesIsLoading", payload: true },
+        { type: "recipe/setIsLastPage", payload: true },
+        { type: "recipe/setSearchResult", payload: expectedResult },
+        { type: "recipe/setRecipesIsLoading", payload: false },
+      ]);
     });
 
-    it('should handle the "Daily limit reached" error by dispatching setDailyLimitIsReached, showNotification and retrying the request', async () => {
-      expect.assertions(10);
-
-      const store = mockStore({
-        recipe: initialState,
-      });
+    it("switches to fallback mode when the API limit is reached", async () => {
+      const store = mockStore({ recipe: initialState });
       const expectedError = new Error(
-        "AxiosError: Request failed with status code 402"
+        "AxiosError: Request failed with status code 402",
       );
       axios.get
         .mockRejectedValueOnce(expectedError)
         .mockResolvedValueOnce({ data: responseData });
-      await store.dispatch(
-        getRecipes({ requestUrl, firebaseRef, filter, position, resultsAmount })
-      );
-      const actions = store.getActions();
 
-      expect(axios.get).toHaveBeenCalledWith(requestUrl);
-      expect(actions[0].type).toEqual("recipe/setIsLastPage");
-      expect(actions[0].payload).toEqual(false);
-      expect(actions[1].type).toEqual("recipe/setRecipesIsLoading");
-      expect(actions[1].payload).toEqual(true);
-      expect(actions[2].type).toEqual("recipe/setDailyLimitIsReached");
-      expect(actions[2].payload).toEqual(true);
-      expect(actions[3].type).toEqual("notification/showNotification");
-      expect(actions[3].payload).toEqual({
-        message:
-          "The application will now enter test mode. Search result will remain the same. You can still use other features!",
-        title: "Daily limit of API is over :(",
-      });
+      await store.dispatch(getRecipes(request));
+
       expect(axios.get).toHaveBeenCalledTimes(2);
-    });
-
-    it("should handle errors by dispatching setErrorMessage ", async () => {
-      expect.assertions(9);
-
-      const store = mockStore({
-        recipe: initialState,
+      expect(store.getActions()).toContainEqual({
+        type: "recipe/setDailyLimitIsReached",
+        payload: true,
       });
-      const expectedError = new Error("Error message");
-      axios.get.mockImplementation(() => Promise.reject(expectedError));
-      await store.dispatch(
-        getRecipes({ requestUrl, firebaseRef, filter, position, resultsAmount })
-      );
-      const actions = store.getActions();
-
-      expect(axios.get).toHaveBeenCalledWith(requestUrl);
-      expect(actions[0].type).toEqual("recipe/setIsLastPage");
-      expect(actions[0].payload).toEqual(false);
-      expect(actions[1].type).toEqual("recipe/setRecipesIsLoading");
-      expect(actions[1].payload).toEqual(true);
-      expect(actions[2].type).toEqual("recipe/setErrorMessage");
-      expect(actions[2].payload).toEqual("Error: Error message");
-      expect(actions[3].type).toEqual("recipe/setRecipesIsLoading");
-      expect(actions[3].payload).toEqual(false);
-    });
-  });
-
-  describe("nextPage", () => {
-    afterEach(() => {
-      vi.clearAllMocks();
-    });
-
-    it("should handle page switching by dispatching setCurrentPage if daily limit is not reached", () => {
-      expect.assertions(3);
-
-      const store = mockStore({
-        recipe: initialState,
+      expect(store.getActions()).toContainEqual({
+        type: "notification/showNotification",
+        payload: {
+          message:
+            "The application will now enter test mode. Search result will remain the same. You can still use other features!",
+          title: "Daily limit of API is over :(",
+        },
       });
-
-      const firebaseRef = "firebaseRef";
-      const filter = "filter";
-
-      store.dispatch(nextPage(firebaseRef, filter));
-
-      const actions = store.getActions();
-
-      expect(actions[0].type).toEqual("recipe/setCurrentPage");
-      expect(actions[0].payload).toEqual(2);
-      expect(actions[1].type).toEqual("recipe/setRecipesPerPage");
-    });
-  });
-
-  describe("prevPage", () => {
-    afterEach(() => {
-      vi.clearAllMocks();
     });
 
-    it("should handle page switching by dispatching setCurrentPage if daily limit is not reached", () => {
-      expect.assertions(3);
+    it("stores request errors", async () => {
+      const store = mockStore({ recipe: initialState });
+      axios.get.mockRejectedValue(new Error("Error message"));
 
-      const store = mockStore({
-        recipe: initialState,
-      });
+      await store.dispatch(getRecipes(request));
 
-      const firebaseRef = "firebaseRef";
-      const filter = "filter";
-
-      store.dispatch(prevPage(firebaseRef, filter));
-
-      const actions = store.getActions();
-
-      expect(actions[0].type).toEqual("recipe/setCurrentPage");
-      expect(actions[0].payload).toEqual(0);
-      expect(actions[1].type).toEqual("recipe/setRecipesPerPage");
-    });
-  });
-
-  describe("sortRecipes", () => {
-    afterEach(() => {
-      vi.clearAllMocks();
-    });
-
-    it("should handle sorting by dispatching setSortedRecipes with sorted data if daily limit is not reached", () => {
-      expect.assertions(8);
-
-      const expectedSortedResult = [
+      expect(store.getActions()).toEqual([
+        { type: "recipe/setRecipesIsLoading", payload: true },
         {
-          id: 2,
-          title: "title 2",
-          img: "img",
-          readyInMinutes: 15,
-          calories: 45,
-          servings: 4,
+          type: "recipe/setErrorMessage",
+          payload: "Error: Error message",
         },
-        {
-          id: 1,
-          title: "title",
-          img: "img",
-          readyInMinutes: 20,
-          calories: 234,
-          servings: 3,
-        },
-      ];
-
-      const store = mockStore({
-        recipe: {
-          searchResult: expectedResult,
-          sortedRecipes: expectedSortedResult,
-          recipesPerPage: [],
-          orderBy: { sortBy: "calories", sortType: "asc" },
-          recipesIsLoading: false,
-          currentPage: 1,
-          isLastPage: false,
-          dailyLimitIsReached: false,
-          title: "",
-          emptyMessage: "",
-          errorMessage: "",
-        },
-      });
-
-      const firebaseRef = "firebaseRef";
-      const filter = "filter";
-
-      store.dispatch(sortRecipes(firebaseRef, filter));
-
-      const actions = store.getActions();
-
-      expect(actions[0].type).toEqual("recipe/setCurrentPage");
-      expect(actions[0].payload).toEqual(1);
-      expect(actions[1].type).toEqual("recipe/setIsLastPage");
-      expect(actions[1].payload).toEqual(false);
-      expect(actions[2].type).toEqual("recipe/setSortedRecipes");
-      expect(actions[2].payload).toEqual(expectedSortedResult);
-      expect(actions[3].type).toEqual("recipe/setRecipesPerPage");
-      expect(actions[3].payload).toEqual(expectedSortedResult);
+        { type: "recipe/setRecipesIsLoading", payload: false },
+      ]);
     });
   });
 
-  describe("splitRecipesPerPage", () => {
-    afterEach(() => {
-      vi.clearAllMocks();
+  it("changes local API pages without storing a derived collection", () => {
+    const nextStore = mockStore({ recipe: initialState });
+    const previousStore = mockStore({
+      recipe: { ...initialState, currentPage: 2 },
     });
 
-    it("should handle splitting per page by dispatching setSortedRecipes with correct amount of data and not dispatch setIsLastPage if sortedRecipes > REACT_APP_AMOUNT_PER_PAGE when daily limit is not reached", () => {
-      expect.assertions(3);
-      const sortedRecipesData = [...Array(15).keys()];
-      const expectedRecipesPerPage = [
-        ...Array(RECIPES_PER_PAGE).keys(),
-      ];
+    nextStore.dispatch(nextPage("firebaseRef", "filter"));
+    previousStore.dispatch(prevPage("firebaseRef", "filter"));
 
-      const store = mockStore({
-        recipe: {
-          searchResult: sortedRecipesData,
-          sortedRecipes: sortedRecipesData,
-          recipesPerPage: [],
-          orderBy: {},
-          recipesIsLoading: false,
-          currentPage: 1,
-          isLastPage: false,
-          dailyLimitIsReached: false,
-          title: "",
-          emptyMessage: "",
-          errorMessage: "",
-        },
-      });
+    expect(nextStore.getActions()).toEqual([
+      { type: "recipe/setCurrentPage", payload: 2 },
+    ]);
+    expect(previousStore.getActions()).toEqual([
+      { type: "recipe/setCurrentPage", payload: 1 },
+    ]);
+  });
 
-      store.dispatch(splitRecipesPerPage());
-
-      const actions = store.getActions();
-
-      expect(actions[0].type).toEqual("recipe/setRecipesPerPage");
-      expect(actions[0].payload).toEqual(expectedRecipesPerPage);
-      expect(actions[1]?.type).not.toEqual("recipe/setIsLastPage");
+  it("resets the page without storing a derived sort result", () => {
+    const store = mockStore({
+      recipe: {
+        ...initialState,
+        orderBy: { sortBy: "calories", sortType: "asc" },
+        searchResult: expectedResult,
+      },
     });
 
-    it("should handle splitting per page by dispatching setSortedRecipes with correct amount of data and dispatch setIsLastPage if sortedRecipes <= REACT_APP_AMOUNT_PER_PAGE when daily limit is not reached", () => {
-      expect.assertions(4);
-      const sortedRecipesData = [...Array(8).keys()];
-      const expectedRecipesPerPage = [
-        ...Array(RECIPES_PER_PAGE).keys(),
-      ];
+    store.dispatch(sortRecipes("firebaseRef", "filter"));
 
-      const store = mockStore({
-        recipe: {
-          searchResult: sortedRecipesData,
-          sortedRecipes: sortedRecipesData,
-          recipesPerPage: [],
-          orderBy: {},
-          recipesIsLoading: false,
-          currentPage: 1,
-          isLastPage: false,
-          dailyLimitIsReached: false,
-          title: "",
-          emptyMessage: "",
-          errorMessage: "",
-        },
-      });
-
-      store.dispatch(splitRecipesPerPage());
-
-      const actions = store.getActions();
-
-      expect(actions[0].type).toEqual("recipe/setRecipesPerPage");
-      expect(actions[0].payload).toEqual(expectedRecipesPerPage);
-      expect(actions[1].type).toEqual("recipe/setIsLastPage");
-      expect(actions[1].payload).toEqual(true);
-    });
-
-    it("should handle splitting per page by dispatching setSortedRecipes with correct amount of data and not dispatch setIsLastPage if daily limit is reached", () => {
-      expect.assertions(3);
-
-      const sortedRecipesData = [...Array(10).keys()];
-
-      const store = mockStore({
-        recipe: {
-          searchResult: sortedRecipesData,
-          sortedRecipes: sortedRecipesData,
-          recipesPerPage: [],
-          orderBy: {},
-          recipesIsLoading: false,
-          currentPage: 1,
-          isLastPage: false,
-          dailyLimitIsReached: true,
-          title: "",
-          emptyMessage: "",
-          errorMessage: "",
-        },
-      });
-
-      store.dispatch(splitRecipesPerPage());
-
-      const actions = store.getActions();
-
-      expect(actions[0].type).toEqual("recipe/setRecipesPerPage");
-      expect(actions[0].payload).toEqual(sortedRecipesData);
-      expect(actions[1]?.type).not.toEqual("recipe/setIsLastPage");
-    });
+    expect(store.getActions()).toEqual([
+      { type: "recipe/setCurrentPage", payload: 1 },
+    ]);
   });
 });

@@ -7,33 +7,8 @@ import {
   fetchRecipesFromFirestore,
 } from "../api/recipeRepository";
 import { mapRecipe } from "../utils/mapRecipe";
-import { paginateRecipes } from "../utils/paginateRecipes";
-import { sortRecipeCollection } from "../utils/sortRecipes";
 import { selectRecipeState } from "./recipesSelectors";
 import { recipeActions } from "./recipesSlice";
-
-export const splitRecipesPerPage = () => (dispatch, getState) => {
-  const {
-    currentPage,
-    dailyLimitIsReached,
-    sortedRecipes,
-  } = selectRecipeState(getState());
-
-  if (dailyLimitIsReached) {
-    dispatch(recipeActions.setRecipesPerPage(sortedRecipes));
-    return;
-  }
-
-  const { recipes, isLastPage } = paginateRecipes(
-    sortedRecipes,
-    currentPage,
-  );
-
-  dispatch(recipeActions.setRecipesPerPage(recipes));
-  if (isLastPage) {
-    dispatch(recipeActions.setIsLastPage(true));
-  }
-};
 
 export const getRecipes = ({
   requestUrl,
@@ -45,7 +20,9 @@ export const getRecipes = ({
   return async (dispatch, getState) => {
     const { dailyLimitIsReached } = selectRecipeState(getState());
 
-    dispatch(recipeActions.setIsLastPage(false));
+    if (dailyLimitIsReached) {
+      dispatch(recipeActions.setIsLastPage(false));
+    }
     dispatch(recipeActions.setRecipesIsLoading(true));
 
     try {
@@ -70,8 +47,6 @@ export const getRecipes = ({
       const recipes = recipesData.map(mapRecipe);
 
       dispatch(recipeActions.setSearchResult(recipes));
-      dispatch(recipeActions.setSortedRecipes(recipes));
-      dispatch(splitRecipesPerPage());
       dispatch(recipeActions.setRecipesIsLoading(false));
     } catch (error) {
       console.log(error.message);
@@ -112,7 +87,6 @@ export const nextPage = (firebaseRef, filter) => {
     dispatch(recipeActions.setCurrentPage(currentPage + 1));
 
     if (!dailyLimitIsReached) {
-      dispatch(splitRecipesPerPage());
       return;
     }
 
@@ -130,8 +104,6 @@ export const prevPage = (firebaseRef, filter) => {
     dispatch(recipeActions.setCurrentPage(currentPage - 1));
 
     if (!dailyLimitIsReached) {
-      dispatch(splitRecipesPerPage());
-      dispatch(recipeActions.setIsLastPage(false));
       return;
     }
 
@@ -143,22 +115,10 @@ export const prevPage = (firebaseRef, filter) => {
 export const sortRecipes = (firebaseRef, filter) => {
   return (dispatch, getState) => {
     dispatch(recipeActions.setCurrentPage(1));
-    dispatch(recipeActions.setIsLastPage(false));
 
-    const {
-      dailyLimitIsReached,
-      orderBy: { sortBy, sortType },
-      searchResult,
-    } = selectRecipeState(getState());
+    const { dailyLimitIsReached } = selectRecipeState(getState());
 
     if (!dailyLimitIsReached) {
-      const sortedRecipes = sortRecipeCollection(searchResult, {
-        sortBy,
-        sortType,
-      });
-
-      dispatch(recipeActions.setSortedRecipes(sortedRecipes));
-      dispatch(splitRecipesPerPage());
       return;
     }
 

@@ -2,8 +2,6 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const recipeInitialState = {
   searchResult: [],
-  sortedRecipes: [],
-  recipesPerPage: [],
   orderBy: {},
   recipesIsLoading: false,
   currentPage: 1,
@@ -21,12 +19,6 @@ const recipeSlice = createSlice({
   reducers: {
     setSearchResult(state, action) {
       state.searchResult = action.payload;
-    },
-    setSortedRecipes(state, action) {
-      state.sortedRecipes = action.payload;
-    },
-    setRecipesPerPage(state, action) {
-      state.recipesPerPage = action.payload;
     },
     setOrderBy(state, action) {
       state.orderBy = action.payload;
@@ -56,7 +48,7 @@ const recipeSlice = createSlice({
       state.errorMessage = action.payload;
     },
     resetRecipes(state) {
-      state.recipesPerPage = [];
+      state.searchResult = [];
     },
   },
 });
