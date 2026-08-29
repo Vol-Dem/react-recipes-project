@@ -46,17 +46,20 @@ describe("useInputValidation", () => {
   it("reports validation results when the value changes", () => {
     const onChange = vi.fn();
     const event = { target: { value: "valid value" } };
-    const { result } = renderHook(() =>
-      useInputValidation({
-        onChange,
-        validation: requiredValidation,
-        value: "",
-      }),
+    const { result, rerender } = renderHook(
+      ({ value }) =>
+        useInputValidation({
+          onChange,
+          validation: requiredValidation,
+          value,
+        }),
+      { initialProps: { value: "" } },
     );
 
     act(() => {
       result.current.handleChange(event);
     });
+    rerender({ value: event.target.value });
 
     expect(onChange).toHaveBeenCalledWith(event, true, "");
     expect(result.current.errorMessage).toBe("");

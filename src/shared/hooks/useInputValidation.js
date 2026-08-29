@@ -8,23 +8,21 @@ export const useInputValidation = ({
   validation,
   value,
 }) => {
-  const [errorMessage, setErrorMessage] = useState("");
   const [shouldShowError, setShouldShowError] = useState(false);
+  const validationResult = validation
+    ? validateInput(validation, value)
+    : null;
+  const errorMessage = validationResult?.errorMessage || "";
 
   useEffect(() => {
     setShouldShowError(showError);
   }, [showError]);
 
   useEffect(() => {
-    if (validation) {
-      const result = validateInput(validation, value);
-
-      setErrorMessage(result.errorMessage);
-      return;
+    if (!validation) {
+      setShouldShowError(false);
     }
-
-    setShouldShowError(false);
-  }, [value, validation]);
+  }, [validation]);
 
   const handleBlur = (event) => {
     onBlur?.(event);
@@ -43,7 +41,6 @@ export const useInputValidation = ({
     const result = validateInput(validation, event.target.value);
 
     onChange?.(event, result.isValid, result.errorMessage);
-    setErrorMessage(result.errorMessage);
   };
 
   return {
