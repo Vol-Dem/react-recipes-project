@@ -1,6 +1,7 @@
 import {
   VALIDATION_EMAIL_MAX_LENGTH,
   VALIDATION_PASSWORD_MAX_LENGTH,
+  VALIDATION_PASSWORD_MIN_LENGTH,
 } from "../../../shared/constants";
 
 export const RESET_EMAIL_VALIDATION = Object.freeze({
@@ -10,27 +11,20 @@ export const RESET_EMAIL_VALIDATION = Object.freeze({
 });
 
 export const EMAIL_VALIDATION = Object.freeze({
-  login: Object.freeze({
-    ...RESET_EMAIL_VALIDATION,
-    disableErrorOnBlur: true,
-  }),
-  signup: Object.freeze({
-    ...RESET_EMAIL_VALIDATION,
-    disableErrorOnBlur: false,
-  }),
+  login: null,
+  signup: RESET_EMAIL_VALIDATION,
 });
 
 export const PASSWORD_VALIDATION = Object.freeze({
-  login: Object.freeze({
-    required: true,
-    password: true,
-    maxLength: VALIDATION_PASSWORD_MAX_LENGTH,
-    disableErrorOnBlur: true,
-  }),
+  login: null,
   signup: Object.freeze({
     required: true,
-    password: true,
+    minLength: VALIDATION_PASSWORD_MIN_LENGTH,
     maxLength: VALIDATION_PASSWORD_MAX_LENGTH,
-    disableErrorOnBlur: false,
+    noWhitespace: true,
+    lowercase: true,
+    uppercase: true,
+    digit: true,
+    specialCharacter: true,
   }),
 });

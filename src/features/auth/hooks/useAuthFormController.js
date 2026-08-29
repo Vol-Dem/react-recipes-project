@@ -77,12 +77,19 @@ export const useAuthFormController = () => {
   const passwordValidation = PASSWORD_VALIDATION[validationMode];
   const email = {
     value: emailValue,
-    isValid: validateInput(emailValidation, emailValue).isValid,
+    isValid:
+      !emailValidation || validateInput(emailValidation, emailValue).isValid,
   };
   const password = {
     value: passwordValue,
-    isValid: validateInput(passwordValidation, passwordValue).isValid,
+    isValid:
+      !passwordValidation ||
+      validateInput(passwordValidation, passwordValue).isValid,
   };
+  const resetEmailIsValid = validateInput(
+    RESET_EMAIL_VALIDATION,
+    emailValue,
+  ).isValid;
 
   const clearMessages = () => {
     dispatch(authActions.setErrorMessage(""));
@@ -101,7 +108,9 @@ export const useAuthFormController = () => {
   const submitAuth = (event) => {
     event.preventDefault();
     clearMessages();
-    updateFormState({ type: "showErrors" });
+    if (!isLogin) {
+      updateFormState({ type: "showErrors" });
+    }
 
     if (!navigator?.onLine) {
       dispatch(authActions.setErrorMessage(ERROR_MESSAGE_OFFLINE));
@@ -156,6 +165,15 @@ export const useAuthFormController = () => {
 
   const submitPasswordReset = (event) => {
     event.preventDefault();
+
+    clearMessages();
+    updateFormState({ type: "showErrors" });
+
+    if (!resetEmailIsValid) {
+      dispatch(authActions.setErrorMessage(ERROR_MESSAGE_INVALID_INPUT));
+      return;
+    }
+
     dispatch(resetUserPassword(email.value));
   };
 
@@ -173,7 +191,9 @@ export const useAuthFormController = () => {
     fields: {
       agreement,
       email,
-      emailIsInvalid: showErrors && !email.isValid,
+      emailIsInvalid:
+        showErrors &&
+        !(showResetPassword ? resetEmailIsValid : email.isValid),
       password,
       passwordIsInvalid: showErrors && !password.isValid,
     },

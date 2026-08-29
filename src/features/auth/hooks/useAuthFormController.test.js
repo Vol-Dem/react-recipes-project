@@ -1,5 +1,8 @@
 import { act, renderHook } from "@testing-library/react";
-import { MESSAGE_AGREEMENT } from "../../../shared/constants";
+import {
+  ERROR_MESSAGE_INVALID_INPUT,
+  MESSAGE_AGREEMENT,
+} from "../../../shared/constants";
 import { useAuthFormController } from "./useAuthFormController";
 
 const hookMocks = vi.hoisted(() => ({
@@ -39,33 +42,33 @@ describe("useAuthFormController", () => {
     });
   });
 
-  it("provides the initial login state and stable validation", () => {
+  it("disables client-side validation in login mode", () => {
     const { result } = renderHook(() => useAuthFormController());
 
     expect(result.current).toMatchObject({
       fields: {
         agreement: false,
-        email: { value: "", isValid: false },
-        password: { value: "", isValid: false },
+        email: { value: "", isValid: true },
+        password: { value: "", isValid: true },
       },
       mode: {
         isLogin: true,
         showErrors: false,
       },
     });
-    expect(result.current.validation.email.disableErrorOnBlur).toBe(true);
-    expect(result.current.validation.password.disableErrorOnBlur).toBe(true);
+    expect(result.current.validation.email).toBeNull();
+    expect(result.current.validation.password).toBeNull();
   });
 
-  it("submits valid credentials through the auth thunk", () => {
+  it("submits login credentials without client-side validation", () => {
     const { result } = renderHook(() => useAuthFormController());
 
     act(() => {
       result.current.actions.changeEmail(
-        { target: { value: "user@example.com" } },
+        { target: { value: "not-an-email" } },
       );
       result.current.actions.changePassword(
-        { target: { value: "password" } },
+        { target: { value: "x" } },
       );
     });
 
@@ -78,12 +81,12 @@ describe("useAuthFormController", () => {
 
     expect(hookMocks.authRequest).toHaveBeenCalledWith(
       true,
-      "user@example.com",
-      "password",
+      "not-an-email",
+      "x",
     );
     expect(hookMocks.dispatch).toHaveBeenCalledWith({
       type: "auth/request",
-      payload: [true, "user@example.com", "password"],
+      payload: [true, "not-an-email", "x"],
     });
   });
 
@@ -102,7 +105,8 @@ describe("useAuthFormController", () => {
       value: "",
       isValid: false,
     });
-    expect(result.current.validation.email.disableErrorOnBlur).toBe(false);
+    expect(result.current.validation.email.email).toBe(true);
+    expect(result.current.validation.password.minLength).toBe(8);
 
     act(() => {
       result.current.actions.submitAuth({ preventDefault: vi.fn() });
@@ -112,6 +116,54 @@ describe("useAuthFormController", () => {
       type: "auth/setErrorMessage",
       payload: MESSAGE_AGREEMENT,
     });
+  });
+
+  it("rejects weak signup credentials", () => {
+    const { result } = renderHook(() => useAuthFormController());
+
+    act(() => {
+      result.current.actions.switchAuthMode();
+      result.current.actions.changeAgreement();
+      result.current.actions.changeEmail({
+        target: { value: "user@example.com" },
+      });
+      result.current.actions.changePassword({
+        target: { value: "password" },
+      });
+    });
+    act(() => {
+      result.current.actions.submitAuth({ preventDefault: vi.fn() });
+    });
+
+    expect(hookMocks.authRequest).not.toHaveBeenCalled();
+    expect(hookMocks.dispatch).toHaveBeenCalledWith({
+      type: "auth/setErrorMessage",
+      payload: ERROR_MESSAGE_INVALID_INPUT,
+    });
+  });
+
+  it("submits signup credentials that satisfy every rule", () => {
+    const { result } = renderHook(() => useAuthFormController());
+
+    act(() => {
+      result.current.actions.switchAuthMode();
+      result.current.actions.changeAgreement();
+      result.current.actions.changeEmail({
+        target: { value: "user@example.com" },
+      });
+      result.current.actions.changePassword({
+        target: { value: "Strong1!" },
+      });
+    });
+    act(() => {
+      result.current.actions.submitAuth({ preventDefault: vi.fn() });
+    });
+
+    expect(hookMocks.authRequest).toHaveBeenCalledWith(
+      false,
+      "user@example.com",
+      "Strong1!",
+    );
   });
 
   it("submits password reset requests for the current email", () => {
@@ -131,5 +183,26 @@ describe("useAuthFormController", () => {
     expect(hookMocks.resetUserPassword).toHaveBeenCalledWith(
       "user@example.com",
     );
+  });
+
+  it("rejects password reset requests with an invalid email", () => {
+    const { result } = renderHook(() => useAuthFormController());
+
+    act(() => {
+      result.current.actions.changeEmail({
+        target: { value: "invalid-email" },
+      });
+    });
+    act(() => {
+      result.current.actions.submitPasswordReset({
+        preventDefault: vi.fn(),
+      });
+    });
+
+    expect(hookMocks.resetUserPassword).not.toHaveBeenCalled();
+    expect(hookMocks.dispatch).toHaveBeenCalledWith({
+      type: "auth/setErrorMessage",
+      payload: ERROR_MESSAGE_INVALID_INPUT,
+    });
   });
 });

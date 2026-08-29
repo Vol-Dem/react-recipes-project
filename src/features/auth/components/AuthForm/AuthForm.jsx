@@ -47,6 +47,7 @@ const AuthForm = () => {
       )}
       {!mode.showResetPassword && (
         <form
+          noValidate
           className={classes["auth__form"]}
           onSubmit={actions.submitAuth}
         >

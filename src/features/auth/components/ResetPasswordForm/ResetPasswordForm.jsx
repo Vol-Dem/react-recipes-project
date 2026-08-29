@@ -14,7 +14,7 @@ const ResetPasswordForm = ({
   successMessage,
   validation,
 }) => (
-  <form className={classes["auth__form"]} onSubmit={onSubmit}>
+  <form noValidate className={classes["auth__form"]} onSubmit={onSubmit}>
     <Input
       name="email"
       type="email"
