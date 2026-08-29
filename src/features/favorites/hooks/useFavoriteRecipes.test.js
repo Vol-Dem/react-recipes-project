@@ -82,7 +82,7 @@ describe("useFavoriteRecipes", () => {
   it("sets the empty message when the favorites list is empty", async () => {
     hookMocks.state.fav.favList = [];
 
-    renderHook(() => useFavoriteRecipes());
+    const { result } = renderHook(() => useFavoriteRecipes());
 
     await waitFor(() =>
       expect(hookMocks.dispatch).toHaveBeenCalledWith({
@@ -90,6 +90,8 @@ describe("useFavoriteRecipes", () => {
         payload: MESSAGE_EMPTY_FAVORITES,
       }),
     );
+    expect(result.current.filter).toBeUndefined();
+    expect(hookMocks.createFilter).not.toHaveBeenCalled();
     expect(hookMocks.getRecipes).not.toHaveBeenCalled();
   });
 });

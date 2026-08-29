@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   createFavoriteRecipesFilter,
@@ -16,12 +16,18 @@ import { selectFavoriteIds } from "../store/favoritesSelectors";
 const favoritesReference = getRecipesCollection();
 
 export const useFavoriteRecipes = () => {
-  const [filter, setFilter] = useState();
   const dispatch = useDispatch();
   const isAuthenticated = useSelector(selectAuthIsLoggedIn);
   const favoriteIds = useSelector(selectFavoriteIds);
   const dailyLimitIsReached = useSelector(
     selectRecipeDailyLimitIsReached,
+  );
+  const filter = useMemo(
+    () =>
+      favoriteIds.length
+        ? createFavoriteRecipesFilter(favoriteIds)
+        : undefined,
+    [favoriteIds],
   );
 
   useEffect(() => {
@@ -30,16 +36,13 @@ export const useFavoriteRecipes = () => {
       return;
     }
 
-    const favoriteFilter = createFavoriteRecipesFilter(favoriteIds);
-
-    setFilter(favoriteFilter);
     dispatch(recipeActions.setEmptyMessage(""));
     dispatch(recipeActions.setCurrentPage(1));
     dispatch(
       getRecipes({
         requestUrl: buildFavoriteRecipesUrl(favoriteIds),
         firebaseRef: favoritesReference,
-        filter: favoriteFilter,
+        filter,
         resultsAmount: createRecipeResultsLimit(),
       }),
     );
@@ -49,7 +52,7 @@ export const useFavoriteRecipes = () => {
       dispatch(recipeActions.resetRecipes());
       dispatch(recipeActions.setEmptyMessage(""));
     };
-  }, [favoriteIds, dispatch, dailyLimitIsReached]);
+  }, [favoriteIds, dispatch, dailyLimitIsReached, filter]);
 
   return {
     favoriteIds,
