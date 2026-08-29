@@ -11,12 +11,12 @@ export const RESET_EMAIL_VALIDATION = Object.freeze({
 });
 
 export const EMAIL_VALIDATION = Object.freeze({
-  login: null,
+  login: Object.freeze({ required: true }),
   signup: RESET_EMAIL_VALIDATION,
 });
 
 export const PASSWORD_VALIDATION = Object.freeze({
-  login: null,
+  login: Object.freeze({ required: true }),
   signup: Object.freeze({
     required: true,
     minLength: VALIDATION_PASSWORD_MIN_LENGTH,

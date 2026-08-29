@@ -42,25 +42,25 @@ describe("useAuthFormController", () => {
     });
   });
 
-  it("disables client-side validation in login mode", () => {
+  it("requires login values without applying format or strength rules", () => {
     const { result } = renderHook(() => useAuthFormController());
 
     expect(result.current).toMatchObject({
       fields: {
         agreement: false,
-        email: { value: "", isValid: true },
-        password: { value: "", isValid: true },
+        email: { value: "", isValid: false },
+        password: { value: "", isValid: false },
       },
       mode: {
         isLogin: true,
         showErrors: false,
       },
     });
-    expect(result.current.validation.email).toBeNull();
-    expect(result.current.validation.password).toBeNull();
+    expect(result.current.validation.email).toEqual({ required: true });
+    expect(result.current.validation.password).toEqual({ required: true });
   });
 
-  it("submits login credentials without client-side validation", () => {
+  it("submits nonempty login credentials without stricter checks", () => {
     const { result } = renderHook(() => useAuthFormController());
 
     act(() => {
@@ -87,6 +87,21 @@ describe("useAuthFormController", () => {
     expect(hookMocks.dispatch).toHaveBeenCalledWith({
       type: "auth/request",
       payload: [true, "not-an-email", "x"],
+    });
+  });
+
+  it("rejects empty login credentials", () => {
+    const { result } = renderHook(() => useAuthFormController());
+
+    act(() => {
+      result.current.actions.submitAuth({ preventDefault: vi.fn() });
+    });
+
+    expect(result.current.mode.showErrors).toBe(true);
+    expect(hookMocks.authRequest).not.toHaveBeenCalled();
+    expect(hookMocks.dispatch).toHaveBeenCalledWith({
+      type: "auth/setErrorMessage",
+      payload: ERROR_MESSAGE_INVALID_INPUT,
     });
   });
 

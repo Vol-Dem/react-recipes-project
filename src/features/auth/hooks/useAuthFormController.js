@@ -108,9 +108,7 @@ export const useAuthFormController = () => {
   const submitAuth = (event) => {
     event.preventDefault();
     clearMessages();
-    if (!isLogin) {
-      updateFormState({ type: "showErrors" });
-    }
+    updateFormState({ type: "showErrors" });
 
     if (!navigator?.onLine) {
       dispatch(authActions.setErrorMessage(ERROR_MESSAGE_OFFLINE));
