@@ -49,6 +49,7 @@ const SearchBox = ({ getFormData }) => {
         onSubmit={submitFormHandler}
       >
         <div
+          id="search-filters"
           className={`${classes["search__filter"]} ${
             filterIsOpen ? classes.active : ""
           }`}
@@ -59,6 +60,7 @@ const SearchBox = ({ getFormData }) => {
         <input
           type="text"
           name="query"
+          aria-label="Search recipes"
           value={searchInput}
           onChange={searchQueryHandler}
           placeholder={searchPlaceholder}
@@ -73,17 +75,21 @@ const SearchBox = ({ getFormData }) => {
           data-testid="filter-btn"
           className={classes["search__filter-btn"]}
           onClick={filterOpenHandler}
-          title="Filter"
+          aria-label={
+            filterIsOpen ? "Hide search filters" : "Show search filters"
+          }
+          aria-expanded={filterIsOpen}
+          aria-controls="search-filters"
         >
-          <FilterIcon />
+          <FilterIcon aria-hidden="true" focusable="false" />
         </motion.button>
         <button
           type="submit"
           data-testid="search-submit"
           className={classes["search__form-btn"]}
-          title="Search"
+          aria-label="Search recipes"
         >
-          <SearchIcon />
+          <SearchIcon aria-hidden="true" focusable="false" />
           <span className={classes["hidden-xs"]}>Search</span>
         </button>
       </form>

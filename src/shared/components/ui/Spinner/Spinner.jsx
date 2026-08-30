@@ -1,8 +1,12 @@
 import classes from "./Spinner.module.scss";
 
-const Spinner = ({ size = "big" }) => {
+const Spinner = ({ label = "Loading", size = "big" }) => {
   return (
-    <div className={`${classes.spinner} ${classes[size]}`}>
+    <div
+      className={`${classes.spinner} ${classes[size]}`}
+      role="status"
+      aria-label={label}
+    >
       <div></div>
       <div></div>
       <div></div>

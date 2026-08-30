@@ -40,22 +40,34 @@ const RecipeCard = ({ recipe }) => {
       <Link to={`recipe/${recipe.id}`} className={classes["recipe-card__link"]}>
         <div className={classes["recipe-card__img-container"]}>
           {isFav && (
-            <StarIcon className={classes["recipe-card__img-container--fav"]} />
+            <StarIcon
+              className={classes["recipe-card__img-container--fav"]}
+              aria-hidden="true"
+              focusable="false"
+            />
           )}
           <Image
             className={classes["recipe-card__img"]}
             src={recipe.img}
             alt={recipe.title}
-            fallback={<FoodIcon className={classes.food} />}
+            fallback={
+              <FoodIcon
+                className={classes.food}
+                aria-hidden="true"
+                focusable="false"
+              />
+            }
           />
         </div>
         <div className={classes["recipe-card__description"]}>
           <div className={classes["recipe-card__info"]}>
             <span className={classes["recipe-card__param"]}>
-              <CaloriesIcon /> {recipe.calories.toFixed()} kcal
+              <CaloriesIcon aria-hidden="true" focusable="false" />{" "}
+              {recipe.calories.toFixed()} kcal
             </span>
             <span className={classes["recipe-card__param"]}>
-              <ClockIcon /> {recipe.readyInMinutes} min
+              <ClockIcon aria-hidden="true" focusable="false" />{" "}
+              {recipe.readyInMinutes} min
             </span>
           </div>
           <div className={classes["recipe-card__title"]}>

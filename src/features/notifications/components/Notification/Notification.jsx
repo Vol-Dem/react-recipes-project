@@ -18,23 +18,25 @@ const NOTIFICATION_VISIBLE_ANIMATION = {
   y: 0,
 };
 
-const Notification = ({ title, message }) => {
+const Notification = ({ title, message, severity = "status" }) => {
   const dispatch = useDispatch();
+  const isError = severity === "error";
   const closeNotificationHandler = () => {
     dispatch(notificationActions.closeNotification());
   };
 
   return createPortal(
     <motion.div
-      role="status"
-      aria-live="polite"
+      role={isError ? "alert" : "status"}
+      aria-live={isError ? "assertive" : "polite"}
+      aria-atomic="true"
       initial={NOTIFICATION_HIDDEN_ANIMATION}
       animate={NOTIFICATION_VISIBLE_ANIMATION}
       exit={NOTIFICATION_HIDDEN_ANIMATION}
       className={classes["notification-container"]}
     >
       <Card className={classes.notification}>
-        <TriangleIcon />
+        <TriangleIcon aria-hidden="true" focusable="false" />
         <div>
           <h4 className={classes["notification__title"]}>{title}</h4>
           <p className={classes["notification__text"]}>{message}</p>

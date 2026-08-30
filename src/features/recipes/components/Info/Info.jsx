@@ -25,19 +25,26 @@ const Info = ({ readyInMinutes, servings, recipeId }) => {
     <div className={classes["recipe__info"]}>
       <div className={classes["recipe__params"]}>
         <div className={classes["recipe__param"]}>
-          <ClockIcon /> {readyInMinutes} min
+          <ClockIcon aria-hidden="true" focusable="false" /> {readyInMinutes}{" "}
+          min
         </div>
         <div className={classes["recipe__param"]}>
-          <ServingsIcon /> {servings} servings
+          <ServingsIcon aria-hidden="true" focusable="false" /> {servings}{" "}
+          servings
         </div>
       </div>
       <div className={classes["recipe__actions"]}>
-        <StarIcon
+        <button
+          type="button"
           onClick={addToFavoristes}
+          aria-label={isFav ? "Remove from favorites" : "Add to favorites"}
+          aria-pressed={isFav}
           className={`${classes["recipe__fav"]} ${
             isFav ? classes["recipe__fav--active"] : ""
           }`}
-        />
+        >
+          <StarIcon aria-hidden="true" focusable="false" />
+        </button>
       </div>
     </div>
   );

@@ -5,6 +5,11 @@
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  cursor: pointer;
 
   & svg {
     width: 1.6rem;

@@ -9,11 +9,21 @@ const AuthAgreement = ({ checked, onChange }) => (
     label={
       <span>
         I have read and agree to the{" "}
-        <Link className={classes.link} to="tos" target="blank">
+        <Link
+          className={classes.link}
+          to="/tos"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           Terms of Service
         </Link>{" "}
         and{" "}
-        <Link className={classes.link} to="privacy" target="blank">
+        <Link
+          className={classes.link}
+          to="/privacy"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           Privacy Policy
         </Link>
       </span>

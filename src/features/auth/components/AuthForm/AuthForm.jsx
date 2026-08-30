@@ -17,6 +17,11 @@ import { useAuthFormController } from "../../hooks/useAuthFormController";
 
 const AuthForm = () => {
   const { actions, fields, mode, status, validation } = useAuthFormController();
+  const title = mode.showResetPassword
+    ? "Reset password"
+    : mode.isLogin
+      ? "Log in"
+      : "Sign Up";
 
   return (
     <motion.div
@@ -26,11 +31,14 @@ const AuthForm = () => {
       animate={ANIMATION_SLIDE_IN}
       exit={ANIMATION_SLIDE_IN_INITIAL}
     >
-      {!mode.showResetPassword && (
-        <h3 className={classes["auth__title"]}>
-          {mode.isLogin ? "Log in" : "Sign Up"}
-        </h3>
-      )}
+      <h3
+        id="auth-dialog-title"
+        className={`${classes["auth__title"]} ${
+          mode.showResetPassword ? classes["auth__title--visually-hidden"] : ""
+        }`}
+      >
+        {title}
+      </h3>
       {mode.showResetPassword && (
         <ResetPasswordForm
           email={fields.email.value}
@@ -54,7 +62,7 @@ const AuthForm = () => {
             <Button type="button" onClick={actions.signInWithGoogle}>
               <img
                 src={GOOGLE_AUTH_ICON_URL}
-                alt="google-icon"
+                alt=""
                 className={classes["icon"]}
               ></img>{" "}
               Sign in with Google
@@ -64,6 +72,7 @@ const AuthForm = () => {
             email={fields.email.value}
             emailIsInvalid={fields.emailIsInvalid}
             emailValidation={validation.email}
+            isLogin={mode.isLogin}
             isLoading={status.isLoading}
             password={fields.password.value}
             passwordIsInvalid={fields.passwordIsInvalid}

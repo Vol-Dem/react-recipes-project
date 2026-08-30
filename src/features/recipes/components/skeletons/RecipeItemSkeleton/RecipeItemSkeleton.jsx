@@ -17,10 +17,12 @@ const RecipeItemSkeleton = () => {
       <div className={classes["recipe-card__description"]}>
         <div className={classes["recipe-card__info"]}>
           <span className={classes["recipe-card__param"]}>
-            <CaloriesIcon /> <Skeleton classNames="text width-40" />
+            <CaloriesIcon aria-hidden="true" focusable="false" />{" "}
+            <Skeleton classNames="text width-40" />
           </span>
           <span className={classes["recipe-card__param"]}>
-            <ClockIcon /> <Skeleton classNames="text width-40" />
+            <ClockIcon aria-hidden="true" focusable="false" />{" "}
+            <Skeleton classNames="text width-40" />
           </span>
         </div>
         <div>

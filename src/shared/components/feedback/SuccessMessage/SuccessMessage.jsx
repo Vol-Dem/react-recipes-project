@@ -3,7 +3,7 @@ import SuccessIcon from "../../../../assets/icons/SuccessIcon";
 
 const SuccessMessage = ({ children, className }) => {
   return (
-    <div className={`${classes["success"]} ${className || ""}`}>
+    <div role="status" className={`${classes["success"]} ${className || ""}`}>
       <SuccessIcon />
       <span>{children}</span>
     </div>

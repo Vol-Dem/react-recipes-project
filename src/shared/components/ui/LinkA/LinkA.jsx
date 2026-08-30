@@ -26,11 +26,23 @@ const LinkA = ({
     }
   };
 
+  if (!href) {
+    return (
+      <button
+        type="button"
+        className={`${classes.link} ${className || ""}`}
+        onClick={clickHandler}
+      >
+        {children}
+      </button>
+    );
+  }
+
   return (
     <a
       className={`${classes.link} ${className || ""}`}
-      target={external ? "_blank" : ""}
-      rel="noreferrer nofollow"
+      target={external ? "_blank" : undefined}
+      rel={external ? "noopener noreferrer nofollow" : undefined}
       href={href}
       onClick={clickHandler}
     >

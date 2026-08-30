@@ -16,8 +16,10 @@ const ResetPasswordForm = ({
 }) => (
   <form noValidate className={classes["auth__form"]} onSubmit={onSubmit}>
     <Input
+      id="reset-email"
       name="email"
       type="email"
+      autoComplete="email"
       label="Email"
       value={email}
       validation={validation}

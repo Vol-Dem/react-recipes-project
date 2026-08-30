@@ -14,7 +14,13 @@ const RecipeHeader = ({ diets, image, onBack, showBackButton, title }) => {
         <Image
           src={image}
           alt={title}
-          fallback={<FoodImg className={classes["default-img"]} />}
+          fallback={
+            <FoodImg
+              className={classes["default-img"]}
+              aria-hidden="true"
+              focusable="false"
+            />
+          }
         />
       </div>
     </div>

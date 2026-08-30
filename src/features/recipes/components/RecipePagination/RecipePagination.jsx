@@ -16,11 +16,12 @@ const RecipePagination = ({
     {currentPage > 1 && (
       <div className={classes["search-result__btn"]}>
         <button
+          type="button"
           disabled={isLoading}
           aria-label="Previous results page"
           onClick={onPreviousPage}
         >
-          <ArrowLeftIcon />
+          <ArrowLeftIcon aria-hidden="true" focusable="false" />
         </button>
       </div>
     )}
@@ -28,11 +29,12 @@ const RecipePagination = ({
     {!isLastPage && (
       <div className={classes["search-result__btn"]}>
         <button
+          type="button"
           disabled={isLoading}
           aria-label="Next results page"
           onClick={onNextPage}
         >
-          <ArrowRightIcon />
+          <ArrowRightIcon aria-hidden="true" focusable="false" />
         </button>
       </div>
     )}

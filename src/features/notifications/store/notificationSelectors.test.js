@@ -1,6 +1,7 @@
 import {
   selectNotificationIsShown,
   selectNotificationMessage,
+  selectNotificationSeverity,
   selectNotificationState,
   selectNotificationTitle,
 } from "./notificationSelectors";
@@ -8,6 +9,7 @@ import {
 const notificationState = {
   isShown: true,
   message: "Search remains available in test mode.",
+  severity: "status",
   title: "Daily API limit reached",
 };
 const state = { notification: notificationState };
@@ -20,5 +22,6 @@ describe("notification selectors", () => {
       "Search remains available in test mode.",
     );
     expect(selectNotificationTitle(state)).toBe("Daily API limit reached");
+    expect(selectNotificationSeverity(state)).toBe("status");
   });
 });

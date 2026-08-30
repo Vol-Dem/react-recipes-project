@@ -20,6 +20,7 @@ import {
 import {
   selectNotificationIsShown,
   selectNotificationMessage,
+  selectNotificationSeverity,
   selectNotificationTitle,
 } from "../../../features/notifications/store/notificationSelectors";
 
@@ -29,6 +30,7 @@ const Layout = () => {
   const notificationIsShown = useSelector(selectNotificationIsShown);
   const notificationTitle = useSelector(selectNotificationTitle);
   const notificationMessage = useSelector(selectNotificationMessage);
+  const notificationSeverity = useSelector(selectNotificationSeverity);
   const dispatch = useDispatch();
 
   const openAuth = () => {
@@ -61,7 +63,7 @@ const Layout = () => {
       </main>
       <AnimatePresence>
         {authIsOpen && (
-          <Modal onClose={closeAuth}>
+          <Modal labelledBy="auth-dialog-title" onClose={closeAuth}>
             <AuthForm />
           </Modal>
         )}
@@ -69,6 +71,7 @@ const Layout = () => {
           <Notification
             title={notificationTitle}
             message={notificationMessage}
+            severity={notificationSeverity}
           />
         )}
       </AnimatePresence>

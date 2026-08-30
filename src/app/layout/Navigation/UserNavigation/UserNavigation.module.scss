@@ -16,6 +16,11 @@
     gap: 1rem;
     color: var.$color-text-light;
     font-size: 1.8rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    font-family: inherit;
+    cursor: pointer;
   }
 
   &__name {
@@ -46,6 +51,7 @@
     transition: all 0.3s;
     box-sizing: border-box;
     text-align: center;
+    visibility: hidden;
   }
 
   &__links {
@@ -74,19 +80,20 @@
     }
   }
 
-  &:hover &__menu {
+  &--open &__menu {
     height: 12rem;
     background-color: var.$color-background-light;
+    visibility: visible;
   }
 
-  &:hover &__user {
+  &--open &__user {
     color: var.$color-text-primary;
   }
-  &:hover &__user svg {
+  &--open &__user svg {
     color: var.$color-text-primary;
   }
 
-  &:hover {
+  &--open {
     background-color: var.$color-background-light;
     color: var.$color-text-primary;
   }

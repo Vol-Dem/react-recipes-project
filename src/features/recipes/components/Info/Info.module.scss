@@ -25,6 +25,10 @@
 }
 
 .recipe__fav {
+  display: flex;
+  padding: 0;
+  border: 0;
+  background: none;
   color: var.$color-info-muted;
   cursor: pointer;
 

@@ -17,6 +17,7 @@ const NavItem = ({ children, className, to }) => {
       </NavLink>
       {activePath && (
         <motion.div
+          aria-hidden="true"
           layoutId="nav-indicator"
           className={classes["nav__indicator"]}
         ></motion.div>

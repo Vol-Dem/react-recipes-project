@@ -25,7 +25,7 @@ const Profile = ({ title }) => {
       <Card>
         <div className={classes["profile__container"]}>
           <div className={classes["profile__img"]}>
-            <UserIcon />
+            <UserIcon aria-hidden="true" focusable="false" />
           </div>
           <div>
             <h1 className={classes["profile__title"]}>Profile</h1>

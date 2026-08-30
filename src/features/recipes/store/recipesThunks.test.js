@@ -154,6 +154,7 @@ describe("recipe thunks", () => {
         payload: {
           message:
             "The application will now enter test mode. Search results will remain the same, and you can still use the other features.",
+          severity: "status",
           title: "Daily API limit reached",
         },
       });

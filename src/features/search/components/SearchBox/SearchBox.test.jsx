@@ -5,9 +5,9 @@ import userEvent from "@testing-library/user-event";
 describe("SearchBox component", () => {
   test("renders search field", () => {
     render(<SearchBox />);
-    const inputElement = screen.getByPlaceholderText(
-      "WHAT RECIPE DO YOU WANT TO FIND?",
-    );
+    const inputElement = screen.getByRole("textbox", {
+      name: "Search recipes",
+    });
     expect(inputElement).toBeInTheDocument();
   });
 
@@ -15,9 +15,11 @@ describe("SearchBox component", () => {
     render(<SearchBox />);
     const filterBtn = screen.getByTestId("filter-btn");
     const user = userEvent.setup();
+    expect(filterBtn).toHaveAttribute("aria-expanded", "false");
     await user.click(filterBtn);
     const filter = screen.getByText("Cuisine");
     expect(filter).toBeInTheDocument();
+    expect(filterBtn).toHaveAttribute("aria-expanded", "true");
   });
 
   test("search input should change", () => {

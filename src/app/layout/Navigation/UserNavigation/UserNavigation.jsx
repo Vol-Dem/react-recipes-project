@@ -5,34 +5,101 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutUser } from "../../../../features/auth/store/authThunks";
 import { selectAuthDisplayName } from "../../../../features/auth/store/authSelectors";
+import { useEffect, useRef, useState } from "react";
 
 const UserNavigation = () => {
+  const [menuIsOpen, setMenuIsOpen] = useState(false);
   const userName = useSelector(selectAuthDisplayName);
+  const containerRef = useRef(null);
+  const triggerRef = useRef(null);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    if (!menuIsOpen) {
+      return undefined;
+    }
+
+    const closeOnOutsideClick = (event) => {
+      if (!containerRef.current?.contains(event.target)) {
+        setMenuIsOpen(false);
+      }
+    };
+    const closeOnEscape = (event) => {
+      if (event.key === "Escape") {
+        setMenuIsOpen(false);
+        triggerRef.current?.focus();
+      }
+    };
+
+    document.addEventListener("pointerdown", closeOnOutsideClick);
+    document.addEventListener("keydown", closeOnEscape);
+
+    return () => {
+      document.removeEventListener("pointerdown", closeOnOutsideClick);
+      document.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [menuIsOpen]);
+
+  const openMenu = () => setMenuIsOpen(true);
+  const closeMenu = () => setMenuIsOpen(false);
+  const handleTriggerClick = (event) => {
+    if (event.detail === 0) {
+      setMenuIsOpen((isOpen) => !isOpen);
+      return;
+    }
+
+    openMenu();
+  };
+
   const logout = () => {
+    closeMenu();
     dispatch(logoutUser());
     navigate("/", { replace: true });
   };
 
   return (
-    <div className={classes["nav-profile"]}>
-      <div className={classes["nav-profile__user"]}>
+    <div
+      ref={containerRef}
+      className={`${classes["nav-profile"]} ${
+        menuIsOpen ? classes["nav-profile--open"] : ""
+      }`}
+      onMouseEnter={openMenu}
+      onMouseLeave={closeMenu}
+    >
+      <button
+        ref={triggerRef}
+        type="button"
+        className={classes["nav-profile__user"]}
+        aria-expanded={menuIsOpen}
+        aria-controls="user-navigation-menu"
+        onClick={handleTriggerClick}
+      >
         <span className={classes["nav-profile__name"]}>{userName}</span>
-        <UserIcon />
-      </div>
-      <div className={classes["nav-profile__menu"]}>
+        <UserIcon aria-hidden="true" focusable="false" />
+      </button>
+      <div
+        id="user-navigation-menu"
+        className={classes["nav-profile__menu"]}
+        aria-hidden={!menuIsOpen}
+        inert={!menuIsOpen}
+      >
         <ul className={classes["nav-profile__links"]}>
           <li className={classes["nav-profile__link"]}>
-            <NavLink to="profile">Profile</NavLink>
+            <NavLink to="profile" onClick={closeMenu}>
+              Profile
+            </NavLink>
           </li>
           <li className={classes["nav-profile__link"]}>
-            <NavLink to="favorites">Favorites</NavLink>
+            <NavLink to="favorites" onClick={closeMenu}>
+              Favorites
+            </NavLink>
           </li>
         </ul>
-        <ButtonSecondary onClick={logout}>Logout</ButtonSecondary>
+        <ButtonSecondary type="button" onClick={logout}>
+          Logout
+        </ButtonSecondary>
       </div>
     </div>
   );

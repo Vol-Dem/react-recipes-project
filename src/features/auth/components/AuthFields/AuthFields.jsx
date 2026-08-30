@@ -5,6 +5,7 @@ const AuthFields = ({
   email,
   emailIsInvalid,
   emailValidation,
+  isLogin,
   isLoading,
   onEmailChange,
   onPasswordChange,
@@ -26,6 +27,7 @@ const AuthFields = ({
         id="email"
         name="email"
         type="email"
+        autoComplete="email"
         label="Email"
         value={email}
         validation={emailValidation}
@@ -38,6 +40,7 @@ const AuthFields = ({
         id="password"
         name="password"
         type="password"
+        autoComplete={isLogin ? "current-password" : "new-password"}
         label="Password"
         value={password}
         validation={passwordValidation}

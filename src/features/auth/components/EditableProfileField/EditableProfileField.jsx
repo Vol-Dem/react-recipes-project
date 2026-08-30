@@ -18,6 +18,7 @@ const EditableProfileField = ({
         <Input
           name={inputName}
           type={inputType}
+          autoComplete={inputType === "password" ? "new-password" : "name"}
           placeholder={inputPlaceholder}
         />
         <ButtonSecondary>Submit</ButtonSecondary>
