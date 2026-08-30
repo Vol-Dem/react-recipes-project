@@ -140,9 +140,9 @@ describe("recipe thunks", () => {
 
     it("switches to fallback mode when the API limit is reached", async () => {
       const store = mockStore({ recipe: initialState });
-      const expectedError = new Error(
-        "AxiosError: Request failed with status code 402",
-      );
+      const expectedError = Object.assign(new Error("Payment required"), {
+        response: { status: 402 },
+      });
       axios.get
         .mockRejectedValueOnce(expectedError)
         .mockResolvedValueOnce({ data: responseData });
@@ -158,8 +158,8 @@ describe("recipe thunks", () => {
         type: "notification/showNotification",
         payload: {
           message:
-            "The application will now enter test mode. Search result will remain the same. You can still use other features!",
-          title: "Daily limit of API is over :(",
+            "The application will now enter test mode. Search results will remain the same, and you can still use the other features.",
+          title: "Daily API limit reached",
         },
       });
     });
@@ -174,7 +174,7 @@ describe("recipe thunks", () => {
         { type: "recipe/setRecipesIsLoading", payload: true },
         {
           type: "recipe/setErrorMessage",
-          payload: "Error: Error message",
+          payload: "Unable to load recipes. Please try again",
         },
         { type: "recipe/setRecipesIsLoading", payload: false },
       ]);

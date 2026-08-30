@@ -6,7 +6,12 @@ import {
   createRecipeResultsLimit,
   fetchRecipesFromFirestore,
 } from "../api/recipeRepository";
+import { RECIPE_DAILY_LIMIT_NOTIFICATION } from "../constants/messages";
 import { mapRecipe } from "../utils/mapRecipe";
+import {
+  getRecipeErrorMessage,
+  isRecipeApiLimitError,
+} from "../utils/recipeErrors";
 import { selectRecipeState } from "./recipesSelectors";
 import { recipeActions } from "./recipesSlice";
 
@@ -49,18 +54,14 @@ export const getRecipes = ({
       dispatch(recipeActions.setSearchResult(recipes));
       dispatch(recipeActions.setRecipesIsLoading(false));
     } catch (error) {
-      console.log(error.message);
-
-      if (error.message.includes("402")) {
+      if (isRecipeApiLimitError(error)) {
         dispatch(recipeActions.setDailyLimitIsReached(true));
         dispatch(
-          notificationActions.showNotification({
-            title: "Daily limit of API is over :(",
-            message:
-              "The application will now enter test mode. Search result will remain the same. You can still use other features!",
-          }),
+          notificationActions.showNotification(
+            RECIPE_DAILY_LIMIT_NOTIFICATION,
+          ),
         );
-        dispatch(
+        return dispatch(
           getRecipes({
             requestUrl,
             firebaseRef,
@@ -69,10 +70,9 @@ export const getRecipes = ({
             resultsAmount,
           }),
         );
-        return;
       }
 
-      dispatch(recipeActions.setErrorMessage(error.message));
+      dispatch(recipeActions.setErrorMessage(getRecipeErrorMessage(error)));
       dispatch(recipeActions.setRecipesIsLoading(false));
     }
   };

@@ -18,11 +18,14 @@ describe("fetchRecipesFromApi", () => {
     expect(axios.get).toHaveBeenCalledWith("https://test.com/api");
   });
 
-  it("normalizes request failures as errors", async () => {
-    axios.get.mockRejectedValue(new Error("Network error"));
+  it("preserves request errors and their response metadata", async () => {
+    const requestError = Object.assign(new Error("Network error"), {
+      response: { status: 503 },
+    });
+    axios.get.mockRejectedValue(requestError);
 
     await expect(
       fetchRecipesFromApi("https://test.com/api"),
-    ).rejects.toThrow("Error: Network error");
+    ).rejects.toBe(requestError);
   });
 });
