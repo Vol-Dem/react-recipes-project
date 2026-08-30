@@ -19,8 +19,8 @@ import { getReauthenticationErrorMessage } from "../utils/authErrors";
 const auth = getAuth(firebaseApp);
 const googleProvider = new GoogleAuthProvider();
 
-export const subscribeToAuthChanges = (callback) =>
-  onAuthStateChanged(auth, callback);
+export const subscribeToAuthChanges = (onUserChanged, onError) =>
+  onAuthStateChanged(auth, onUserChanged, onError);
 
 export const authenticateWithEmail = (isLogin, email, password) =>
   isLogin

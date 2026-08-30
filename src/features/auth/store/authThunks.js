@@ -1,4 +1,3 @@
-import { ERROR_MESSAGE_DEFAULT } from "../../../shared/constants";
 import { loadFav } from "../../favorites/store/favoritesSlice";
 import {
   authenticateWithEmail,
@@ -12,6 +11,7 @@ import {
 import {
   getAuthErrorMessage,
   getPasswordResetErrorMessage,
+  isAuthCancellationError,
 } from "../utils/authErrors";
 import { authActions } from "./authSlice";
 
@@ -25,14 +25,20 @@ const createUserPayload = (user) => ({
 
 export const initAuth = () => {
   return (dispatch) =>
-    subscribeToAuthChanges((user) => {
-      if (user) {
-        dispatch(authActions.login(createUserPayload(user)));
-        dispatch(loadFav(user.uid));
-      }
+    subscribeToAuthChanges(
+      (user) => {
+        if (user) {
+          dispatch(authActions.login(createUserPayload(user)));
+          dispatch(loadFav(user.uid));
+        }
 
-      dispatch(authActions.completeAuthInitialization());
-    });
+        dispatch(authActions.completeAuthInitialization());
+      },
+      (error) => {
+        dispatch(authActions.setErrorMessage(getAuthErrorMessage(error)));
+        dispatch(authActions.completeAuthInitialization());
+      },
+    );
 };
 
 export const authRequest = (isLogin, email, password) => {
@@ -69,7 +75,7 @@ export const changeUserPassword = (password) => {
     try {
       await updateCurrentUserPassword(password);
     } catch (error) {
-      dispatch(authActions.setErrorMessage(error.message));
+      dispatch(authActions.setErrorMessage(getAuthErrorMessage(error)));
     }
   };
 };
@@ -80,7 +86,7 @@ export const changeUserName = (name) => {
       const user = await updateCurrentUserName(name);
       dispatch(authActions.login(createUserPayload(user)));
     } catch (error) {
-      dispatch(authActions.setErrorMessage(error.message));
+      dispatch(authActions.setErrorMessage(getAuthErrorMessage(error)));
     }
   };
 };
@@ -92,8 +98,10 @@ export const authWithGoogle = () => {
 
       dispatch(authActions.login(createUserPayload(result.user)));
       dispatch(authActions.closeAuthForm());
-    } catch {
-      dispatch(authActions.setErrorMessage(ERROR_MESSAGE_DEFAULT));
+    } catch (error) {
+      if (!isAuthCancellationError(error)) {
+        dispatch(authActions.setErrorMessage(getAuthErrorMessage(error)));
+      }
     }
   };
 };

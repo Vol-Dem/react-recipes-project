@@ -15,6 +15,9 @@ vi.mock("../../favorites/store/favoritesSlice", () => ({
 
 import {
   authRequest,
+  authWithGoogle,
+  changeUserName,
+  changeUserPassword,
   initAuth,
   logoutUser,
   resetUserPassword,
@@ -55,6 +58,29 @@ describe("auth thunks", () => {
     });
   });
 
+  it("finishes initialization with a safe message when the observer fails", () => {
+    const dispatch = vi.fn();
+    authApiMocks.subscribeToAuthChanges.mockImplementation(
+      (_onUserChanged, onError) => {
+        onError({
+          code: "auth/internal-error",
+          message: "Firebase: Error (auth/internal-error)",
+        });
+      },
+    );
+
+    initAuth()(dispatch);
+
+    expect(dispatch).toHaveBeenNthCalledWith(1, {
+      type: "auth/setErrorMessage",
+      payload: "Oops! Something went wrong. Try refreshing!",
+    });
+    expect(dispatch).toHaveBeenNthCalledWith(2, {
+      type: "auth/completeAuthInitialization",
+      payload: undefined,
+    });
+  });
+
   it("authenticates with email and closes the form", async () => {
     const dispatch = vi.fn();
     authApiMocks.authenticateWithEmail.mockResolvedValue({ user });
@@ -84,11 +110,66 @@ describe("auth thunks", () => {
 
     expect(dispatch).toHaveBeenCalledWith({
       type: "auth/setErrorMessage",
-      payload: "Invalid email",
+      payload: "Invalid email address",
     });
     expect(dispatch).toHaveBeenLastCalledWith({
       type: "auth/setIsLoading",
       payload: false,
+    });
+  });
+
+  it("maps an email already in use during sign-up", async () => {
+    const dispatch = vi.fn();
+    authApiMocks.authenticateWithEmail.mockRejectedValue({
+      code: "auth/email-already-in-use",
+      message: "Firebase: Error (auth/email-already-in-use)",
+    });
+
+    await authRequest(false, user.email, "password")(dispatch);
+
+    expect(dispatch).toHaveBeenCalledWith({
+      type: "auth/setErrorMessage",
+      payload: "An account already exists with this email address",
+    });
+  });
+
+  it("maps profile update failures", async () => {
+    const dispatch = vi.fn();
+    authApiMocks.updateCurrentUserName.mockRejectedValue({
+      code: "auth/network-request-failed",
+    });
+    authApiMocks.updateCurrentUserPassword.mockRejectedValue({
+      code: "auth/requires-recent-login",
+    });
+
+    await changeUserName("Updated User")(dispatch);
+    await changeUserPassword("New-password1")(dispatch);
+
+    expect(dispatch).toHaveBeenNthCalledWith(1, {
+      type: "auth/setErrorMessage",
+      payload: "Unable to connect. Check your internet connection and try again",
+    });
+    expect(dispatch).toHaveBeenNthCalledWith(2, {
+      type: "auth/setErrorMessage",
+      payload:
+        "Please sign in again before changing sensitive account information",
+    });
+  });
+
+  it("maps Google sign-in failures but ignores popup cancellation", async () => {
+    const dispatch = vi.fn();
+    authApiMocks.authenticateWithGoogle
+      .mockRejectedValueOnce({ code: "auth/popup-blocked" })
+      .mockRejectedValueOnce({ code: "auth/popup-closed-by-user" });
+
+    await authWithGoogle()(dispatch);
+    await authWithGoogle()(dispatch);
+
+    expect(dispatch).toHaveBeenCalledOnce();
+    expect(dispatch).toHaveBeenCalledWith({
+      type: "auth/setErrorMessage",
+      payload:
+        "Your browser blocked the sign-in popup. Allow popups and try again",
     });
   });
 
