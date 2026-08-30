@@ -2,7 +2,7 @@ import classes from "./Info.module.scss";
 import ClockIcon from "../../../../assets/icons/clock.svg?react";
 import ServingsIcon from "../../../../assets/icons/servings.svg?react";
 import { useDispatch, useSelector } from "react-redux";
-import { sendFav } from "../../../favorites/store/favoritesSlice";
+import { toggleFavorite } from "../../../favorites/store/favoritesThunks";
 import { authActions } from "../../../auth/store/authSlice";
 import StarIcon from "../../../../assets/icons/star.svg?react";
 import { selectAuthIsLoggedIn } from "../../../auth/store/authSelectors";
@@ -15,7 +15,7 @@ const Info = ({ readyInMinutes, servings, recipeId }) => {
     if (!isAuth) {
       dispatch(authActions.openAuthForm());
     } else {
-      dispatch(sendFav(+recipeId));
+      dispatch(toggleFavorite(+recipeId));
     }
   };
   const isFavorite = useSelector((state) =>

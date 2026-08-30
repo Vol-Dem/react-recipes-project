@@ -1,64 +1,34 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getFirestore, setDoc, doc, getDoc } from "firebase/firestore";
-import firebaseApp from "../../../config/firebase";
-import { FIRESTORE_COLLECTIONS } from "../../../shared/constants";
-import { selectAuthUserId } from "../../auth/store/authSelectors";
-import { selectFavoriteIds } from "./favoritesSelectors";
 
-const firestore = getFirestore(firebaseApp);
-
-const favSlice = createSlice({
+const favoritesSlice = createSlice({
   name: "fav",
-  initialState: { favList: [], recipes: [] },
+  initialState: { favList: [], pendingIds: [] },
   reducers: {
-    addToFav(state, action) {
+    toggleFavorite(state, action) {
       if (!state.favList.includes(action.payload)) {
         state.favList.push(action.payload);
       } else {
         state.favList = state.favList.filter((id) => id !== action.payload);
       }
     },
-    updateFav(state, action) {
+    setFavoriteIds(state, action) {
       state.favList = action.payload;
+    },
+    startFavoriteUpdate(state, action) {
+      state.pendingIds.push(action.payload);
+    },
+    finishFavoriteUpdate(state, action) {
+      state.pendingIds = state.pendingIds.filter(
+        (recipeId) => recipeId !== action.payload,
+      );
+    },
+    clearFavorites(state) {
+      state.favList = [];
+      state.pendingIds = [];
     },
   },
 });
 
-/**
- * Add a recipe to the favorites list and upload the updated list to the database.
- * @param {number} id - Recipe id
- * @returns
- */
-export const sendFav = (id) => {
-  return async (dispatch, getState) => {
-    dispatch(favActions.addToFav(id));
-    const userId = selectAuthUserId(getState());
-    const favList = selectFavoriteIds(getState());
-    const favRef = doc(firestore, FIRESTORE_COLLECTIONS.favorites, userId);
-    try {
-      await setDoc(favRef, { favList: favList });
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
-};
+export const favoritesActions = favoritesSlice.actions;
 
-/**
- * Loads the user's favorites list from the database.
- * @returns
- */
-export const loadFav = () => {
-  return async (dispatch, getState) => {
-    const uid = selectAuthUserId(getState());
-    const favRef = doc(firestore, FIRESTORE_COLLECTIONS.favorites, uid);
-    const favSnap = await getDoc(favRef);
-    if (favSnap.exists()) {
-      const favList = favSnap.data().favList;
-      dispatch(favActions.updateFav(favList));
-    }
-  };
-};
-
-export const favActions = favSlice.actions;
-
-export default favSlice;
+export default favoritesSlice;

@@ -1,4 +1,5 @@
-import { loadFav } from "../../favorites/store/favoritesSlice";
+import { favoritesActions } from "../../favorites/store/favoritesSlice";
+import { loadFavorites } from "../../favorites/store/favoritesThunks";
 import {
   authenticateWithEmail,
   authenticateWithGoogle,
@@ -29,7 +30,7 @@ export const initAuth = () => {
       (user) => {
         if (user) {
           dispatch(authActions.login(createUserPayload(user)));
-          dispatch(loadFav(user.uid));
+          dispatch(loadFavorites(user.uid));
         }
 
         dispatch(authActions.completeAuthInitialization());
@@ -65,6 +66,7 @@ export const authRequest = (isLogin, email, password) => {
 export const logoutUser = () => {
   return (dispatch) => {
     dispatch(authActions.logout());
+    dispatch(favoritesActions.clearFavorites());
 
     return signOutUser();
   };

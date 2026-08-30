@@ -10,7 +10,12 @@ const authApiMocks = vi.hoisted(() => ({
 
 vi.mock("../api/authApi", () => authApiMocks);
 vi.mock("../../favorites/store/favoritesSlice", () => ({
-  loadFav: (userId) => ({ type: "favorites/load", payload: userId }),
+  favoritesActions: {
+    clearFavorites: () => ({ type: "favorites/clear" }),
+  },
+}));
+vi.mock("../../favorites/store/favoritesThunks", () => ({
+  loadFavorites: (userId) => ({ type: "favorites/load", payload: userId }),
 }));
 
 import {
@@ -183,6 +188,7 @@ describe("auth thunks", () => {
       type: "auth/logout",
       payload: undefined,
     });
+    expect(dispatch).toHaveBeenCalledWith({ type: "favorites/clear" });
     expect(authApiMocks.signOutUser).toHaveBeenCalledOnce();
   });
 
