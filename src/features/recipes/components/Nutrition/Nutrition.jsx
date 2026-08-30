@@ -13,7 +13,7 @@ const Nutrition = ({ nutrition, nutrients }) => {
                     ({ name }) =>
                       name ===
                       element.nutrient[0].toUpperCase() +
-                        element.nutrient.slice(1)
+                        element.nutrient.slice(1),
                   )
                   ?.amount.toFixed() || "??"}
               </span>

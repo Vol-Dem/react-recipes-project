@@ -18,9 +18,7 @@ describe("validateInput", () => {
     ["user example@example.com", false],
     ["user@example", false],
   ])("validates email addresses", (value, expectedIsValid) => {
-    expect(validateInput({ email: true }, value).isValid).toBe(
-      expectedIsValid,
-    );
+    expect(validateInput({ email: true }, value).isValid).toBe(expectedIsValid);
   });
 
   it.each([

@@ -40,9 +40,9 @@ describe("auth error messages", () => {
         code: "auth/invalid-login-credentials",
       }),
     ).toBe("The current password you entered did not match our records");
-    expect(
-      getPasswordResetErrorMessage({ code: "auth/invalid-email" }),
-    ).toBe("Invalid email address");
+    expect(getPasswordResetErrorMessage({ code: "auth/invalid-email" })).toBe(
+      "Invalid email address",
+    );
     expect(
       getPasswordResetErrorMessage({ code: "auth/network-request-failed" }),
     ).toBe("Unable to connect. Check your internet connection and try again");
@@ -52,9 +52,9 @@ describe("auth error messages", () => {
   });
 
   it("identifies user-cancelled authentication popups", () => {
-    expect(
-      isAuthCancellationError({ code: "auth/popup-closed-by-user" }),
-    ).toBe(true);
+    expect(isAuthCancellationError({ code: "auth/popup-closed-by-user" })).toBe(
+      true,
+    );
     expect(
       isAuthCancellationError({ code: "auth/cancelled-popup-request" }),
     ).toBe(true);

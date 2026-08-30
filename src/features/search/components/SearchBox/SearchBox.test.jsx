@@ -1,15 +1,14 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import SearchBox from "./SearchBox";
 import userEvent from "@testing-library/user-event";
-import { act } from "react-dom/test-utils";
 
 describe("SearchBox component", () => {
   test("renders search field", () => {
     render(<SearchBox />);
-    const imputEl = screen.getByPlaceholderText(
-      "WHAT RECIPE DO YOU WANT TO FIND?"
+    const inputElement = screen.getByPlaceholderText(
+      "WHAT RECIPE DO YOU WANT TO FIND?",
     );
-    expect(imputEl).toBeInTheDocument();
+    expect(inputElement).toBeInTheDocument();
   });
 
   test("renders filter when filter button pressed", async () => {

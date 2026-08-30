@@ -26,17 +26,11 @@ export const fetchFavoriteIds = async (userId) => {
   return Array.isArray(favoriteIds) ? favoriteIds : [];
 };
 
-export const updateFavorite = (
-  userId,
-  recipeId,
-  shouldAddFavorite,
-) =>
+export const updateFavorite = (userId, recipeId, shouldAddFavorite) =>
   setDoc(
     getFavoritesReference(userId),
     {
-      favList: shouldAddFavorite
-        ? arrayUnion(recipeId)
-        : arrayRemove(recipeId),
+      favList: shouldAddFavorite ? arrayUnion(recipeId) : arrayRemove(recipeId),
     },
     { merge: true },
   );

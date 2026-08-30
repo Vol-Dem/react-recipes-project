@@ -39,11 +39,7 @@ describe("favorites thunks", () => {
     await store.dispatch(toggleFavorite(42));
 
     expect(store.getState().fav.favList).toEqual([42]);
-    expect(apiMocks.updateFavorite).toHaveBeenCalledWith(
-      "user-id",
-      42,
-      true,
-    );
+    expect(apiMocks.updateFavorite).toHaveBeenCalledWith("user-id", 42, true);
     expect(store.getState().fav.pendingIds).toEqual([]);
   });
 
@@ -86,11 +82,7 @@ describe("favorites thunks", () => {
     await store.dispatch(toggleFavorite(42));
 
     expect(store.getState().fav.favList).toEqual([42]);
-    expect(apiMocks.updateFavorite).toHaveBeenCalledWith(
-      "user-id",
-      42,
-      false,
-    );
+    expect(apiMocks.updateFavorite).toHaveBeenCalledWith("user-id", 42, false);
   });
 
   it("loads favorites from persistence", async () => {

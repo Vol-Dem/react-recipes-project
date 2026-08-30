@@ -5,10 +5,7 @@ import {
   RECIPE_ERROR_MESSAGE_RATE_LIMIT,
   RECIPE_ERROR_MESSAGE_TIMEOUT,
 } from "../constants/messages";
-import {
-  getRecipeErrorMessage,
-  isRecipeApiLimitError,
-} from "./recipeErrors";
+import { getRecipeErrorMessage, isRecipeApiLimitError } from "./recipeErrors";
 
 describe("recipe error handling", () => {
   it("identifies the API daily limit by response status", () => {

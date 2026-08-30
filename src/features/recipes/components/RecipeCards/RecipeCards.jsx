@@ -20,14 +20,9 @@ const RecipeCards = ({
   );
 
   return (
-    <motion.ul
-      variants={RECIPE_CARDS_VARIANTS}
-      className={cardClassName}
-    >
+    <motion.ul variants={RECIPE_CARDS_VARIANTS} className={cardClassName}>
       {!isLoading &&
-        recipes.map((recipe) => (
-          <RecipeCard key={recipe.id} recipe={recipe} />
-        ))}
+        recipes.map((recipe) => <RecipeCard key={recipe.id} recipe={recipe} />)}
       {isLoading && skeletons}
     </motion.ul>
   );

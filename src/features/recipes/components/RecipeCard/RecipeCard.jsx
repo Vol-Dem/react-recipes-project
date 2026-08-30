@@ -19,9 +19,7 @@ const RecipeCard = ({ recipe }) => {
   const { recipeId } = useParams();
   const recipeIsOpen = !!recipeId;
   const isAuth = useSelector(selectAuthIsLoggedIn);
-  const isFavorite = useSelector((state) =>
-    selectIsFavorite(state, recipe.id),
-  );
+  const isFavorite = useSelector((state) => selectIsFavorite(state, recipe.id));
   const isFav = isAuth && isFavorite;
   const classSide = recipeIsOpen ? classes["recipe-card--side"] : "";
   const isActive = recipe.id === +recipeId;
@@ -39,10 +37,7 @@ const RecipeCard = ({ recipe }) => {
       whileHover={RECIPE_CARD_HOVER_ANIMATION}
       className={cardClassName}
     >
-      <Link
-        to={`recipe/${recipe.id}`}
-        className={classes["recipe-card__link"]}
-      >
+      <Link to={`recipe/${recipe.id}`} className={classes["recipe-card__link"]}>
         <div className={classes["recipe-card__img-container"]}>
           {isFav && (
             <StarIcon className={classes["recipe-card__img-container--fav"]} />

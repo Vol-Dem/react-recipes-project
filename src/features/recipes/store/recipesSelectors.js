@@ -12,14 +12,11 @@ export const selectRecipeEmptyMessage = (state) =>
   selectRecipeState(state).emptyMessage;
 export const selectRecipeErrorMessage = (state) =>
   selectRecipeState(state).errorMessage;
-const selectStoredIsLastPage = (state) =>
-  selectRecipeState(state).isLastPage;
+const selectStoredIsLastPage = (state) => selectRecipeState(state).isLastPage;
 export const selectRecipeIsLoading = (state) =>
   selectRecipeState(state).recipesIsLoading;
-export const selectRecipeOptions = (state) =>
-  selectRecipeState(state).options;
-export const selectRecipeOrderBy = (state) =>
-  selectRecipeState(state).orderBy;
+export const selectRecipeOptions = (state) => selectRecipeState(state).options;
+export const selectRecipeOrderBy = (state) => selectRecipeState(state).orderBy;
 export const selectRecipeSearchResult = (state) =>
   selectRecipeState(state).searchResult;
 
@@ -56,8 +53,7 @@ const selectRecipePage = createSelector(
   },
 );
 
-export const selectRecipesPerPage = (state) =>
-  selectRecipePage(state).recipes;
+export const selectRecipesPerPage = (state) => selectRecipePage(state).recipes;
 export const selectRecipeIsLastPage = (state) =>
   selectRecipePage(state).isLastPage;
 

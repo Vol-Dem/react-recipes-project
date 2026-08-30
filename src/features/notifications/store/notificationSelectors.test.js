@@ -19,8 +19,6 @@ describe("notification selectors", () => {
     expect(selectNotificationMessage(state)).toBe(
       "Search remains available in test mode.",
     );
-    expect(selectNotificationTitle(state)).toBe(
-      "Daily API limit reached",
-    );
+    expect(selectNotificationTitle(state)).toBe("Daily API limit reached");
   });
 });

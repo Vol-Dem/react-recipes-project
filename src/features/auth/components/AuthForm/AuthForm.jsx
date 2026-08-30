@@ -16,8 +16,7 @@ import ResetPasswordForm from "../ResetPasswordForm/ResetPasswordForm";
 import { useAuthFormController } from "../../hooks/useAuthFormController";
 
 const AuthForm = () => {
-  const { actions, fields, mode, status, validation } =
-    useAuthFormController();
+  const { actions, fields, mode, status, validation } = useAuthFormController();
 
   return (
     <motion.div

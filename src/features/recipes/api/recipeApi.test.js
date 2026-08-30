@@ -24,8 +24,8 @@ describe("fetchRecipesFromApi", () => {
     });
     axios.get.mockRejectedValue(requestError);
 
-    await expect(
-      fetchRecipesFromApi("https://test.com/api"),
-    ).rejects.toBe(requestError);
+    await expect(fetchRecipesFromApi("https://test.com/api")).rejects.toBe(
+      requestError,
+    );
   });
 });

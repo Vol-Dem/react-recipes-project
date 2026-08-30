@@ -18,9 +18,7 @@ const Info = ({ readyInMinutes, servings, recipeId }) => {
       dispatch(toggleFavorite(+recipeId));
     }
   };
-  const isFavorite = useSelector((state) =>
-    selectIsFavorite(state, +recipeId),
-  );
+  const isFavorite = useSelector((state) => selectIsFavorite(state, +recipeId));
   const isFav = isAuth && isFavorite;
 
   return (

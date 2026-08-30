@@ -49,9 +49,7 @@ describe("recipe selectors", () => {
     expect(selectSortedRecipes(state).map(({ id }) => id)).toEqual([
       10, 9, 8, 7, 6, 5, 4, 3, 2, 1,
     ]);
-    expect(selectRecipesPerPage(state).map(({ id }) => id)).toEqual([
-      2, 1,
-    ]);
+    expect(selectRecipesPerPage(state).map(({ id }) => id)).toEqual([2, 1]);
     expect(selectRecipeIsLastPage(state)).toBe(true);
     expect(selectHasRecipesPerPage(state)).toBe(true);
     expect(selectRecipeOrderValue(state)).toBe("calories-asc");

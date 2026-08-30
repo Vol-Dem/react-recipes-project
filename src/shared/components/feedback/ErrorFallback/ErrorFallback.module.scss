@@ -50,7 +50,9 @@
     font: inherit;
     font-size: 1.8rem;
     cursor: pointer;
-    transition: background-color 0.3s, box-shadow 0.3s;
+    transition:
+      background-color 0.3s,
+      box-shadow 0.3s;
 
     &:hover {
       background-color: color.adjust(var.$color-primary, $lightness: -10%);

@@ -25,7 +25,8 @@ body {
 body:before {
   content: "";
   display: block;
-  background: linear-gradient(
+  background:
+    linear-gradient(
       to right bottom,
       var.$color-overlay-dark,
       var.$color-overlay-primary
@@ -44,7 +45,8 @@ body:before {
 
 @font-face {
   font-family: "Grand Hotel";
-  src: url("../assets/fonts/GrandHotel/GrandHotel-Regular.ttf") format("truetype");
+  src: url("../assets/fonts/GrandHotel/GrandHotel-Regular.ttf")
+    format("truetype");
   font-weight: 500;
 }
 
@@ -80,7 +82,8 @@ body:before {
 
 @media (max-width: 768px) {
   body:before {
-    background: linear-gradient(
+    background:
+      linear-gradient(
         to right bottom,
         var.$color-overlay-dark,
         var.$color-overlay-primary
@@ -91,7 +94,8 @@ body:before {
 
 @media (max-width: 425px) {
   body:before {
-    background: linear-gradient(
+    background:
+      linear-gradient(
         to right bottom,
         var.$color-overlay-dark,
         var.$color-overlay-primary

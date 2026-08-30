@@ -35,7 +35,7 @@ const authSlice = createSlice({
     logout(state) {
       state.isLoggedIn = false;
       state.user = Object.fromEntries(
-        Object.keys(state.user).map((key) => [key, ""])
+        Object.keys(state.user).map((key) => [key, ""]),
       );
     },
     completeAuthInitialization(state) {

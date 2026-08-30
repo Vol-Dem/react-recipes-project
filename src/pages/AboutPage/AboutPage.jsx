@@ -20,14 +20,15 @@ const AboutPage = ({ title }) => {
           Welcome to the “Your recipe book”!
         </h1>
         <p className={classes["about__text"]}>
-          Welcome to "Your Recipe Book", the ultimate destination for cooking
-          enthusiasts!
+          Welcome to &ldquo;Your Recipe Book&rdquo;, the ultimate destination
+          for cooking enthusiasts!
         </p>
         <p className={classes["about__text"]}>
           This&nbsp;platform is designed to be your go-to virtual space for
           discovering, organizing, and saving your favorite recipes. Whether
-          you're a seasoned chef, an aspiring home cook, or someone just looking
-          for quick meal ideas, Your Recipe Book has something for everyone.
+          you&rsquo;re a seasoned chef, an aspiring home cook, or someone just
+          looking for quick meal ideas, Your Recipe Book has something for
+          everyone.
         </p>
         <p className={classes["about__text"]}>
           With our intuitive and attractive web application, you can:

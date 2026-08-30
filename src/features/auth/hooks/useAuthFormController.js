@@ -190,8 +190,7 @@ export const useAuthFormController = () => {
       agreement,
       email,
       emailIsInvalid:
-        showErrors &&
-        !(showResetPassword ? resetEmailIsValid : email.isValid),
+        showErrors && !(showResetPassword ? resetEmailIsValid : email.isValid),
       password,
       passwordIsInvalid: showErrors && !password.isValid,
     },

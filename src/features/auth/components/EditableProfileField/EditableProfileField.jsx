@@ -19,7 +19,6 @@ const EditableProfileField = ({
           name={inputName}
           type={inputType}
           placeholder={inputPlaceholder}
-          autoFocus={true}
         />
         <ButtonSecondary>Submit</ButtonSecondary>
       </>

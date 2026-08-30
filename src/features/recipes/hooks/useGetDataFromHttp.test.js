@@ -67,14 +67,14 @@ describe("useGetDataFromHttp", () => {
     await act(() => result.current({ url: "/recipes/42" }, vi.fn()));
 
     expect(hookMocks.navigate).toHaveBeenCalledWith("/recipes");
-    expect(hookMocks.dispatch.mock.calls.map(([action]) => action.type)).toEqual(
-      [
-        "recipe/setDailyLimitIsReached",
-        "recipe/resetRecipes",
-        "recipe/getRecipes",
-        "notification/showNotification",
-      ],
-    );
+    expect(
+      hookMocks.dispatch.mock.calls.map(([action]) => action.type),
+    ).toEqual([
+      "recipe/setDailyLimitIsReached",
+      "recipe/resetRecipes",
+      "recipe/getRecipes",
+      "notification/showNotification",
+    ]);
     expect(hookMocks.throwAsyncError).not.toHaveBeenCalled();
   });
 

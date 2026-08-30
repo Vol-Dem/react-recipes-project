@@ -57,9 +57,7 @@ export const getRecipes = ({
       if (isRecipeApiLimitError(error)) {
         dispatch(recipeActions.setDailyLimitIsReached(true));
         dispatch(
-          notificationActions.showNotification(
-            RECIPE_DAILY_LIMIT_NOTIFICATION,
-          ),
+          notificationActions.showNotification(RECIPE_DAILY_LIMIT_NOTIFICATION),
         );
         return dispatch(
           getRecipes({
@@ -80,9 +78,7 @@ export const getRecipes = ({
 
 export const nextPage = (firebaseRef, filter) => {
   return async (dispatch, getState) => {
-    const { currentPage, dailyLimitIsReached } = selectRecipeState(
-      getState(),
-    );
+    const { currentPage, dailyLimitIsReached } = selectRecipeState(getState());
 
     dispatch(recipeActions.setCurrentPage(currentPage + 1));
 
@@ -97,9 +93,7 @@ export const nextPage = (firebaseRef, filter) => {
 
 export const prevPage = (firebaseRef, filter) => {
   return async (dispatch, getState) => {
-    const { currentPage, dailyLimitIsReached } = selectRecipeState(
-      getState(),
-    );
+    const { currentPage, dailyLimitIsReached } = selectRecipeState(getState());
 
     dispatch(recipeActions.setCurrentPage(currentPage - 1));
 

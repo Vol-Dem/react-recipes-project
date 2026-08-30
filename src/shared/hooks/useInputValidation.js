@@ -9,9 +9,7 @@ export const useInputValidation = ({
   value,
 }) => {
   const [shouldShowError, setShouldShowError] = useState(false);
-  const validationResult = validation
-    ? validateInput(validation, value)
-    : null;
+  const validationResult = validation ? validateInput(validation, value) : null;
   const errorMessage = validationResult?.errorMessage || "";
 
   useEffect(() => {

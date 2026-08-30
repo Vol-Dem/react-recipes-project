@@ -22,9 +22,7 @@ import {
 } from "../../store/recipesSelectors";
 import { usePageSetup } from "../../../../shared/hooks/usePageSetup";
 
-const RecipeList = lazy(() =>
-  import("../../components/RecipeList/RecipeList")
-);
+const RecipeList = lazy(() => import("../../components/RecipeList/RecipeList"));
 
 const RecipesPage = ({ title }) => {
   usePageSetup(title);
@@ -45,9 +43,7 @@ const RecipesPage = ({ title }) => {
   const shouldShowRecipeList =
     recipesIsLoading || hasRecipesPerPage || emptyMessage;
   const searchSectionClassName = `${classes["section-search"]} ${
-    hasRecipesPerPage || recipesIsLoading || recipeIsOpen
-      ? classes.mt0
-      : ""
+    hasRecipesPerPage || recipesIsLoading || recipeIsOpen ? classes.mt0 : ""
   }`;
   const contentSectionClassName = `${classes["section-content"]} ${
     recipeIsOpen && hasRecipesPerPage ? classes["recipe-columns"] : ""
@@ -58,10 +54,7 @@ const RecipesPage = ({ title }) => {
       initial={ANIMATION_SLIDE_IN_INITIAL}
       animate={ANIMATION_SLIDE_IN}
     >
-      <section
-        data-testid="section-search"
-        className={searchSectionClassName}
-      >
+      <section data-testid="section-search" className={searchSectionClassName}>
         <AnimatePresence>{shouldShowLogo && <Logo />}</AnimatePresence>
         <SearchBox getFormData={submitSearch} />
       </section>
@@ -73,10 +66,7 @@ const RecipesPage = ({ title }) => {
       <section className={contentSectionClassName}>
         {shouldShowRecipeList && (
           <Suspense fallback={<Spinner />}>
-            <RecipeList
-              title={searchTitle}
-              firebaseRef={recipeReference}
-            />
+            <RecipeList title={searchTitle} firebaseRef={recipeReference} />
           </Suspense>
         )}
 

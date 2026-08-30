@@ -54,9 +54,7 @@ export const loadFavorites = (userId) => {
       dispatch(favoritesActions.setFavoriteIds(favoriteIds));
     } catch {
       dispatch(
-        notificationActions.showNotification(
-          FAVORITES_LOAD_ERROR_NOTIFICATION,
-        ),
+        notificationActions.showNotification(FAVORITES_LOAD_ERROR_NOTIFICATION),
       );
     }
   };

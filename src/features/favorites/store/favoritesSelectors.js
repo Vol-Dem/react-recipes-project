@@ -1,7 +1,6 @@
 export const selectFavoritesState = (state) => state.fav;
 
-export const selectFavoriteIds = (state) =>
-  selectFavoritesState(state).favList;
+export const selectFavoriteIds = (state) => selectFavoritesState(state).favList;
 export const selectFavoritePendingIds = (state) =>
   selectFavoritesState(state).pendingIds;
 

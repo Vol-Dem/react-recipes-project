@@ -11,6 +11,9 @@ const MobileNavigation = () => {
   const navSwitch = () => {
     setNavIsOpen((prevState) => !prevState);
   };
+  const closeNavigation = () => {
+    setNavIsOpen(false);
+  };
 
   return (
     <div
@@ -24,28 +27,38 @@ const MobileNavigation = () => {
         onClick={navSwitch}
         aria-expanded={navIsOpen}
         aria-controls="mobile-navigation"
-        aria-label={navIsOpen ? "Close navigation menu" : "Open navigation menu"}
+        aria-label={
+          navIsOpen ? "Close navigation menu" : "Open navigation menu"
+        }
       >
         <span className={classes["mobile-nav__icon"]}></span>
       </button>
       <div className={classes["mobile-nav__background"]}></div>
       <nav id="mobile-navigation" className={classes["mobile-nav__nav"]}>
-        <ul className={classes["mobile-nav__links"]} onClick={navSwitch}>
+        <ul className={classes["mobile-nav__links"]}>
           <li>
-            <NavLink to="/">Home</NavLink>
+            <NavLink to="/" onClick={closeNavigation}>
+              Home
+            </NavLink>
           </li>
           {isAuth && (
             <>
               <li>
-                <NavLink to="profile">Profile</NavLink>
+                <NavLink to="profile" onClick={closeNavigation}>
+                  Profile
+                </NavLink>
               </li>
               <li>
-                <NavLink to="favorites">Favorites</NavLink>
+                <NavLink to="favorites" onClick={closeNavigation}>
+                  Favorites
+                </NavLink>
               </li>
             </>
           )}
           <li>
-            <NavLink to="about">About</NavLink>
+            <NavLink to="about" onClick={closeNavigation}>
+              About
+            </NavLink>
           </li>
         </ul>
       </nav>

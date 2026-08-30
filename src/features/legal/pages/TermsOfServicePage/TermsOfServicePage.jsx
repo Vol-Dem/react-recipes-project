@@ -18,11 +18,12 @@ const TermsOfServicePage = ({ title }) => {
       <Card className={classes.tos}>
         <h1 className={classes["tos__h1"]}>Terms of Service</h1>
         <p className={classes["tos__text"]}>
-          Welcome to "Your recipe book" web application ("Website"). These Terms
-          of Service ("Terms") govern your access to and use of our website,
-          products, and services ("Services"). By accessing or using our
-          Services, you agree to be bound by these Terms. If you do not agree,
-          please do not use our Services.
+          Welcome to &ldquo;Your recipe book&rdquo; web application
+          (&ldquo;Website&rdquo;). These Terms of Service (&ldquo;Terms&rdquo;)
+          govern your access to and use of our website, products, and services
+          (&ldquo;Services&rdquo;). By accessing or using our Services, you
+          agree to be bound by these Terms. If you do not agree, please do not
+          use our Services.
         </p>
         <h2 className={classes["tos__h4"]}>
           1. <strong>Acceptance of Terms</strong>

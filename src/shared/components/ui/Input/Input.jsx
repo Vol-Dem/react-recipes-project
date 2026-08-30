@@ -40,9 +40,7 @@ const Input = ({
         placeholder={placeholder}
         className={`${classes.input} ${className || ""}`}
       />
-      {shouldShowError && error && (
-        <div className={classes.error}>{error}</div>
-      )}
+      {shouldShowError && error && <div className={classes.error}>{error}</div>}
       {shouldShowError && validationErrorMessage && (
         <div className={classes.error}>{validationErrorMessage}</div>
       )}

@@ -1,14 +1,7 @@
 import { useState } from "react";
 import classes from "./Image.module.scss";
 
-const Image = ({
-  alt,
-  className,
-  fallback,
-  onLoad,
-  src,
-  ...imageProps
-}) => {
+const Image = ({ alt, className, fallback, onLoad, src, ...imageProps }) => {
   const [loadedSource, setLoadedSource] = useState(null);
   const isLoading = loadedSource !== src;
   const imageClassName = `${classes.image} ${

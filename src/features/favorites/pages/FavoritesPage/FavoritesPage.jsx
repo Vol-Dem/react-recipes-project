@@ -12,12 +12,8 @@ import { usePageSetup } from "../../../../shared/hooks/usePageSetup";
 const FavoritesPage = ({ title }) => {
   usePageSetup(title);
 
-  const {
-    favoriteIds,
-    favoritesReference,
-    filter,
-    isAuthenticated,
-  } = useFavoriteRecipes();
+  const { favoriteIds, favoritesReference, filter, isAuthenticated } =
+    useFavoriteRecipes();
   const { recipeId } = useParams();
   const recipeIsOpen = !!recipeId;
 

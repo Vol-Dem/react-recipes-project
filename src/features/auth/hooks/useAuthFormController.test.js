@@ -64,12 +64,8 @@ describe("useAuthFormController", () => {
     const { result } = renderHook(() => useAuthFormController());
 
     act(() => {
-      result.current.actions.changeEmail(
-        { target: { value: "not-an-email" } },
-      );
-      result.current.actions.changePassword(
-        { target: { value: "x" } },
-      );
+      result.current.actions.changeEmail({ target: { value: "not-an-email" } });
+      result.current.actions.changePassword({ target: { value: "x" } });
     });
 
     expect(result.current.fields.email.isValid).toBe(true);
@@ -109,9 +105,9 @@ describe("useAuthFormController", () => {
     const { result } = renderHook(() => useAuthFormController());
 
     act(() => {
-      result.current.actions.changeEmail(
-        { target: { value: "user@example.com" } },
-      );
+      result.current.actions.changeEmail({
+        target: { value: "user@example.com" },
+      });
       result.current.actions.switchAuthMode();
     });
 
@@ -185,9 +181,9 @@ describe("useAuthFormController", () => {
     const { result } = renderHook(() => useAuthFormController());
 
     act(() => {
-      result.current.actions.changeEmail(
-        { target: { value: "user@example.com" } },
-      );
+      result.current.actions.changeEmail({
+        target: { value: "user@example.com" },
+      });
     });
     act(() => {
       result.current.actions.submitPasswordReset({

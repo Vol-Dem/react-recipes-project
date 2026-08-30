@@ -10,10 +10,7 @@ const LOGO_EXIT_ANIMATION = {
 
 const Logo = () => {
   return (
-    <motion.h1
-      exit={LOGO_EXIT_ANIMATION}
-      className={classes.logo}
-    >
+    <motion.h1 exit={LOGO_EXIT_ANIMATION} className={classes.logo}>
       Your recipe book
     </motion.h1>
   );

@@ -6,8 +6,7 @@ export const selectAuthFormIsOpen = (state) =>
   selectAuthState(state).authFormIsOpen;
 export const selectAuthIsInitialized = (state) =>
   selectAuthState(state).isInitialized;
-export const selectAuthIsLoading = (state) =>
-  selectAuthState(state).isLoading;
+export const selectAuthIsLoading = (state) => selectAuthState(state).isLoading;
 export const selectAuthIsLoggedIn = (state) =>
   selectAuthState(state).isLoggedIn;
 export const selectAuthShowResetPassword = (state) =>

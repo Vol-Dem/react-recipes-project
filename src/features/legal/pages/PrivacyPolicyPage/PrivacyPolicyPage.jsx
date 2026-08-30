@@ -20,10 +20,10 @@ const PrivacyPolicyPage = ({ title }) => {
           <strong>Privacy Policy</strong>
         </h1>
         <p className={classes["policy__text"]}>
-          "Your recipe book" ("we," "our," or "us") is committed to protecting
-          your privacy. This Privacy Policy explains how we collect, use, and
-          safeguard your personal information when you access our website and
-          Services.
+          &ldquo;Your recipe book&rdquo; (&ldquo;we,&rdquo; &ldquo;our,&rdquo;
+          or &ldquo;us&rdquo;) is committed to protecting your privacy. This
+          Privacy Policy explains how we collect, use, and safeguard your
+          personal information when you access our website and Services.
         </p>
         <h2 className={classes["policy__h4"]}>
           1. <strong>Information We Collect</strong>

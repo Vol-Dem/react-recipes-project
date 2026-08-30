@@ -22,10 +22,7 @@ let firstVisible;
 let lastVisible;
 
 export const getRecipesCollection = () =>
-  collection(
-    getFirestore(firebaseApp),
-    FIRESTORE_COLLECTIONS.recipes,
-  );
+  collection(getFirestore(firebaseApp), FIRESTORE_COLLECTIONS.recipes);
 
 export const createFavoriteRecipesFilter = (recipeIds) =>
   where("id", "in", recipeIds);

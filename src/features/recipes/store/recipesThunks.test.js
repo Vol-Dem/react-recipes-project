@@ -1,12 +1,7 @@
 import configureStore from "redux-mock-store";
 import { thunk } from "redux-thunk";
 import axios from "axios";
-import {
-  getRecipes,
-  nextPage,
-  prevPage,
-  sortRecipes,
-} from "./recipesThunks";
+import { getRecipes, nextPage, prevPage, sortRecipes } from "./recipesThunks";
 
 const repositoryMocks = vi.hoisted(() => ({
   createLimit: vi.fn(() => "results-limit"),

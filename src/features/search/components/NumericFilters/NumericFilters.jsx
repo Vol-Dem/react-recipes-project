@@ -3,10 +3,7 @@ import classes from "./NumericFilters.module.scss";
 
 const NumericFilters = () => (
   <fieldset className={classes["search__filter-item"]}>
-    <label
-      htmlFor="max-ready-time"
-      className={classes["search__filter-title"]}
-    >
+    <label htmlFor="max-ready-time" className={classes["search__filter-title"]}>
       Max ready time (min.)
     </label>
     <Input
@@ -16,10 +13,7 @@ const NumericFilters = () => (
       min="0"
       max="999"
     />
-    <label
-      htmlFor="min-calories"
-      className={classes["search__filter-title"]}
-    >
+    <label htmlFor="min-calories" className={classes["search__filter-title"]}>
       Calories (kcal.)
     </label>
     <div className={classes["search__filter-calories"]}>

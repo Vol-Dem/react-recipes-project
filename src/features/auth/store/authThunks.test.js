@@ -152,7 +152,8 @@ describe("auth thunks", () => {
 
     expect(dispatch).toHaveBeenNthCalledWith(1, {
       type: "auth/setErrorMessage",
-      payload: "Unable to connect. Check your internet connection and try again",
+      payload:
+        "Unable to connect. Check your internet connection and try again",
     });
     expect(dispatch).toHaveBeenNthCalledWith(2, {
       type: "auth/setErrorMessage",

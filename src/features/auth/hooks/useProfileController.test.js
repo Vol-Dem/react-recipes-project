@@ -105,8 +105,6 @@ describe("useProfileController", () => {
     });
 
     expect(event.preventDefault).toHaveBeenCalledOnce();
-    expect(hookMocks.changeUserPassword).toHaveBeenCalledWith(
-      "new-password",
-    );
+    expect(hookMocks.changeUserPassword).toHaveBeenCalledWith("new-password");
   });
 });

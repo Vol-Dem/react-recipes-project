@@ -22,31 +22,30 @@ const AuthFields = ({
 
   return (
     <>
-    <Input
-      id="email"
-      name="email"
-      type="email"
-      label="Email"
-      value={email}
-      validation={emailValidation}
-      showError={showError}
-      disabled={isLoading}
-      autoFocus={true}
-      className={emailClassName}
-      onChange={onEmailChange}
-    />
-    <Input
-      id="password"
-      name="password"
-      type="password"
-      label="Password"
-      value={password}
-      validation={passwordValidation}
-      showError={showError}
-      disabled={isLoading}
-      className={passwordClassName}
-      onChange={onPasswordChange}
-    />
+      <Input
+        id="email"
+        name="email"
+        type="email"
+        label="Email"
+        value={email}
+        validation={emailValidation}
+        showError={showError}
+        disabled={isLoading}
+        className={emailClassName}
+        onChange={onEmailChange}
+      />
+      <Input
+        id="password"
+        name="password"
+        type="password"
+        label="Password"
+        value={password}
+        validation={passwordValidation}
+        showError={showError}
+        disabled={isLoading}
+        className={passwordClassName}
+        onChange={onPasswordChange}
+      />
     </>
   );
 };

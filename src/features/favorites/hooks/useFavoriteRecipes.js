@@ -19,14 +19,10 @@ export const useFavoriteRecipes = () => {
   const dispatch = useDispatch();
   const isAuthenticated = useSelector(selectAuthIsLoggedIn);
   const favoriteIds = useSelector(selectFavoriteIds);
-  const dailyLimitIsReached = useSelector(
-    selectRecipeDailyLimitIsReached,
-  );
+  const dailyLimitIsReached = useSelector(selectRecipeDailyLimitIsReached);
   const filter = useMemo(
     () =>
-      favoriteIds.length
-        ? createFavoriteRecipesFilter(favoriteIds)
-        : undefined,
+      favoriteIds.length ? createFavoriteRecipesFilter(favoriteIds) : undefined,
     [favoriteIds],
   );
 

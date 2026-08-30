@@ -9,9 +9,7 @@ import { useGetDataFromHttp } from "./useGetDataFromHttp";
 export const useRecipeDetails = (recipeId) => {
   const [recipe, setRecipe] = useState({});
   const [isLoading, setIsLoading] = useState(true);
-  const dailyLimitIsReached = useSelector(
-    selectRecipeDailyLimitIsReached,
-  );
+  const dailyLimitIsReached = useSelector(selectRecipeDailyLimitIsReached);
   const throwAsyncError = useThrowAsyncError();
   const getDataFromHttp = useGetDataFromHttp();
 
@@ -24,10 +22,7 @@ export const useRecipeDetails = (recipeId) => {
         setIsLoading(false);
       };
 
-      getDataFromHttp(
-        { url: buildRecipeDetailsUrl(recipeId) },
-        setRecipeData,
-      );
+      getDataFromHttp({ url: buildRecipeDetailsUrl(recipeId) }, setRecipeData);
       return;
     }
 
@@ -43,12 +38,7 @@ export const useRecipeDetails = (recipeId) => {
     };
 
     loadRecipeFromFirestore();
-  }, [
-    dailyLimitIsReached,
-    getDataFromHttp,
-    recipeId,
-    throwAsyncError,
-  ]);
+  }, [dailyLimitIsReached, getDataFromHttp, recipeId, throwAsyncError]);
 
   return { isLoading, recipe };
 };

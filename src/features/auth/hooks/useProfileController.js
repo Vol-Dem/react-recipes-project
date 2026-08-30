@@ -1,13 +1,7 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  changeUserName,
-  changeUserPassword,
-} from "../store/authThunks";
-import {
-  selectAuthErrorMessage,
-  selectAuthUser,
-} from "../store/authSelectors";
+import { changeUserName, changeUserPassword } from "../store/authThunks";
+import { selectAuthErrorMessage, selectAuthUser } from "../store/authSelectors";
 
 export const useProfileController = () => {
   const [editing, setEditing] = useState({

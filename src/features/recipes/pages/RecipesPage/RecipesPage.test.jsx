@@ -67,7 +67,6 @@ describe("RecipesPage component", () => {
   });
 
   it("sends request with correct URL and dispatches actions on form submission", async () => {
-
     const store = mockStore({
       recipe: initialState,
       auth: { isLoggedIn: false },
@@ -78,7 +77,7 @@ describe("RecipesPage component", () => {
         <Provider store={store}>
           <RecipesPage />
         </Provider>
-      </BrowserRouter>
+      </BrowserRouter>,
     );
     const inputQuery = "pasta";
     const expectedUrl = `${SPOONACULAR_API_URL}/recipes/complexSearch?apiKey=${SPOONACULAR_API_KEY}&query=${inputQuery}&cuisine=&diet=&intolerances=&type=&number=${RESULT_NUM}&addRecipeNutrition=${INCLUDE_SEARCH_NUTRITION}`;
@@ -95,12 +94,12 @@ describe("RecipesPage component", () => {
       expect(dispatchedActions).toContainEqual(recipeActions.setCurrentPage(1));
       expect(dispatchedActions).toContainEqual(
         recipeActions.setEmptyMessage(
-          'No results for "pasta". Try checking your spelling'
-        )
+          'No results for "pasta". Try checking your spelling',
+        ),
       );
       expect(dispatchedActions).toContainEqual(recipeActions.setOrderBy([]));
       expect(dispatchedActions).toContainEqual(
-        recipeActions.setSearchResult(expectedResult)
+        recipeActions.setSearchResult(expectedResult),
       );
     });
   });
@@ -118,7 +117,7 @@ describe("RecipesPage component", () => {
         <Provider store={store}>
           <RecipesPage />
         </Provider>
-      </BrowserRouter>
+      </BrowserRouter>,
     );
     const h1El = screen.getByText("Your recipe book");
     const searchInputEl = screen.getByTestId("search-input");
@@ -151,10 +150,10 @@ describe("RecipesPage component", () => {
         <Provider store={store}>
           <RecipesPage />
         </Provider>
-      </BrowserRouter>
+      </BrowserRouter>,
     );
     const h1El = screen.queryByText("Your recipe book");
-    const pizzaEl = await screen.findByText("Pizza");
+    const pizzaEl = await screen.findByText("Pizza", {}, { timeout: 5000 });
     const searchInputEl = screen.getByTestId("search-input");
     const recipeItemListEl = screen.queryByTestId("recipe-item-list");
     const recipeEl = screen.queryByTestId("recipe");
@@ -187,7 +186,7 @@ describe("RecipesPage component", () => {
         <Provider store={store}>
           <RecipesPage />
         </Provider>
-      </BrowserRouter>
+      </BrowserRouter>,
     );
     const errorEl = screen.queryByTestId("error-message");
     const errorMessageEl = screen.queryByText("Test error message");

@@ -23,14 +23,10 @@ const ResetPasswordForm = ({
       validation={validation}
       showError={showError}
       disabled={isLoading}
-      autoFocus={true}
       className={`${classes.input} ${emailIsInvalid ? classes.invalid : ""}`}
       onChange={onEmailChange}
     />
-    <AuthMessages
-      errorMessage={errorMessage}
-      successMessage={successMessage}
-    />
+    <AuthMessages errorMessage={errorMessage} successMessage={successMessage} />
     <Button>Reset password</Button>
   </form>
 );

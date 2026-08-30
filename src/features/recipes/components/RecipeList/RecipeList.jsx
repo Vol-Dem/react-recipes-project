@@ -11,12 +11,7 @@ import {
 } from "../../constants/animations";
 import { useRecipeListController } from "../../hooks/useRecipeListController";
 
-const RecipeList = ({
-  title,
-  firebaseRef,
-  filter,
-  skeletonItemsAmount,
-}) => {
+const RecipeList = ({ title, firebaseRef, filter, skeletonItemsAmount }) => {
   const { actions, list } = useRecipeListController({
     firebaseRef,
     filter,

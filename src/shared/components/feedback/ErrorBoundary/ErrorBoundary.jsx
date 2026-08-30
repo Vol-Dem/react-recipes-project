@@ -1,5 +1,8 @@
 import { Component } from "react";
-import { getErrorPresentation, reportError } from "../../../utils/errorPresentation";
+import {
+  getErrorPresentation,
+  reportError,
+} from "../../../utils/errorPresentation";
 import ErrorFallback from "../ErrorFallback/ErrorFallback";
 
 class ErrorBoundary extends Component {

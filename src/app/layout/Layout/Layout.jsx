@@ -12,7 +12,7 @@ import AuthForm from "../../../features/auth/components/AuthForm/AuthForm";
 import { Suspense } from "react";
 import Spinner from "../../../shared/components/ui/Spinner/Spinner";
 import Notification from "../../../features/notifications/components/Notification/Notification";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import {
   selectAuthFormIsOpen,
   selectAuthIsLoggedIn,

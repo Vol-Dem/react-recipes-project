@@ -17,7 +17,12 @@ const Tags = ({ onTagClick }) => {
       aria-label="Quick recipe filters"
     >
       {QUICK_FILTERS.map(({ label, query, type }) => (
-        <Tag key={`${type}-${query}`} query={query} type={type} onClick={onTagClick}>
+        <Tag
+          key={`${type}-${query}`}
+          query={query}
+          type={type}
+          onClick={onTagClick}
+        >
           {label}
         </Tag>
       ))}

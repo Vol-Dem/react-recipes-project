@@ -20,10 +20,9 @@ describe("usePageSetup", () => {
   });
 
   it("updates the title without repeating the mount scroll", () => {
-    const { rerender } = renderHook(
-      ({ title }) => usePageSetup(title),
-      { initialProps: { title: "Privacy Policy" } },
-    );
+    const { rerender } = renderHook(({ title }) => usePageSetup(title), {
+      initialProps: { title: "Privacy Policy" },
+    });
 
     rerender({ title: "Terms of Service" });
 

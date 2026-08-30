@@ -11,11 +11,7 @@ import {
   selectRecipesPerPage,
 } from "../store/recipesSelectors";
 import { recipeActions } from "../store/recipesSlice";
-import {
-  nextPage,
-  prevPage,
-  sortRecipes,
-} from "../store/recipesThunks";
+import { nextPage, prevPage, sortRecipes } from "../store/recipesThunks";
 
 export const useRecipeListController = ({ firebaseRef, filter }) => {
   const dispatch = useDispatch();

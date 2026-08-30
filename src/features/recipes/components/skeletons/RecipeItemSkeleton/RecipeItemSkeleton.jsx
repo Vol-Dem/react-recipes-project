@@ -1,4 +1,3 @@
-import React from "react";
 import Skeleton from "../Skeleton/Skeleton";
 import classes from "./RecipeItemSkeleton.module.scss";
 import ClockIcon from "../../../../../assets/icons/clock.svg?react";
