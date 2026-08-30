@@ -18,4 +18,30 @@ describe("LinkA", () => {
 
     expect(onClick).toHaveBeenCalledOnce();
   });
+
+  it("avoids smooth scrolling when reduced motion is preferred", async () => {
+    const user = userEvent.setup();
+    const originalMatchMedia = window.matchMedia;
+    window.scrollTo.mockClear();
+    window.matchMedia = vi.fn().mockReturnValue({ matches: true });
+
+    render(
+      <>
+        <header id="header"></header>
+        <LinkA href="#section" smoothScroll>
+          Jump to section
+        </LinkA>
+        <div id="section">Section</div>
+      </>,
+    );
+
+    await user.click(screen.getByRole("link", { name: "Jump to section" }));
+
+    expect(window.scrollTo).toHaveBeenCalledWith({
+      top: -10,
+      behavior: "auto",
+    });
+
+    window.matchMedia = originalMatchMedia;
+  });
 });

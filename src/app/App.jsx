@@ -2,6 +2,7 @@ import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { initAuth } from "../features/auth/store/authThunks";
 import AppRouter from "./AppRouter";
+import { MotionConfig } from "framer-motion";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -12,7 +13,11 @@ const App = () => {
     return unsubscribe;
   }, [dispatch]);
 
-  return <AppRouter />;
+  return (
+    <MotionConfig reducedMotion="user">
+      <AppRouter />
+    </MotionConfig>
+  );
 };
 
 export default App;

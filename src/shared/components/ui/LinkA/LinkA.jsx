@@ -15,7 +15,14 @@ const LinkA = ({
     const scrollTarget = document.querySelector(href);
     const headerHeight = document.querySelector("#header").offsetHeight;
     const distToTop = window.scrollY + scrollTarget.getBoundingClientRect().top;
-    window.scrollTo({ top: distToTop - headerHeight - 10, behavior: "smooth" });
+    const reducedMotionIsPreferred = window.matchMedia?.(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    window.scrollTo({
+      top: distToTop - headerHeight - 10,
+      behavior: reducedMotionIsPreferred ? "auto" : "smooth",
+    });
   };
 
   const clickHandler = (event) => {
