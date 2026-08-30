@@ -39,7 +39,6 @@ const router = createBrowserRouter([
           {
             path: "recipe/:recipeId",
             element: <RecipeDetailsPage title="Recipe Details" />,
-            errorElement: <ErrorPage title="Error" />,
           },
         ],
       },
@@ -57,12 +56,10 @@ const router = createBrowserRouter([
           {
             path: "favorites",
             element: <FavoritesPage title="Favorites" />,
-            errorElement: <ErrorPage title="Error" />,
             children: [
               {
                 path: "recipe/:recipeId",
                 element: <RecipeDetailsPage title="Recipe Details" />,
-                errorElement: <ErrorPage title="Error" />,
               },
             ],
           },
@@ -71,12 +68,10 @@ const router = createBrowserRouter([
       {
         path: "tos",
         element: <TermsOfServicePage title="Terms of Service" />,
-        errorElement: <ErrorPage title="Error" />,
       },
       {
         path: "privacy",
         element: <PrivacyPolicyPage title="Privacy Policy" />,
-        errorElement: <ErrorPage title="Error" />,
       },
       {
         path: "*",

@@ -1,28 +1,26 @@
 import { Component } from "react";
-import ErrorMessage from "../ErrorMessage/ErrorMessage";
-import Card from "../../ui/Card/Card";
+import { getErrorPresentation, reportError } from "../../../utils/errorPresentation";
+import ErrorFallback from "../ErrorFallback/ErrorFallback";
 
 class ErrorBoundary extends Component {
   constructor(props) {
     super(props);
-    this.state = { hasError: false, errorMessage: "" };
+    this.state = { hasError: false };
   }
 
-  static getDerivedStateFromError(error) {
-    return { hasError: true, errorMessage: error.message };
+  static getDerivedStateFromError() {
+    return { hasError: true };
   }
+
   componentDidCatch(error, info) {
-    console.log(error, info.componentStack);
+    reportError(error, { componentStack: info.componentStack });
   }
 
   render() {
     if (this.state.hasError) {
-      return (
-        <Card>
-          <ErrorMessage>{this.state.errorMessage}</ErrorMessage>
-        </Card>
-      );
+      return <ErrorFallback {...getErrorPresentation()} />;
     }
+
     return this.props.children;
   }
 }
