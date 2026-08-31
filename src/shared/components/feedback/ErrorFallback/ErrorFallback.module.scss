@@ -28,7 +28,7 @@
 
   &__link {
     padding: 1rem;
-    color: color.adjust(var.$color-primary, $lightness: -10%);
+    color: var.$color-text-orange;
     font-family: inherit;
     font-size: 2.8rem;
     font-weight: 600;
@@ -36,7 +36,7 @@
     transition: color 0.3s;
 
     &:hover {
-      color: color.adjust(var.$color-primary, $lightness: -15%);
+      color: color.adjust(var.$color-text-orange, $lightness: -5%);
     }
   }
 
@@ -44,7 +44,7 @@
     padding: 1.2rem 2.4rem;
     border: 0;
     border-radius: 10px;
-    color: var.$color-text-light;
+    color: var.$color-on-primary;
     background-color: var.$color-primary;
     box-shadow: 0 0.2rem 0.5rem rgba(var.$color-black, 0.2);
     font: inherit;

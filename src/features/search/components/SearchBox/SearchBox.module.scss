@@ -47,7 +47,7 @@
     align-items: center;
     justify-content: center;
     gap: 0.8rem;
-    color: var.$color-text-light;
+    color: var.$color-on-primary;
     background-color: var.$color-primary;
     border: none;
     width: 25rem;
@@ -105,7 +105,7 @@
     align-items: center;
     background: transparent;
     border: none;
-    color: color.adjust(var.$color-primary, $lightness: -10%);
+    color: var.$color-text-orange;
     height: 100%;
     font-size: 2.8rem;
     font-weight: 700;
@@ -114,7 +114,7 @@
     transition: color 0.3s;
 
     &:hover {
-      color: color.adjust(var.$color-primary, $lightness: -20%);
+      color: color.adjust(var.$color-text-orange, $lightness: -5%);
     }
 
     svg {

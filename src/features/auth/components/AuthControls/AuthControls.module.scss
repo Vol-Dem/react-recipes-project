@@ -10,11 +10,11 @@
 .auth__btn--switch {
   background-color: transparent;
   border: none;
-  color: color.adjust(var.$color-primary, $lightness: -10%);
+  color: var.$color-text-orange;
   font-weight: 600;
 
   &:hover {
-    color: color.adjust(var.$color-primary, $lightness: -15%);
+    color: color.adjust(var.$color-text-orange, $lightness: -5%);
   }
 
   &:disabled {

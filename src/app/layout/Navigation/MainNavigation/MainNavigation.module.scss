@@ -24,17 +24,17 @@
 
     & a:hover,
     & a:active {
-      color: var.$color-text-orange;
+      color: var.$color-primary;
     }
 
     & a.active {
-      color: var.$color-text-orange;
+      color: var.$color-primary;
       padding-bottom: 0.5rem;
     }
   }
   &__indicator {
     width: 100%;
-    border: 1px solid var.$color-text-orange;
+    border: 1px solid var.$color-primary;
   }
 }
 
