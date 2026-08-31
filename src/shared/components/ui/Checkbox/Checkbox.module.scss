@@ -33,12 +33,15 @@
   transform: scale(1);
 }
 
-.label {
+.field {
   display: flex;
   gap: 1.4rem;
   text-transform: capitalize;
   font-size: 1.6rem;
   align-items: center;
   line-height: 1.2;
+}
+
+.label {
   cursor: pointer;
 }
