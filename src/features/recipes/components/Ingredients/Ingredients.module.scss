@@ -27,6 +27,18 @@
 
   &-name {
     position: relative;
+
+    &-button {
+      padding: 0;
+      border: 0;
+      background: none;
+      color: inherit;
+      font: inherit;
+      line-height: inherit;
+      white-space: inherit;
+      cursor: help;
+    }
+
     &-fullname {
       position: absolute;
       background-color: var.$color-background-muted;
@@ -38,7 +50,9 @@
       border-radius: 10rem;
       transform: translateY(-110%);
       box-shadow: 0rem 0.4rem 1rem rgba(var.$color-black, 0.1);
-      transition: all 0.3s;
+      transition: opacity 0.3s;
+      pointer-events: none;
+
       &::before {
         content: "";
         position: absolute;
@@ -50,7 +64,8 @@
         height: 1rem;
       }
     }
-    &:hover &-fullname {
+
+    &--visible &-fullname {
       z-index: 3523;
       opacity: 1;
     }
