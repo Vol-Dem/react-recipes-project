@@ -2,6 +2,6 @@ import RecipeDetailsPage from "../../../../features/recipes/pages/RecipeDetailsP
 
 export const metadata = { title: "Recipe Details" };
 
-const FavoriteRecipeRoute = () => <RecipeDetailsPage />;
+const RecipeRoute = () => <RecipeDetailsPage />;
 
-export default FavoriteRecipeRoute;
+export default RecipeRoute;
