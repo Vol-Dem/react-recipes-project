@@ -1,12 +1,15 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
-import { MemoryRouter } from "react-router-dom";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import authSlice, {
   authActions,
 } from "../../../../features/auth/store/authSlice";
 import UserNavigation from "./UserNavigation";
+
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({ replace: vi.fn() }),
+}));
 
 describe("UserNavigation", () => {
   it("opens from its button and returns focus after Escape", async () => {
@@ -24,9 +27,7 @@ describe("UserNavigation", () => {
 
     render(
       <Provider store={store}>
-        <MemoryRouter>
-          <UserNavigation />
-        </MemoryRouter>
+        <UserNavigation />
       </Provider>,
     );
 

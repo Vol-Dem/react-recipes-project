@@ -1,3 +1,5 @@
+"use client";
+
 import Card from "../../../../shared/components/ui/Card/Card";
 import classes from "./Profile.module.scss";
 import ErrorMessage from "../../../../shared/components/feedback/ErrorMessage/ErrorMessage";
@@ -10,11 +12,8 @@ import {
 import EditableProfileField from "../../components/EditableProfileField/EditableProfileField";
 import ProfileField from "../../components/ProfileField/ProfileField";
 import { useProfileController } from "../../hooks/useProfileController";
-import { usePageSetup } from "../../../../shared/hooks/usePageSetup";
 
-const Profile = ({ title }) => {
-  usePageSetup(title);
-
+const Profile = () => {
   const { actions, editing, status, user } = useProfileController();
 
   return (

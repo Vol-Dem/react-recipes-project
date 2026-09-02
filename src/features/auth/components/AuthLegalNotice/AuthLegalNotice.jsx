@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import classes from "./AuthLegalNotice.module.scss";
 
 const AuthLegalNotice = () => (
@@ -6,7 +6,7 @@ const AuthLegalNotice = () => (
     By continuing, you are indicating that you accept our
     <Link
       className={classes.link}
-      to="/tos"
+      href="/tos"
       target="_blank"
       rel="noopener noreferrer"
     >
@@ -15,7 +15,7 @@ const AuthLegalNotice = () => (
     and{" "}
     <Link
       className={classes.link}
-      to="/privacy"
+      href="/privacy"
       target="_blank"
       rel="noopener noreferrer"
     >

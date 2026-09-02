@@ -31,7 +31,7 @@ vi.mock("react-redux", () => ({
   useDispatch: () => hookMocks.dispatch,
   useSelector: (selector) => selector(hookMocks.state),
 }));
-vi.mock("react-router-dom", () => ({
+vi.mock("next/navigation", () => ({
   useParams: () => ({ recipeId: "1" }),
 }));
 vi.mock("../store/recipesThunks", () => ({

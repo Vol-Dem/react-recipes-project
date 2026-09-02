@@ -9,7 +9,8 @@
 /coverage
 
 # production
-/dist
+/.next
+/out
 
 # misc
 .env

@@ -10,22 +10,21 @@
     "axios": "^1.19.0",
     "firebase": "^12.18.0",
     "framer-motion": "^13.1.1",
+    "next": "^16.3.4",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-redux": "^9.3.0",
-    "react-router-dom": "^7.18.2",
     "sass": "^1.103.1"
   },
   "scripts": {
-    "dev": "vite",
-    "start": "vite",
-    "build": "vite build",
+    "dev": "next dev --webpack",
+    "start": "next start",
+    "build": "next build --webpack",
     "format": "prettier . --write",
     "format:check": "prettier . --check",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "preview": "vite preview",
-    "test": "vitest"
+    "test": "vitest --config vitest.config.mjs"
   },
   "browserslist": {
     "production": [
@@ -41,8 +40,10 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.5",
+    "@svgr/webpack": "^8.1.0",
     "@vitejs/plugin-react": "^6.1.0",
     "eslint": "^9.39.5",
+    "eslint-config-next": "^16.3.4",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-react": "^7.37.5",

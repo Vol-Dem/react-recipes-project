@@ -1,6 +1,8 @@
 build
 coverage
 dist
+.next
+out
 node_modules
 package-lock.json
 public

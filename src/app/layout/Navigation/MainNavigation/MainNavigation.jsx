@@ -1,21 +1,25 @@
-import { NavLink, useLocation } from "react-router-dom";
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import classes from "./MainNavigation.module.scss";
 import { useSelector } from "react-redux";
 import { motion } from "framer-motion";
 import { selectAuthIsLoggedIn } from "../../../../features/auth/store/authSelectors";
 
-const NavItem = ({ children, className, to }) => {
-  const location = useLocation();
+const NavItem = ({ children, className, href }) => {
+  const pathname = usePathname();
 
-  const activePath =
-    to === location.pathname ||
-    to === location.pathname.slice(1, location.pathname.length);
+  const isActive =
+    href === "/"
+      ? pathname === "/" || pathname.startsWith("/recipe/")
+      : pathname === href || pathname.startsWith(`${href}/`);
   return (
     <li>
-      <NavLink to={to} className={(nav) => (nav.isActive ? className : "")}>
+      <Link href={href} className={isActive ? className : ""}>
         {children}
-      </NavLink>
-      {activePath && (
+      </Link>
+      {isActive && (
         <motion.div
           aria-hidden="true"
           layoutId="nav-indicator"
@@ -32,20 +36,20 @@ const MainNavigation = () => {
   return (
     <nav className={classes.nav}>
       <ul className={classes["nav__links"]}>
-        <NavItem to="/" className={classes.active}>
+        <NavItem href="/" className={classes.active}>
           Home
         </NavItem>
         {isAuth && (
           <>
-            <NavItem to="profile" className={classes.active}>
+            <NavItem href="/profile" className={classes.active}>
               Profile
             </NavItem>
-            <NavItem to="favorites" className={classes.active}>
+            <NavItem href="/favorites" className={classes.active}>
               Favorites
             </NavItem>
           </>
         )}
-        <NavItem to="about" className={classes.active}>
+        <NavItem href="/about" className={classes.active}>
           About
         </NavItem>
       </ul>

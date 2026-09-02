@@ -11,9 +11,9 @@ const hookMocks = vi.hoisted(() => ({
 vi.mock("react-redux", () => ({
   useDispatch: () => hookMocks.dispatch,
 }));
-vi.mock("react-router-dom", () => ({
-  useMatches: () => [{}, { pathname: "/recipes" }],
-  useNavigate: () => hookMocks.navigate,
+vi.mock("next/navigation", () => ({
+  usePathname: () => "/recipe/42",
+  useRouter: () => ({ replace: hookMocks.navigate }),
 }));
 vi.mock("../../../shared/hooks/useThrowAsyncError", () => ({
   useThrowAsyncError: () => hookMocks.throwAsyncError,
@@ -66,7 +66,7 @@ describe("useGetDataFromHttp", () => {
 
     await act(() => result.current({ url: "/recipes/42" }, vi.fn()));
 
-    expect(hookMocks.navigate).toHaveBeenCalledWith("/recipes");
+    expect(hookMocks.navigate).toHaveBeenCalledWith("/");
     expect(
       hookMocks.dispatch.mock.calls.map(([action]) => action.type),
     ).toEqual([

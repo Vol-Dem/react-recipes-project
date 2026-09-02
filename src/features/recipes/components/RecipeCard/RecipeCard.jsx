@@ -4,7 +4,8 @@ import CaloriesIcon from "../../../../assets/icons/calories.svg?react";
 import StarIcon from "../../../../assets/icons/star.svg?react";
 import FoodIcon from "../../../../assets/icons/food.svg?react";
 import { useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
+import Link from "next/link";
+import { useParams, usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import Image from "../../../../shared/components/ui/Image/Image";
 import {
@@ -17,6 +18,7 @@ import { selectIsFavorite } from "../../../favorites/store/favoritesSelectors";
 
 const RecipeCard = ({ recipe }) => {
   const { recipeId } = useParams();
+  const pathname = usePathname();
   const recipeIsOpen = !!recipeId;
   const isAuth = useSelector(selectAuthIsLoggedIn);
   const isFavorite = useSelector((state) => selectIsFavorite(state, recipe.id));
@@ -26,6 +28,9 @@ const RecipeCard = ({ recipe }) => {
   const cardClassName = `${classes["recipe-card"]} ${classSide} ${
     isActive ? classes.active : ""
   }`;
+  const recipeBasePath = pathname.startsWith("/favorites")
+    ? "/favorites/recipe"
+    : "/recipe";
 
   return (
     <motion.li
@@ -37,7 +42,10 @@ const RecipeCard = ({ recipe }) => {
       whileHover={RECIPE_CARD_HOVER_ANIMATION}
       className={cardClassName}
     >
-      <Link to={`recipe/${recipe.id}`} className={classes["recipe-card__link"]}>
+      <Link
+        href={`${recipeBasePath}/${recipe.id}`}
+        className={classes["recipe-card__link"]}
+      >
         <div className={classes["recipe-card__img-container"]}>
           {isFav && (
             <StarIcon

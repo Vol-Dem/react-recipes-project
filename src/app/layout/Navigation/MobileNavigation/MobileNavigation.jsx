@@ -1,6 +1,8 @@
+"use client";
+
 import { useEffect, useRef, useState } from "react";
 import classes from "./MobileNavigation.module.scss";
-import { NavLink } from "react-router-dom";
+import Link from "next/link";
 import { useSelector } from "react-redux";
 import { selectAuthIsLoggedIn } from "../../../../features/auth/store/authSelectors";
 
@@ -73,28 +75,28 @@ const MobileNavigation = () => {
         >
           <ul className={classes["mobile-nav__links"]}>
             <li>
-              <NavLink to="/" onClick={closeNavigation}>
+              <Link href="/" onClick={closeNavigation}>
                 Home
-              </NavLink>
+              </Link>
             </li>
             {isAuth && (
               <>
                 <li>
-                  <NavLink to="profile" onClick={closeNavigation}>
+                  <Link href="/profile" onClick={closeNavigation}>
                     Profile
-                  </NavLink>
+                  </Link>
                 </li>
                 <li>
-                  <NavLink to="favorites" onClick={closeNavigation}>
+                  <Link href="/favorites" onClick={closeNavigation}>
                     Favorites
-                  </NavLink>
+                  </Link>
                 </li>
               </>
             )}
             <li>
-              <NavLink to="about" onClick={closeNavigation}>
+              <Link href="/about" onClick={closeNavigation}>
                 About
-              </NavLink>
+              </Link>
             </li>
           </ul>
         </nav>

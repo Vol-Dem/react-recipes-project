@@ -1,7 +1,10 @@
+"use client";
+
 import classes from "./UserNavigation.module.scss";
 import UserIcon from "../../../../assets/icons/user.svg?react";
 import ButtonSecondary from "../../../../shared/components/ui/ButtonSecondary/ButtonSecondary";
-import { NavLink, useNavigate } from "react-router-dom";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutUser } from "../../../../features/auth/store/authThunks";
 import { selectAuthDisplayName } from "../../../../features/auth/store/authSelectors";
@@ -13,7 +16,7 @@ const UserNavigation = () => {
   const containerRef = useRef(null);
   const triggerRef = useRef(null);
 
-  const navigate = useNavigate();
+  const router = useRouter();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -56,7 +59,7 @@ const UserNavigation = () => {
   const logout = () => {
     closeMenu();
     dispatch(logoutUser());
-    navigate("/", { replace: true });
+    router.replace("/");
   };
 
   return (
@@ -87,14 +90,14 @@ const UserNavigation = () => {
       >
         <ul className={classes["nav-profile__links"]}>
           <li className={classes["nav-profile__link"]}>
-            <NavLink to="profile" onClick={closeMenu}>
+            <Link href="/profile" onClick={closeMenu}>
               Profile
-            </NavLink>
+            </Link>
           </li>
           <li className={classes["nav-profile__link"]}>
-            <NavLink to="favorites" onClick={closeMenu}>
+            <Link href="/favorites" onClick={closeMenu}>
               Favorites
-            </NavLink>
+            </Link>
           </li>
         </ul>
         <ButtonSecondary type="button" onClick={logout}>

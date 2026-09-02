@@ -1,17 +1,16 @@
+"use client";
+
 import RecipeList from "../../../recipes/components/RecipeList/RecipeList";
 import classes from "./FavoritesPage.module.scss";
-import { Outlet, useParams } from "react-router-dom";
+import { useParams } from "next/navigation";
 import { motion } from "framer-motion";
 import {
   ANIMATION_SLIDE_IN,
   ANIMATION_SLIDE_IN_INITIAL,
 } from "../../../../shared/constants";
 import { useFavoriteRecipes } from "../../hooks/useFavoriteRecipes";
-import { usePageSetup } from "../../../../shared/hooks/usePageSetup";
 
-const FavoritesPage = ({ title }) => {
-  usePageSetup(title);
-
+const FavoritesPage = ({ children }) => {
   const { favoriteIds, favoritesReference, filter, isAuthenticated } =
     useFavoriteRecipes();
   const { recipeId } = useParams();
@@ -34,7 +33,7 @@ const FavoritesPage = ({ title }) => {
         />
       )}
 
-      <Outlet />
+      {children}
     </motion.div>
   );
 };

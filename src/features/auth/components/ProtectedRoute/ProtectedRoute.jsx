@@ -1,24 +1,31 @@
-import { Navigate, Outlet, useLocation } from "react-router-dom";
+"use client";
+
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import {
   selectAuthIsInitialized,
   selectAuthIsLoggedIn,
 } from "../../store/authSelectors";
 
-const ProtectedRoute = () => {
+const ProtectedRoute = ({ children }) => {
   const isInitialized = useSelector(selectAuthIsInitialized);
   const isLoggedIn = useSelector(selectAuthIsLoggedIn);
-  const location = useLocation();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isInitialized && !isLoggedIn) {
+      router.replace("/");
+    }
+  }, [isInitialized, isLoggedIn, router]);
 
   if (!isInitialized) {
     return null;
   }
 
-  if (!isLoggedIn) {
-    return <Navigate to="/" replace state={{ from: location }} />;
-  }
+  if (!isLoggedIn) return null;
 
-  return <Outlet />;
+  return children;
 };
 
 export default ProtectedRoute;

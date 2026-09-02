@@ -1,7 +1,9 @@
+"use client";
+
 import Header from "../Header/Header";
 import classes from "./Layout.module.scss";
 import MainNavigation from "../Navigation/MainNavigation/MainNavigation";
-import { Link, Outlet } from "react-router-dom";
+import Link from "next/link";
 import MobileNavigation from "../Navigation/MobileNavigation/MobileNavigation";
 import { useSelector, useDispatch } from "react-redux";
 import { authActions } from "../../../features/auth/store/authSlice";
@@ -9,8 +11,6 @@ import UserNavigation from "../Navigation/UserNavigation/UserNavigation";
 import Button from "../../../shared/components/ui/Button/Button";
 import Modal from "../../../shared/components/ui/Modal/Modal";
 import AuthForm from "../../../features/auth/components/AuthForm/AuthForm";
-import { Suspense } from "react";
-import Spinner from "../../../shared/components/ui/Spinner/Spinner";
 import Notification from "../../../features/notifications/components/Notification/Notification";
 import { AnimatePresence } from "framer-motion";
 import {
@@ -24,7 +24,7 @@ import {
   selectNotificationTitle,
 } from "../../../features/notifications/store/notificationSelectors";
 
-const Layout = () => {
+const Layout = ({ children }) => {
   const isAuth = useSelector(selectAuthIsLoggedIn);
   const authIsOpen = useSelector(selectAuthFormIsOpen);
   const notificationIsShown = useSelector(selectNotificationIsShown);
@@ -41,26 +41,24 @@ const Layout = () => {
   };
 
   return (
-    <div className={classes.wrapper}>
-      <Header>
-        <MobileNavigation />
-        <Link to="/" className={classes.logo}>
-          Your recipe book
-        </Link>
-        <MainNavigation />
-        {isAuth && <UserNavigation />}
-        {!isAuth && (
-          <Button onClick={openAuth} className={classes["btn-auth"]}>
-            Sign In
-          </Button>
-        )}
-      </Header>
+    <div id="app-root">
+      <div className={classes.wrapper}>
+        <Header>
+          <MobileNavigation />
+          <Link href="/" className={classes.logo}>
+            Your recipe book
+          </Link>
+          <MainNavigation />
+          {isAuth && <UserNavigation />}
+          {!isAuth && (
+            <Button onClick={openAuth} className={classes["btn-auth"]}>
+              Sign In
+            </Button>
+          )}
+        </Header>
 
-      <main>
-        <Suspense fallback={<Spinner />}>
-          <Outlet />
-        </Suspense>
-      </main>
+        <main>{children}</main>
+      </div>
       <AnimatePresence>
         {authIsOpen && (
           <Modal labelledBy="auth-dialog-title" onClose={closeAuth}>

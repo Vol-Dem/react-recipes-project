@@ -40,7 +40,7 @@ const Modal = ({
 
   useEffect(() => {
     const previouslyFocusedElement = document.activeElement;
-    const appRoot = document.getElementById("root");
+    const appRoot = document.getElementById("app-root");
     const appWasInert = appRoot?.inert;
 
     if (appRoot) {

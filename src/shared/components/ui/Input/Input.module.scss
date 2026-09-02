@@ -1,6 +1,6 @@
 @use "../../../../styles/_variables.scss" as var;
 
-.input {
+:where(.input) {
   border-radius: 20px;
   padding: 0.5rem;
   width: 100%;

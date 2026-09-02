@@ -2,7 +2,7 @@ import Skeleton from "../Skeleton/Skeleton";
 import classes from "./RecipeItemSkeleton.module.scss";
 import ClockIcon from "../../../../../assets/icons/clock.svg?react";
 import CaloriesIcon from "../../../../../assets/icons/calories.svg?react";
-import { useParams } from "react-router-dom";
+import { useParams } from "next/navigation";
 
 const RecipeItemSkeleton = () => {
   const { recipeId } = useParams();

@@ -1,56 +1,27 @@
 import js from "@eslint/js";
 import eslintConfigPrettier from "eslint-config-prettier";
-import jsxA11y from "eslint-plugin-jsx-a11y";
-import react from "eslint-plugin-react";
-import reactHooks from "eslint-plugin-react-hooks";
 import globals from "globals";
+import nextVitals from "eslint-config-next/core-web-vitals";
 
 const sourceFiles = ["**/*.{js,jsx}"];
 
-export default [
+const eslintConfig = [
   {
     ignores: ["build/**", "coverage/**", "dist/**", "node_modules/**"],
   },
   js.configs.recommended,
+  ...nextVitals,
   {
-    ...react.configs.flat.recommended,
     files: sourceFiles,
-    languageOptions: {
-      ...react.configs.flat.recommended.languageOptions,
-      ecmaVersion: "latest",
-      globals: globals.browser,
-      parserOptions: {
-        ...react.configs.flat.recommended.languageOptions.parserOptions,
-        ecmaFeatures: { jsx: true },
-      },
-      sourceType: "module",
-    },
     rules: {
-      ...react.configs.flat.recommended.rules,
-      ...react.configs.flat["jsx-runtime"].rules,
       "no-unused-vars": [
         "error",
         { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
       ],
       "react/prop-types": "off",
+      "react-hooks/set-state-in-effect": "off",
+      "@next/next/no-img-element": "off",
     },
-    settings: {
-      react: { version: "detect" },
-    },
-  },
-  {
-    files: sourceFiles,
-    plugins: {
-      "react-hooks": reactHooks,
-    },
-    rules: {
-      "react-hooks/exhaustive-deps": "warn",
-      "react-hooks/rules-of-hooks": "error",
-    },
-  },
-  {
-    ...jsxA11y.flatConfigs.recommended,
-    files: ["**/*.jsx"],
   },
   {
     files: [
@@ -68,3 +39,5 @@ export default [
   },
   eslintConfigPrettier,
 ];
+
+export default eslintConfig;

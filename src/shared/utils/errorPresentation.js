@@ -50,7 +50,7 @@ export const getErrorPresentation = (error) => {
 };
 
 export const reportError = (error, context) => {
-  if (import.meta.env.DEV) {
+  if (process.env.NODE_ENV !== "production") {
     console.error("Application error", error, context);
   }
 };

@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import Checkbox from "../../../../shared/components/ui/Checkbox/Checkbox";
 import classes from "./AuthAgreement.module.scss";
 
@@ -15,7 +15,7 @@ const AuthAgreement = ({ checked, onChange }) => (
       I have read and agree to the{" "}
       <Link
         className={classes.link}
-        to="/tos"
+        href="/tos"
         target="_blank"
         rel="noopener noreferrer"
       >
@@ -24,7 +24,7 @@ const AuthAgreement = ({ checked, onChange }) => (
       and{" "}
       <Link
         className={classes.link}
-        to="/privacy"
+        href="/privacy"
         target="_blank"
         rel="noopener noreferrer"
       >

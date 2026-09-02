@@ -1,3 +1,5 @@
+"use client";
+
 import classes from "./RecipesPage.module.scss";
 import SearchBox from "../../../search/components/SearchBox/SearchBox";
 import Logo from "../../../../app/layout/Logo/Logo";
@@ -8,7 +10,7 @@ import {
 import { lazy } from "react";
 import { Suspense } from "react";
 import Spinner from "../../../../shared/components/ui/Spinner/Spinner";
-import { Outlet, useParams } from "react-router-dom";
+import { useParams } from "next/navigation";
 import { useSelector } from "react-redux";
 import ErrorMessage from "../../../../shared/components/feedback/ErrorMessage/ErrorMessage";
 import Card from "../../../../shared/components/ui/Card/Card";
@@ -20,13 +22,10 @@ import {
   selectRecipeErrorMessage,
   selectRecipeIsLoading,
 } from "../../store/recipesSelectors";
-import { usePageSetup } from "../../../../shared/hooks/usePageSetup";
 
 const RecipeList = lazy(() => import("../../components/RecipeList/RecipeList"));
 
-const RecipesPage = ({ title }) => {
-  usePageSetup(title);
-
+const RecipesPage = ({ children }) => {
   const { recipeReference, searchTitle, submitSearch } = useRecipeSearch();
   const { recipeId } = useParams();
   const recipeIsOpen = !!recipeId;
@@ -70,7 +69,7 @@ const RecipesPage = ({ title }) => {
           </Suspense>
         )}
 
-        <Outlet />
+        {children}
       </section>
     </motion.div>
   );

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/navigation";
 import {
   createRecipeResultsLimit,
   getRecipesCollection,
@@ -14,7 +14,7 @@ const recipeReference = getRecipesCollection();
 export const useRecipeSearch = () => {
   const [searchTitle, setSearchTitle] = useState("Search result");
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const submitSearch = useCallback(
     (searchFilters) => {
@@ -44,9 +44,9 @@ export const useRecipeSearch = () => {
           resultsAmount: createRecipeResultsLimit(),
         }),
       );
-      navigate("/");
+      router.push("/");
     },
-    [dispatch, navigate],
+    [dispatch, router],
   );
 
   useEffect(

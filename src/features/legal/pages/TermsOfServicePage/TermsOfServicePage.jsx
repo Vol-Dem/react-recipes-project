@@ -1,3 +1,5 @@
+"use client";
+
 import classes from "./TermsOfServicePage.module.scss";
 import Card from "../../../../shared/components/ui/Card/Card";
 import { motion } from "framer-motion";
@@ -5,11 +7,8 @@ import {
   ANIMATION_SLIDE_IN,
   ANIMATION_SLIDE_IN_INITIAL,
 } from "../../../../shared/constants";
-import { usePageSetup } from "../../../../shared/hooks/usePageSetup";
 
-const TermsOfServicePage = ({ title }) => {
-  usePageSetup(title);
-
+const TermsOfServicePage = () => {
   return (
     <motion.div
       initial={ANIMATION_SLIDE_IN_INITIAL}

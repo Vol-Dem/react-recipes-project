@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { useDispatch } from "react-redux";
-import { useMatches, useNavigate } from "react-router-dom";
+import { usePathname, useRouter } from "next/navigation";
 import { TIMEOUT_SEC } from "../../../shared/constants";
 import { useThrowAsyncError } from "../../../shared/hooks/useThrowAsyncError";
 import { timeout } from "../../../shared/utils/async";
@@ -16,8 +16,8 @@ import {
 export const useGetDataFromHttp = () => {
   const throwAsyncError = useThrowAsyncError();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const matches = useMatches();
+  const pathname = usePathname();
+  const router = useRouter();
 
   const getData = useCallback(
     async ({ url, method, headers, body }, transformData) => {
@@ -38,7 +38,9 @@ export const useGetDataFromHttp = () => {
         if (isRecipeApiLimitError(responseError)) {
           dispatch(recipeActions.setDailyLimitIsReached());
           dispatch(recipeActions.resetRecipes());
-          navigate(`${matches[1].pathname}`);
+          router.replace(
+            pathname.startsWith("/favorites") ? "/favorites" : "/",
+          );
           dispatch(getRecipes({}));
           dispatch(
             notificationActions.showNotification(
@@ -57,7 +59,7 @@ export const useGetDataFromHttp = () => {
         throwAsyncError(new Error(getRecipeErrorMessage(error)));
       }
     },
-    [throwAsyncError, dispatch, navigate, matches],
+    [throwAsyncError, dispatch, pathname, router],
   );
   return getData;
 };

@@ -1,4 +1,7 @@
+"use client";
+
 import classes from "./ErrorFallback.module.scss";
+import Link from "next/link";
 
 const reloadPage = () => window.location.reload();
 
@@ -20,9 +23,9 @@ const ErrorFallback = ({
       </h1>
       <p className={classes["error-page__message"]}>{message}</p>
       <div className={classes["error-page__actions"]}>
-        <a href="/" className={classes["error-page__link"]}>
+        <Link href="/" className={classes["error-page__link"]}>
           Home
-        </a>
+        </Link>
         {showReloadButton && (
           <button
             type="button"

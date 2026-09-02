@@ -1,6 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
-import { MemoryRouter } from "react-router-dom";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import authSlice from "../../../../features/auth/store/authSlice";
@@ -13,9 +12,7 @@ describe("MobileNavigation", () => {
 
     render(
       <Provider store={store}>
-        <MemoryRouter>
-          <MobileNavigation />
-        </MemoryRouter>
+        <MobileNavigation />
       </Provider>,
     );
 

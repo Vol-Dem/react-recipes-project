@@ -1,7 +1,6 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import RecipesPage from "./RecipesPage";
-import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
 import { thunk } from "redux-thunk";
@@ -15,6 +14,11 @@ import {
 } from "../../../../shared/constants";
 
 vi.mock("axios");
+vi.mock("next/navigation", () => ({
+  useParams: () => ({}),
+  usePathname: () => "/",
+  useRouter: () => ({ push: vi.fn(), replace: vi.fn() }),
+}));
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
 const expectedResult = [
@@ -73,11 +77,9 @@ describe("RecipesPage component", () => {
       fav: { favList: [] },
     });
     render(
-      <BrowserRouter>
-        <Provider store={store}>
-          <RecipesPage />
-        </Provider>
-      </BrowserRouter>,
+      <Provider store={store}>
+        <RecipesPage />
+      </Provider>,
     );
     const inputQuery = "pasta";
     const expectedUrl = `${SPOONACULAR_API_URL}/recipes/complexSearch?apiKey=${SPOONACULAR_API_KEY}&query=${inputQuery}&cuisine=&diet=&intolerances=&type=&number=${RESULT_NUM}&addRecipeNutrition=${INCLUDE_SEARCH_NUTRITION}`;
@@ -113,11 +115,9 @@ describe("RecipesPage component", () => {
       fav: { favList: [] },
     });
     render(
-      <BrowserRouter>
-        <Provider store={store}>
-          <RecipesPage />
-        </Provider>
-      </BrowserRouter>,
+      <Provider store={store}>
+        <RecipesPage />
+      </Provider>,
     );
     const h1El = screen.getByText("Your recipe book");
     const searchInputEl = screen.getByTestId("search-input");
@@ -146,11 +146,9 @@ describe("RecipesPage component", () => {
       fav: { favList: [] },
     });
     render(
-      <BrowserRouter>
-        <Provider store={store}>
-          <RecipesPage />
-        </Provider>
-      </BrowserRouter>,
+      <Provider store={store}>
+        <RecipesPage />
+      </Provider>,
     );
     const h1El = screen.queryByText("Your recipe book");
     const pizzaEl = await screen.findByText("Pizza", {}, { timeout: 5000 });
@@ -182,11 +180,9 @@ describe("RecipesPage component", () => {
       fav: { favList: [] },
     });
     render(
-      <BrowserRouter>
-        <Provider store={store}>
-          <RecipesPage />
-        </Provider>
-      </BrowserRouter>,
+      <Provider store={store}>
+        <RecipesPage />
+      </Provider>,
     );
     const errorEl = screen.queryByTestId("error-message");
     const errorMessageEl = screen.queryByText("Test error message");
