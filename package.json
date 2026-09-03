@@ -2,6 +2,7 @@
   "name": "recipe-search-app",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "dependencies": {
     "@reduxjs/toolkit": "^2.12.0",
     "@testing-library/jest-dom": "^6.9.1",
@@ -24,7 +25,8 @@
     "format:check": "prettier . --check",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "test": "vitest --config vitest.config.mjs"
+    "test": "vitest --config vitest.config.ts",
+    "typecheck": "tsc --noEmit"
   },
   "browserslist": {
     "production": [
@@ -41,6 +43,10 @@
   "devDependencies": {
     "@eslint/js": "^9.39.5",
     "@svgr/webpack": "^8.1.0",
+    "@types/node": "^26.4.1",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "@types/redux-mock-store": "^1.5.0",
     "@vitejs/plugin-react": "^6.1.0",
     "eslint": "^9.39.5",
     "eslint-config-next": "^16.3.4",
@@ -53,6 +59,8 @@
     "prettier": "^3.9.6",
     "redux-mock-store": "^1.5.5",
     "redux-thunk": "^3.1.0",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.69.0",
     "vite": "^8.2.2",
     "vite-plugin-svgr": "^5.2.0",
     "vitest": "^4.0.0"
