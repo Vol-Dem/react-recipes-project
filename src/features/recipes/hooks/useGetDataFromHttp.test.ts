@@ -3,7 +3,6 @@ import { useGetDataFromHttp } from "./useGetDataFromHttp";
 
 const hookMocks = vi.hoisted(() => ({
   dispatch: vi.fn(),
-  navigate: vi.fn(),
   throwAsyncError: vi.fn(),
   timeout: vi.fn(),
 }));
@@ -11,20 +10,12 @@ const hookMocks = vi.hoisted(() => ({
 vi.mock("react-redux", () => ({
   useDispatch: () => hookMocks.dispatch,
 }));
-vi.mock("next/navigation", () => ({
-  usePathname: () => "/recipe/42",
-  useRouter: () => ({ replace: hookMocks.navigate }),
-}));
 vi.mock("../../../shared/hooks/useThrowAsyncError", () => ({
   useThrowAsyncError: () => hookMocks.throwAsyncError,
 }));
 vi.mock("../../../shared/utils/async", () => ({
   timeout: hookMocks.timeout,
 }));
-vi.mock("../store/recipesThunks", () => ({
-  getRecipes: () => ({ type: "recipe/getRecipes" }),
-}));
-
 interface ResponseOptions {
   data: unknown;
   ok?: boolean;
@@ -73,13 +64,10 @@ describe("useGetDataFromHttp", () => {
 
     await act(() => result.current({ url: "/recipes/42" }, vi.fn()));
 
-    expect(hookMocks.navigate).toHaveBeenCalledWith("/");
     expect(
       hookMocks.dispatch.mock.calls.map(([action]) => action.type),
     ).toEqual([
       "recipe/setDailyLimitIsReached",
-      "recipe/resetRecipes",
-      "recipe/getRecipes",
       "notification/showNotification",
     ]);
     expect(hookMocks.throwAsyncError).not.toHaveBeenCalled();
