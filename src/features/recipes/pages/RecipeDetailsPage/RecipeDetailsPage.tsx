@@ -1,12 +1,10 @@
 "use client";
 
-import classes from "./RecipeDetailsPage.module.scss";
-import Card from "../../../../shared/components/ui/Card/Card";
-import RecipeHeadSkeleton from "../../components/skeletons/RecipeHeadSkeleton/RecipeHeadSkeleton";
-import RecipeDescriptionSkeleton from "../../components/skeletons/RecipeDescriptionSkeleton/RecipeDescriptionSkeleton";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import RecipeDetails from "../../components/RecipeDetails/RecipeDetails";
+import RecipeDetailsLoading from "../../components/RecipeDetailsLoading/RecipeDetailsLoading";
+import RecipeDetailsShell from "../../components/RecipeDetailsShell/RecipeDetailsShell";
 import RecipeHeader from "../../components/RecipeHeader/RecipeHeader";
 import { useRecipeDetails } from "../../hooks/useRecipeDetails";
 import { selectHasRecipesPerPage } from "../../store/recipesSelectors";
@@ -22,27 +20,24 @@ const RecipeDetailsPage = () => {
     router.push(pathname.startsWith("/favorites") ? "/favorites" : "/");
   };
 
+  if (recipeIsLoading || !recipe) {
+    return <RecipeDetailsLoading />;
+  }
+
   return (
-    <Card>
-      <article data-testid="recipe">
-        <div className={classes["recipe__head-container"]}>
-          {recipeIsLoading && <RecipeHeadSkeleton />}
-          {!recipeIsLoading && recipe && (
-            <RecipeHeader
-              diets={recipe.diets}
-              image={recipe.image}
-              showBackButton={hasRecipesPerPage}
-              title={recipe.title}
-              onBack={backToListHandler}
-            />
-          )}
-        </div>
-        {recipeIsLoading && <RecipeDescriptionSkeleton />}
-        {!recipeIsLoading && recipe && (
-          <RecipeDetails recipe={recipe} recipeId={recipeId} />
-        )}
-      </article>
-    </Card>
+    <RecipeDetailsShell
+      header={
+        <RecipeHeader
+          diets={recipe.diets}
+          image={recipe.image}
+          showBackButton={hasRecipesPerPage}
+          title={recipe.title}
+          onBack={backToListHandler}
+        />
+      }
+    >
+      <RecipeDetails recipe={recipe} recipeId={recipeId} />
+    </RecipeDetailsShell>
   );
 };
 
