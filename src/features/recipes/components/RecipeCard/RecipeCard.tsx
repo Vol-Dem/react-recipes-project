@@ -18,7 +18,12 @@ import { selectIsFavorite } from "../../../favorites/store/favoritesSelectors";
 import type { RootState } from "../../../../app/store";
 import type { RecipeSummary } from "../../types";
 
-const RecipeCard = ({ recipe }: { recipe: RecipeSummary }) => {
+interface RecipeCardProps {
+  recipe: RecipeSummary;
+  shouldPrefetch: boolean;
+}
+
+const RecipeCard = ({ recipe, shouldPrefetch }: RecipeCardProps) => {
   const { recipeId } = useParams<{ recipeId?: string }>() ?? {};
   const pathname = usePathname() ?? "";
   const recipeIsOpen = !!recipeId;
@@ -48,6 +53,7 @@ const RecipeCard = ({ recipe }: { recipe: RecipeSummary }) => {
     >
       <Link
         href={`${recipeBasePath}/${recipe.id}`}
+        prefetch={shouldPrefetch ? null : false}
         className={classes["recipe-card__link"]}
       >
         <div className={classes["recipe-card__img-container"]}>

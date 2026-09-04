@@ -30,7 +30,13 @@ const RecipeCards = ({
   return (
     <motion.ul variants={RECIPE_CARDS_VARIANTS} className={cardClassName}>
       {!isLoading &&
-        recipes.map((recipe) => <RecipeCard key={recipe.id} recipe={recipe} />)}
+        recipes.map((recipe, index) => (
+          <RecipeCard
+            key={recipe.id}
+            recipe={recipe}
+            shouldPrefetch={index === 0}
+          />
+        ))}
       {isLoading && skeletons}
     </motion.ul>
   );
