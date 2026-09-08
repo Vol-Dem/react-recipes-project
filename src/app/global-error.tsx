@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { grandHotel, raleway } from "./fonts";
 import ErrorFallback from "../shared/components/feedback/ErrorFallback/ErrorFallback";
 import {
   getErrorPresentation,
@@ -17,7 +18,7 @@ const GlobalError = ({ error }: GlobalErrorProps) => {
   }, [error]);
 
   return (
-    <html lang="en">
+    <html lang="en" className={`${raleway.variable} ${grandHotel.variable}`}>
       <body>
         <ErrorFallback {...getErrorPresentation(error)} />
       </body>

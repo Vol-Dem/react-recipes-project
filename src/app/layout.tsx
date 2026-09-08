@@ -1,6 +1,7 @@
 import "../styles/global.scss";
 import AppLayout from "./layout/Layout/Layout";
 import AppProviders from "./providers";
+import { grandHotel, raleway } from "./fonts";
 import type { Metadata } from "next";
 import type { PropsWithChildren } from "react";
 
@@ -14,7 +15,7 @@ export const metadata: Metadata = {
 };
 
 const RootLayout = ({ children }: PropsWithChildren) => (
-  <html lang="en">
+  <html lang="en" className={`${raleway.variable} ${grandHotel.variable}`}>
     <body>
       <AppProviders>
         <AppLayout>{children}</AppLayout>

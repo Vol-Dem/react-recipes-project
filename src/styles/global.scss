@@ -13,7 +13,7 @@ html {
 }
 
 body {
-  font-family: "Raleway", sans-serif;
+  font-family: var.$font-family-primary;
   line-height: 1;
   font-weight: 400;
   font-size: 1.4rem;
@@ -41,37 +41,6 @@ body:before {
 #app-root {
   min-height: 100vh;
   overflow: hidden;
-}
-
-@font-face {
-  font-family: "Grand Hotel";
-  src: url("../assets/fonts/GrandHotel/GrandHotel-Regular.ttf")
-    format("truetype");
-  font-weight: 500;
-}
-
-@font-face {
-  font-family: "Raleway";
-  src: url("../assets/fonts/Raleway/Raleway-Regular.ttf") format("truetype");
-  font-weight: 400;
-}
-
-@font-face {
-  font-family: "Raleway";
-  src: url("../assets/fonts/Raleway/Raleway-Medium.ttf") format("truetype");
-  font-weight: 500;
-}
-
-@font-face {
-  font-family: "Raleway";
-  src: url("../assets/fonts/Raleway/Raleway-SemiBold.ttf") format("truetype");
-  font-weight: 600;
-}
-
-@font-face {
-  font-family: "Raleway";
-  src: url("../assets/fonts/Raleway/Raleway-Bold.ttf") format("truetype");
-  font-weight: 700;
 }
 
 @media (max-width: 1024px) {

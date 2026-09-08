@@ -24,8 +24,8 @@ $color-overlay-dark: rgba(38, 50, 55, 0.7);
 $color-overlay-primary: rgba(48, 71, 80, 0.7);
 $color-shimmer: rgba(153, 153, 153, 0.1);
 
-$font-family-primary: "Raleway", sans-serif;
-$font-family-secondary: "Grand Hotel", sans-serif;
+$font-family-primary: var(--font-raleway, sans-serif);
+$font-family-secondary: var(--font-grand-hotel, sans-serif);
 
 $box-shadow: 0rem 0rem 1rem rgba($color-black, 0.4);
 
