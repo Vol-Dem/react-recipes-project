@@ -1,19 +1,10 @@
-"use client";
-
 import classes from "./TermsOfServicePage.module.scss";
 import Card from "../../../../shared/components/ui/Card/Card";
-import { motion } from "framer-motion";
-import {
-  ANIMATION_SLIDE_IN,
-  ANIMATION_SLIDE_IN_INITIAL,
-} from "../../../../shared/constants";
+import AnimatedPage from "../../../../shared/components/layout/AnimatedPage/AnimatedPage";
 
 const TermsOfServicePage = () => {
   return (
-    <motion.div
-      initial={ANIMATION_SLIDE_IN_INITIAL}
-      animate={ANIMATION_SLIDE_IN}
-    >
+    <AnimatedPage>
       <Card className={classes.tos}>
         <h1 className={classes["tos__h1"]}>Terms of Service</h1>
         <p className={classes["tos__text"]}>
@@ -116,7 +107,7 @@ const TermsOfServicePage = () => {
           the exclusive jurisdiction of the courts in Website.
         </p>
       </Card>
-    </motion.div>
+    </AnimatedPage>
   );
 };
 

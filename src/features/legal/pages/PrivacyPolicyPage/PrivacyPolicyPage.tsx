@@ -1,19 +1,10 @@
-"use client";
-
 import classes from "./PrivacyPolicyPage.module.scss";
 import Card from "../../../../shared/components/ui/Card/Card";
-import { motion } from "framer-motion";
-import {
-  ANIMATION_SLIDE_IN,
-  ANIMATION_SLIDE_IN_INITIAL,
-} from "../../../../shared/constants";
+import AnimatedPage from "../../../../shared/components/layout/AnimatedPage/AnimatedPage";
 
 const PrivacyPolicyPage = () => {
   return (
-    <motion.div
-      initial={ANIMATION_SLIDE_IN_INITIAL}
-      animate={ANIMATION_SLIDE_IN}
-    >
+    <AnimatedPage>
       <Card className={classes.policy}>
         <h1 className={classes["policy__h1"]}>
           <strong>Privacy Policy</strong>
@@ -138,7 +129,7 @@ const PrivacyPolicyPage = () => {
           If you have questions about this Privacy Policy, contact us.
         </p>
       </Card>
-    </motion.div>
+    </AnimatedPage>
   );
 };
 

@@ -1,19 +1,10 @@
-"use client";
-
 import Card from "../../../../shared/components/ui/Card/Card";
-import {
-  ANIMATION_SLIDE_IN,
-  ANIMATION_SLIDE_IN_INITIAL,
-} from "../../../../shared/constants";
+import AnimatedPage from "../../../../shared/components/layout/AnimatedPage/AnimatedPage";
 import classes from "./AboutPage.module.scss";
-import { motion } from "framer-motion";
 
 const AboutPage = () => {
   return (
-    <motion.div
-      initial={ANIMATION_SLIDE_IN_INITIAL}
-      animate={ANIMATION_SLIDE_IN}
-    >
+    <AnimatedPage>
       <Card>
         <h1 className={classes["about__h1"]}>
           Welcome to the “Your recipe book”!
@@ -57,7 +48,7 @@ const AboutPage = () => {
         </p>
         <p className={classes["about__text"]}>Happy cooking!</p>
       </Card>
-    </motion.div>
+    </AnimatedPage>
   );
 };
 
