@@ -3,6 +3,11 @@ import ButtonBack from "../../../../shared/components/ui/ButtonBack/ButtonBack";
 import Image from "../../../../shared/components/ui/Image/Image";
 import Diets from "../Diets/Diets";
 import classes from "./RecipeHeader.module.scss";
+import {
+  RECIPE_HEADER_IMAGE_HEIGHT,
+  RECIPE_HEADER_IMAGE_SIZES,
+  RECIPE_HEADER_IMAGE_WIDTH,
+} from "../../constants/images";
 
 interface RecipeHeaderProps {
   diets: string[];
@@ -28,6 +33,10 @@ const RecipeHeader = ({
         <Image
           src={image}
           alt={title}
+          width={RECIPE_HEADER_IMAGE_WIDTH}
+          height={RECIPE_HEADER_IMAGE_HEIGHT}
+          sizes={RECIPE_HEADER_IMAGE_SIZES}
+          loading="eager"
           fallback={
             <FoodImg
               className={classes["default-img"]}

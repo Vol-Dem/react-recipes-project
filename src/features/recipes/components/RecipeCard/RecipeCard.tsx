@@ -17,6 +17,12 @@ import { selectAuthIsLoggedIn } from "../../../auth/store/authSelectors";
 import { selectIsFavorite } from "../../../favorites/store/favoritesSelectors";
 import type { RootState } from "../../../../app/store";
 import type { RecipeSummary } from "../../types";
+import {
+  RECIPE_CARD_IMAGE_HEIGHT,
+  RECIPE_CARD_IMAGE_SIZES,
+  RECIPE_CARD_IMAGE_WIDTH,
+  RECIPE_SIDEBAR_IMAGE_SIZES,
+} from "../../constants/images";
 
 interface RecipeCardProps {
   recipe: RecipeSummary;
@@ -68,6 +74,13 @@ const RecipeCard = ({ recipe, shouldPrefetch }: RecipeCardProps) => {
             className={classes["recipe-card__img"]}
             src={recipe.img}
             alt={recipe.title}
+            width={RECIPE_CARD_IMAGE_WIDTH}
+            height={RECIPE_CARD_IMAGE_HEIGHT}
+            sizes={
+              recipeIsOpen
+                ? RECIPE_SIDEBAR_IMAGE_SIZES
+                : RECIPE_CARD_IMAGE_SIZES
+            }
             fallback={
               <FoodIcon
                 className={classes.food}

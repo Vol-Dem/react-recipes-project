@@ -1,11 +1,10 @@
-import { useState, type ImgHTMLAttributes, type ReactNode } from "react";
+"use client";
+
+import NextImage, { type ImageProps as NextImageProps } from "next/image";
+import { useState, type ReactNode } from "react";
 import classes from "./Image.module.scss";
 
-interface ImageProps extends Omit<
-  ImgHTMLAttributes<HTMLImageElement>,
-  "alt" | "src"
-> {
-  alt: string;
+interface ImageProps extends Omit<NextImageProps, "src"> {
   fallback?: ReactNode;
   src: string;
 }
@@ -31,7 +30,7 @@ const Image = ({
 
   return (
     <>
-      <img
+      <NextImage
         {...imageProps}
         alt={alt}
         className={imageClassName}
