@@ -1,7 +1,16 @@
 import { useState, type ChangeEvent } from "react";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { useSelector } from "react-redux";
-import { useParams, useRouter } from "next/navigation";
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
+import {
+  buildRecipeSearchHref,
+  parseRecipeSearchParams,
+} from "../utils/recipeNavigation";
 import { buildRecipeSearchUrl } from "../api/recipeUrls";
 import {
   fallbackRecipeSearchQueryOptions,
@@ -21,19 +30,27 @@ import type {
 } from "../types";
 
 export const useRecipeSearch = () => {
-  const [filters, setFilters] = useState<SearchFilters | null>(null);
-  const [order, setOrder] = useState<RecipeSort>({});
+  const searchParams = useSearchParams();
+  const { filters, errorMessage: searchError } =
+    parseRecipeSearchParams(searchParams);
+  const requestUrl = buildRecipeSearchUrl(filters ?? {});
+  const identity = filters ? requestUrl : searchError;
   const dailyLimitIsReached = useSelector(selectRecipeDailyLimitIsReached);
-  const [pagination, setPagination] = useState({
+  const [view, setView] = useState({
+    identity,
+    order: {} as RecipeSort,
     fallback: dailyLimitIsReached,
     page: 1,
   });
   // Switching data sources starts at page one, not at an API-only page number.
   const currentPage =
-    pagination.fallback === dailyLimitIsReached ? pagination.page : 1;
+    view.identity === identity && view.fallback === dailyLimitIsReached
+      ? view.page
+      : 1;
+  const order = view.identity === identity ? view.order : {};
   const router = useRouter();
+  const pathname = usePathname();
   const { recipeId } = useParams<{ recipeId?: string }>() ?? {};
-  const requestUrl = buildRecipeSearchUrl(filters ?? {});
   const hasSearch = filters !== null;
   const apiQuery = useQuery({
     ...recipeSearchQueryOptions(requestUrl),
@@ -51,9 +68,10 @@ export const useRecipeSearch = () => {
     hasSearch &&
     (activeQuery.isPending || activeQuery.isFetching || shouldUseFallback);
   const errorMessage =
-    hasSearch && activeQuery.error && !shouldUseFallback
+    searchError ||
+    (hasSearch && activeQuery.error && !shouldUseFallback
       ? getRecipeErrorMessage(activeQuery.error)
-      : "";
+      : "");
 
   const apiRecipes = apiQuery.data ?? [];
   const sortedRecipes =
@@ -69,7 +87,7 @@ export const useRecipeSearch = () => {
   const recipes = hasSearch ? (page?.recipes ?? []) : [];
   const isLastPage = page?.isLastPage ?? true;
   const setPage = (page: number) =>
-    setPagination({ fallback: dailyLimitIsReached, page });
+    setView({ identity, order, fallback: dailyLimitIsReached, page });
 
   const submitSearch = (searchFilters: SearchFilters) => {
     // A repeated failed search is the existing retry interaction.
@@ -79,10 +97,22 @@ export const useRecipeSearch = () => {
     ) {
       if (!dailyLimitIsReached || !order.sortBy) void activeQuery.refetch();
     }
-    setFilters(searchFilters);
-    setOrder({});
-    setPage(1);
-    router.push("/");
+    const href = buildRecipeSearchHref(searchFilters);
+    setView({
+      identity: buildRecipeSearchUrl(searchFilters),
+      order: {},
+      fallback: dailyLimitIsReached,
+      page: 1,
+    });
+    if (pathname === "/") {
+      // Next synchronizes its search-param hook with native history. Query-only
+      // changes do not need a server navigation or another RSC request.
+      if (`${window.location.pathname}${window.location.search}` !== href) {
+        window.history.pushState(null, "", href);
+      }
+    } else {
+      router.push(href, { scroll: false });
+    }
   };
 
   const goToNextPage = () => {
@@ -102,18 +132,23 @@ export const useRecipeSearch = () => {
 
   const sortBySelection = (event: ChangeEvent<HTMLSelectElement>) => {
     const [sortBy, sortType] = event.target.value.split("-");
-    setOrder(
+    const nextOrder: RecipeSort =
       sortBy && sortType
         ? {
             sortBy: sortBy as RecipeSortKey,
             sortType: sortType as RecipeSortDirection,
           }
-        : {},
-    );
-    setPage(1);
+        : {};
+    setView({
+      identity,
+      order: nextOrder,
+      fallback: dailyLimitIsReached,
+      page: 1,
+    });
   };
 
   const controller: RecipeListController = {
+    listHref: filters ? buildRecipeSearchHref(filters) : "/",
     actions: { goToNextPage, goToPreviousPage, sortBySelection },
     list: {
       currentPage,

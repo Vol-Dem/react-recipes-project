@@ -13,11 +13,14 @@ import { fetchRecipesFromApi } from "../../api/recipeApi";
 import { useRecipeList } from "../../context/RecipeListContext";
 import RecipesPage from "./RecipesPage";
 import { FavoritesProvider } from "../../../favorites/context/FavoritesContext";
+import { mockNextHistory } from "../../../../test-utils/nextHistory";
 
 vi.mock("../../api/recipeApi");
 const mockedFetchRecipes = vi.mocked(fetchRecipesFromApi);
 const { params } = vi.hoisted(() => ({ params: {} as { recipeId?: string } }));
-vi.mock("next/navigation", () => ({
+vi.mock("next/navigation", async () => ({
+  useSearchParams: (await import("../../../../test-utils/nextHistory"))
+    .useTestSearchParams,
   useParams: () => params,
   usePathname: () => "/",
   useRouter: () => ({ push: vi.fn(), replace: vi.fn() }),
@@ -59,6 +62,7 @@ describe("RecipesPage component", () => {
     fireEvent.click(screen.getByTestId("search-submit"));
   };
   beforeEach(() => {
+    mockNextHistory();
     delete params.recipeId;
     mockedFetchRecipes.mockResolvedValue({
       results: [
@@ -79,6 +83,7 @@ describe("RecipesPage component", () => {
     cleanup();
     clients.splice(0).forEach((client) => client.clear());
     vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   it("renders the initial search page without making a request", () => {
@@ -103,6 +108,10 @@ describe("RecipesPage component", () => {
     expect(store.getState().recipe).not.toHaveProperty("searchResult");
     expect(screen.getByTestId("recipe-item-list")).toBeInTheDocument();
     expect(screen.getByTestId("list-context")).toHaveTextContent("true:false");
+    expect(screen.getByRole("link", { name: /Pizza/ })).toHaveAttribute(
+      "href",
+      "/recipe/152?query=pasta",
+    );
     await waitFor(() =>
       expect(screen.queryByText("Your recipe book")).not.toBeInTheDocument(),
     );

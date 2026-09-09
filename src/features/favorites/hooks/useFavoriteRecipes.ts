@@ -109,6 +109,7 @@ export const useFavoriteRecipes = () => {
   };
 
   const controller: RecipeListController = {
+    listHref: "/favorites",
     actions: { goToNextPage, goToPreviousPage, sortBySelection },
     list: {
       currentPage,

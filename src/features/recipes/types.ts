@@ -76,6 +76,7 @@ export interface RecipeState {
 }
 
 export interface RecipeListController {
+  listHref: string;
   list: {
     currentPage: number;
     emptyMessage: string;

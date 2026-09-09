@@ -5,7 +5,9 @@ import StarIcon from "../../../../assets/icons/star.svg?react";
 import FoodIcon from "../../../../assets/icons/food.svg?react";
 import { useSelector } from "react-redux";
 import Link from "next/link";
-import { useParams, usePathname } from "next/navigation";
+import { useParams } from "next/navigation";
+import { useRecipeList } from "../../context/RecipeListContext";
+import { buildRecipeDetailsHref } from "../../utils/recipeNavigation";
 import { motion } from "framer-motion";
 import Image from "../../../../shared/components/ui/Image/Image";
 import {
@@ -30,7 +32,7 @@ interface RecipeCardProps {
 
 const RecipeCard = ({ recipe, shouldPrefetch }: RecipeCardProps) => {
   const { recipeId } = useParams<{ recipeId?: string }>() ?? {};
-  const pathname = usePathname() ?? "";
+  const { listHref } = useRecipeList();
   const recipeIsOpen = !!recipeId;
   const isAuth = useSelector(selectAuthIsLoggedIn);
   const { favoriteIds } = useFavorites();
@@ -41,9 +43,6 @@ const RecipeCard = ({ recipe, shouldPrefetch }: RecipeCardProps) => {
   const cardClassName = `${classes["recipe-card"]} ${classSide} ${
     isActive ? classes.active : ""
   }`;
-  const recipeBasePath = pathname.startsWith("/favorites")
-    ? "/favorites/recipe"
-    : "/recipe";
 
   return (
     <motion.li
@@ -56,7 +55,7 @@ const RecipeCard = ({ recipe, shouldPrefetch }: RecipeCardProps) => {
       className={cardClassName}
     >
       <Link
-        href={`${recipeBasePath}/${recipe.id}`}
+        href={buildRecipeDetailsHref(recipe.id, listHref)}
         prefetch={shouldPrefetch ? null : false}
         className={classes["recipe-card__link"]}
       >

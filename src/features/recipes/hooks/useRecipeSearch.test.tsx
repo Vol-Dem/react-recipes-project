@@ -9,12 +9,16 @@ import { RecipeHttpError } from "../api/requestRecipeJson";
 import { recipeActions } from "../store/recipesSlice";
 import { mapRecipe } from "../utils/mapRecipe";
 import { useRecipeSearch } from "./useRecipeSearch";
+import { mockNextHistory } from "../../../test-utils/nextHistory";
 import type { RecipeApiItem, RecipeApiResponse } from "../types";
 import type { QueryDocumentSnapshot } from "firebase/firestore";
 import type { ChangeEvent, PropsWithChildren } from "react";
 
 const { push } = vi.hoisted(() => ({ push: vi.fn() }));
-vi.mock("next/navigation", () => ({
+vi.mock("next/navigation", async () => ({
+  useSearchParams: (await import("../../../test-utils/nextHistory"))
+    .useTestSearchParams,
+  usePathname: () => window.location.pathname,
   useRouter: () => ({ push }),
   useParams: () => ({}),
 }));
@@ -61,6 +65,7 @@ describe("useRecipeSearch", () => {
   };
   beforeEach(() => {
     vi.resetAllMocks();
+    mockNextHistory();
     vi.mocked(fetchRecipesFromApi).mockResolvedValue({ results: recipes });
   });
   afterEach(() => {
@@ -85,7 +90,8 @@ describe("useRecipeSearch", () => {
       expect.any(AbortSignal),
     );
     expect(store.getState().recipe).not.toHaveProperty("searchResult");
-    expect(push).toHaveBeenCalledWith("/");
+    expect(window.location.search).toBe("?query=pasta&diet=vegan");
+    expect(push).not.toHaveBeenCalled();
   });
 
   it("paginates and sorts API data without extra requests", async () => {
@@ -114,6 +120,102 @@ describe("useRecipeSearch", () => {
     );
     expect(result.current.controller.list.recipes[0].id).toBe(1);
     expect(fetchRecipesFromApi).toHaveBeenCalledOnce();
+  });
+
+  it("loads a bookmarked search and restores it after remounting", async () => {
+    window.history.replaceState(null, "", "/?query=pasta&diet=vegan");
+    const first = renderHook(useRecipeSearch, { wrapper: setup().wrapper });
+    await waitFor(() =>
+      expect(first.result.current.controller.list.hasRecipes).toBe(true),
+    );
+    first.unmount();
+    const { result } = renderHook(useRecipeSearch, {
+      wrapper: setup().wrapper,
+    });
+    await waitFor(() =>
+      expect(result.current.controller.list.hasRecipes).toBe(true),
+    );
+    expect(result.current.searchTitle).toBe("pasta");
+    expect(result.current.controller.list.options).toEqual(["vegan"]);
+    expect(result.current.controller.listHref).toBe("/?query=pasta&diet=vegan");
+    expect(fetchRecipesFromApi).toHaveBeenCalledTimes(2);
+  });
+
+  it("restores searches on back/forward navigation and returns to the landing page", async () => {
+    const { result } = renderHook(useRecipeSearch, {
+      wrapper: setup().wrapper,
+    });
+    act(() => result.current.submitSearch({ query: "pasta" }));
+    await waitFor(() =>
+      expect(result.current.controller.list.hasRecipes).toBe(true),
+    );
+    act(() => result.current.submitSearch({ query: "soup", diet: "vegan" }));
+    await waitFor(() =>
+      expect(result.current.controller.list.isLoading).toBe(false),
+    );
+    await act(async () => {
+      window.history.back();
+      await new Promise<void>((resolve) =>
+        window.addEventListener("popstate", () => resolve(), { once: true }),
+      );
+    });
+    expect(result.current.searchTitle).toBe("pasta");
+    expect(result.current.controller.list.options).toEqual([]);
+    expect(result.current.controller.list.currentPage).toBe(1);
+    await act(async () => {
+      window.history.forward();
+      await new Promise<void>((resolve) =>
+        window.addEventListener("popstate", () => resolve(), { once: true }),
+      );
+    });
+    expect(result.current.searchTitle).toBe("soup");
+    expect(result.current.controller.list.options).toEqual(["vegan"]);
+    expect(fetchRecipesFromApi).toHaveBeenCalledTimes(2);
+    act(() => window.history.pushState(null, "", "/"));
+    expect(result.current.controller.list.hasRecipes).toBe(false);
+    expect(result.current.controller.list.isLoading).toBe(false);
+    expect(result.current.controller.list.emptyMessage).toBe("");
+  });
+
+  it("rejects malformed URL filters without fetching and allows a valid replacement", async () => {
+    window.history.replaceState(null, "", "/?query=pasta&maxReadyTime=-1");
+    const { result } = renderHook(useRecipeSearch, {
+      wrapper: setup().wrapper,
+    });
+    expect(result.current.controller.list.errorMessage).toContain(
+      "Invalid search filters",
+    );
+    expect(fetchRecipesFromApi).not.toHaveBeenCalled();
+    expect(fetchRecipePage).not.toHaveBeenCalled();
+    act(() => result.current.submitSearch({ query: "soup" }));
+    await waitFor(() =>
+      expect(result.current.controller.list.hasRecipes).toBe(true),
+    );
+    expect(result.current.controller.list.errorMessage).toBe("");
+  });
+
+  it("runs an intentional empty search without duplicating history entries", async () => {
+    const { result } = renderHook(useRecipeSearch, {
+      wrapper: setup().wrapper,
+    });
+    act(() => result.current.submitSearch({}));
+    await waitFor(() =>
+      expect(result.current.controller.list.hasRecipes).toBe(true),
+    );
+    act(() => result.current.submitSearch({ query: "" }));
+    expect(window.location.search).toBe("?query=");
+    expect(window.history.pushState).toHaveBeenCalledOnce();
+    expect(fetchRecipesFromApi).toHaveBeenCalledOnce();
+  });
+
+  it("navigates from recipe details to a newly submitted search", () => {
+    window.history.replaceState(null, "", "/recipe/152");
+    const { result } = renderHook(useRecipeSearch, {
+      wrapper: setup().wrapper,
+    });
+    act(() => result.current.submitSearch({ query: "soup" }));
+    expect(push).toHaveBeenCalledWith("/?query=soup", { scroll: false });
+    expect(window.history.pushState).not.toHaveBeenCalled();
   });
 
   it("reuses fresh searches and resets pagination, sorting, and labels on submission", async () => {
