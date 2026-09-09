@@ -97,7 +97,7 @@ describe("RecipesPage component", () => {
       "/api/recipes/search?query=pasta&cuisine=&diet=&intolerance=&type=",
       expect.any(AbortSignal),
     );
-    expect(store.getState().recipe.searchResult).toEqual([]);
+    expect(store.getState().recipe).not.toHaveProperty("searchResult");
     expect(screen.getByTestId("recipe-item-list")).toBeInTheDocument();
     expect(screen.getByTestId("list-context")).toHaveTextContent("true:false");
     await waitFor(() =>

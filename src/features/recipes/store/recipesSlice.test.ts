@@ -1,54 +1,17 @@
 import recipeSlice, { recipeActions } from "./recipesSlice";
-import type { RecipeSummary } from "../types";
 
 describe("recipesSlice", () => {
-  const reducer = recipeSlice.reducer;
-
-  it("provides the initial recipe state", () => {
-    expect(reducer(undefined, { type: "unknown" })).toEqual({
-      searchResult: [],
-      orderBy: {},
-      recipesIsLoading: false,
-      currentPage: 1,
-      isLastPage: false,
+  it("stores only the shared API quota flag", () => {
+    expect(recipeSlice.reducer(undefined, { type: "unknown" })).toEqual({
       dailyLimitIsReached: false,
-      title: "",
-      options: [],
-      emptyMessage: "",
-      errorMessage: "",
     });
   });
 
-  it("updates recipe request state", () => {
-    let state = reducer(undefined, recipeActions.setRecipesIsLoading(true));
-    state = reducer(state, recipeActions.setCurrentPage(3));
-    state = reducer(state, recipeActions.setIsLastPage(true));
-
-    expect(state).toMatchObject({
-      recipesIsLoading: true,
-      currentPage: 3,
-      isLastPage: true,
+  it("activates fallback mode", () => {
+    expect(
+      recipeSlice.reducer(undefined, recipeActions.setDailyLimitIsReached()),
+    ).toEqual({
+      dailyLimitIsReached: true,
     });
-  });
-
-  it("clears the canonical recipe collection", () => {
-    const state = reducer(
-      {
-        ...reducer(undefined, { type: "unknown" }),
-        searchResult: [
-          {
-            id: 1,
-            title: "Recipe",
-            img: "recipe.jpg",
-            readyInMinutes: 10,
-            calories: 100,
-            servings: 2,
-          } satisfies RecipeSummary,
-        ],
-      },
-      recipeActions.resetRecipes(),
-    );
-
-    expect(state.searchResult).toEqual([]);
   });
 });

@@ -9,17 +9,11 @@ import {
   ANIMATION_SLIDE_IN_INITIAL,
 } from "../../../../shared/constants";
 import { useFavoriteRecipes } from "../../hooks/useFavoriteRecipes";
-import { useRecipeListController } from "../../../recipes/hooks/useRecipeListController";
 import { RecipeListContext } from "../../../recipes/context/RecipeListContext";
 import type { PropsWithChildren } from "react";
 
 const FavoritesPage = ({ children }: PropsWithChildren) => {
-  const { favoriteIds, favoritesReference, filter, isAuthenticated } =
-    useFavoriteRecipes();
-  const controller = useRecipeListController({
-    firebaseRef: favoritesReference,
-    filter,
-  });
+  const { favoriteIds, controller, isAuthenticated } = useFavoriteRecipes();
   const { recipeId } = useParams<{ recipeId?: string }>() ?? {};
   const recipeIsOpen = !!recipeId;
 

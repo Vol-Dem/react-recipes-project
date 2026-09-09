@@ -5,22 +5,25 @@ import {
   query,
   startAfter,
   type QueryDocumentSnapshot,
+  type QueryConstraint,
 } from "firebase/firestore";
 import { RECIPES_PER_PAGE } from "../../../shared/constants";
 import { getRecipesCollection } from "./recipeRepository";
 import { mapRecipe } from "../utils/mapRecipe";
 import type { RecipeApiItem, RecipeSort } from "../types";
 
-export type RecipeSearchCursor = QueryDocumentSnapshot | undefined;
+export type RecipePageCursor = QueryDocumentSnapshot | undefined;
 
 // Cursors belong to individual query pages, not module globals or Redux.
-export const fetchRecipeSearchPage = async (
+export const fetchRecipePage = async (
   { sortBy, sortType }: RecipeSort,
-  after?: RecipeSearchCursor,
+  after?: RecipePageCursor,
+  filter?: QueryConstraint,
 ) => {
   const snapshot = await getDocs(
     query(
       getRecipesCollection(),
+      ...(filter ? [filter] : []),
       sortBy ? orderBy(sortBy, sortType) : orderBy("nutrition"),
       ...(after ? [startAfter(after)] : []),
       limit(RECIPES_PER_PAGE + 1),

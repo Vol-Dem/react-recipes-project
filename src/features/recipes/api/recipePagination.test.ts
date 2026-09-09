@@ -9,8 +9,11 @@ vi.mock("firebase/firestore", () => mocks);
 vi.mock("./recipeRepository", () => ({
   getRecipesCollection: () => "recipes",
 }));
-import { fetchRecipeSearchPage } from "./recipeSearchRepository";
-import type { QueryDocumentSnapshot } from "firebase/firestore";
+import { fetchRecipePage } from "./recipePagination";
+import type {
+  QueryConstraint,
+  QueryDocumentSnapshot,
+} from "firebase/firestore";
 
 const documents = Array.from({ length: 9 }, (_, index) => ({
   id: String(index),
@@ -24,12 +27,12 @@ const documents = Array.from({ length: 9 }, (_, index) => ({
   }),
 }));
 
-describe("recipe search pagination", () => {
+describe("recipe pagination", () => {
   afterEach(() => vi.clearAllMocks());
 
   it("uses the last displayed document as the exclusive next-page cursor", async () => {
     mocks.getDocs.mockResolvedValue({ docs: documents });
-    const page = await fetchRecipeSearchPage({});
+    const page = await fetchRecipePage({});
     expect(page.recipes.map((recipe) => recipe.id)).toEqual([
       0, 1, 2, 3, 4, 5, 6, 7,
     ]);
@@ -37,7 +40,7 @@ describe("recipe search pagination", () => {
     expect(page.isLastPage).toBe(false);
     expect(mocks.limit).toHaveBeenCalledWith(9);
     expect(mocks.startAfter).not.toHaveBeenCalled();
-    await fetchRecipeSearchPage({}, page.nextCursor);
+    await fetchRecipePage({}, page.nextCursor);
     expect(mocks.startAfter).toHaveBeenCalledWith(documents[7]);
   });
 
@@ -45,7 +48,7 @@ describe("recipe search pagination", () => {
     "has no next cursor for a final page of %s recipes",
     async (length) => {
       mocks.getDocs.mockResolvedValue({ docs: documents.slice(0, length) });
-      const page = await fetchRecipeSearchPage({});
+      const page = await fetchRecipePage({});
       expect(page.isLastPage).toBe(true);
       expect(page.nextCursor).toBeUndefined();
       expect(page.recipes).toHaveLength(length);
@@ -55,12 +58,27 @@ describe("recipe search pagination", () => {
   it("does not reuse a different request's cursor or sort", async () => {
     mocks.getDocs.mockResolvedValue({ docs: documents });
     const cursor = documents[7] as unknown as QueryDocumentSnapshot;
-    await fetchRecipeSearchPage(
-      { sortBy: "calories", sortType: "desc" },
-      cursor,
-    );
-    await fetchRecipeSearchPage({});
+    await fetchRecipePage({ sortBy: "calories", sortType: "desc" }, cursor);
+    await fetchRecipePage({});
     expect(mocks.startAfter).toHaveBeenCalledOnce();
+    expect(mocks.query).toHaveBeenLastCalledWith(
+      "recipes",
+      { field: "nutrition", direction: undefined },
+      { limit: 9 },
+    );
+  });
+
+  it("includes the favorites filter without sharing it with search", async () => {
+    mocks.getDocs.mockResolvedValue({ docs: documents });
+    const filter = { type: "where" } as QueryConstraint;
+    await fetchRecipePage({}, undefined, filter);
+    expect(mocks.query).toHaveBeenLastCalledWith(
+      "recipes",
+      filter,
+      { field: "nutrition", direction: undefined },
+      { limit: 9 },
+    );
+    await fetchRecipePage({});
     expect(mocks.query).toHaveBeenLastCalledWith(
       "recipes",
       { field: "nutrition", direction: undefined },

@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import { makeQueryClient } from "../../../app/queryClient";
 import { makeStore } from "../../../app/store";
 import { fetchRecipesFromApi } from "../api/recipeApi";
-import { fetchRecipeSearchPage } from "../api/recipeSearchRepository";
+import { fetchRecipePage } from "../api/recipePagination";
 import { RecipeHttpError } from "../api/requestRecipeJson";
 import { recipeActions } from "../store/recipesSlice";
 import { mapRecipe } from "../utils/mapRecipe";
@@ -19,8 +19,8 @@ vi.mock("next/navigation", () => ({
   useParams: () => ({}),
 }));
 vi.mock("../api/recipeApi", () => ({ fetchRecipesFromApi: vi.fn() }));
-vi.mock("../api/recipeSearchRepository", () => ({
-  fetchRecipeSearchPage: vi.fn(),
+vi.mock("../api/recipePagination", () => ({
+  fetchRecipePage: vi.fn(),
 }));
 
 const recipes: RecipeApiItem[] = Array.from({ length: 10 }, (_, index) => ({
@@ -84,7 +84,7 @@ describe("useRecipeSearch", () => {
       "/api/recipes/search?query=pasta&cuisine=&diet=vegan&intolerance=&type=",
       expect.any(AbortSignal),
     );
-    expect(store.getState().recipe.searchResult).toEqual([]);
+    expect(store.getState().recipe).not.toHaveProperty("searchResult");
     expect(push).toHaveBeenCalledWith("/");
   });
 
@@ -190,7 +190,7 @@ describe("useRecipeSearch", () => {
 
   it("switches to Firestore once on quota failure", async () => {
     vi.mocked(fetchRecipesFromApi).mockRejectedValue(new RecipeHttpError(402));
-    vi.mocked(fetchRecipeSearchPage).mockResolvedValue(firstPage);
+    vi.mocked(fetchRecipePage).mockResolvedValue(firstPage);
     const { wrapper, store } = setup();
     const { result } = renderHook(useRecipeSearch, { wrapper });
     act(() => result.current.submitSearch({ query: "pasta" }));
@@ -200,14 +200,11 @@ describe("useRecipeSearch", () => {
     expect(store.getState().recipe.dailyLimitIsReached).toBe(true);
     expect(store.getState().notification.title).toBe("Daily API limit reached");
     expect(fetchRecipesFromApi).toHaveBeenCalledOnce();
-    expect(fetchRecipeSearchPage).toHaveBeenCalledExactlyOnceWith(
-      {},
-      undefined,
-    );
+    expect(fetchRecipePage).toHaveBeenCalledExactlyOnceWith({}, undefined);
   });
 
   it("keeps fallback cursors in query pages and reuses previous pages", async () => {
-    vi.mocked(fetchRecipeSearchPage)
+    vi.mocked(fetchRecipePage)
       .mockResolvedValueOnce(firstPage)
       .mockResolvedValueOnce(lastPage);
     const { wrapper, store } = setup(true);
@@ -222,19 +219,19 @@ describe("useRecipeSearch", () => {
         result.current.controller.list.recipes.map((recipe) => recipe.id),
       ).toEqual([9, 10]),
     );
-    expect(fetchRecipeSearchPage).toHaveBeenLastCalledWith({}, cursor);
+    expect(fetchRecipePage).toHaveBeenLastCalledWith({}, cursor);
     expect(result.current.controller.list.isLastPage).toBe(true);
     act(() => result.current.controller.actions.goToPreviousPage());
     expect(result.current.controller.list.recipes[0].id).toBe(1);
     act(() => result.current.controller.actions.goToNextPage());
     expect(result.current.controller.list.recipes[0].id).toBe(9);
-    expect(fetchRecipeSearchPage).toHaveBeenCalledTimes(2);
+    expect(fetchRecipePage).toHaveBeenCalledTimes(2);
     expect(fetchRecipesFromApi).not.toHaveBeenCalled();
-    expect(store.getState().recipe.searchResult).toEqual([]);
+    expect(store.getState().recipe).not.toHaveProperty("searchResult");
   });
 
   it("starts a new fallback cursor chain when sorting changes", async () => {
-    vi.mocked(fetchRecipeSearchPage).mockResolvedValue(firstPage);
+    vi.mocked(fetchRecipePage).mockResolvedValue(firstPage);
     const { wrapper } = setup(true);
     const { result } = renderHook(useRecipeSearch, { wrapper });
     act(() => result.current.submitSearch({ query: "pasta" }));
@@ -249,7 +246,7 @@ describe("useRecipeSearch", () => {
     await waitFor(() =>
       expect(result.current.controller.list.isLoading).toBe(false),
     );
-    expect(fetchRecipeSearchPage).toHaveBeenLastCalledWith(
+    expect(fetchRecipePage).toHaveBeenLastCalledWith(
       { sortBy: "calories", sortType: "desc" },
       undefined,
     );
@@ -257,7 +254,7 @@ describe("useRecipeSearch", () => {
   });
 
   it("resets an API-only page when another consumer reaches the quota", async () => {
-    vi.mocked(fetchRecipeSearchPage).mockResolvedValue(firstPage);
+    vi.mocked(fetchRecipePage).mockResolvedValue(firstPage);
     const { wrapper, store } = setup();
     const { result } = renderHook(useRecipeSearch, { wrapper });
     act(() => result.current.submitSearch({ query: "pasta" }));
@@ -277,6 +274,6 @@ describe("useRecipeSearch", () => {
     const { wrapper } = setup(true);
     const { result } = renderHook(useRecipeSearch, { wrapper });
     expect(result.current.controller.list.isLoading).toBe(false);
-    expect(fetchRecipeSearchPage).not.toHaveBeenCalled();
+    expect(fetchRecipePage).not.toHaveBeenCalled();
   });
 });
