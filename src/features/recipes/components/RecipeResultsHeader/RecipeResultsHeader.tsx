@@ -6,6 +6,7 @@ interface RecipeResultsHeaderProps {
   options: string[];
   showTitle: boolean;
   title: string;
+  sortValue: string;
   onSort: ChangeEventHandler<HTMLSelectElement>;
 }
 
@@ -13,6 +14,7 @@ const RecipeResultsHeader = ({
   options,
   showTitle,
   title,
+  sortValue,
   onSort,
 }: RecipeResultsHeaderProps) => (
   <div className={classes["search-result__head"]}>
@@ -21,7 +23,7 @@ const RecipeResultsHeader = ({
         {title} {options.map((option) => ` | ${option}`)}
       </h1>
     )}
-    <Sort onSort={onSort} />
+    <Sort value={sortValue} onSort={onSort} />
   </div>
 );
 

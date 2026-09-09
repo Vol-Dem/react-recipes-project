@@ -9,27 +9,15 @@ import {
   RECIPE_LIST_INITIAL_ANIMATION,
   RECIPE_LIST_VISIBLE_ANIMATION,
 } from "../../constants/animations";
-import { useRecipeListController } from "../../hooks/useRecipeListController";
-import type { CollectionReference, DocumentData } from "firebase/firestore";
-import type { RecipeFilter } from "../../types";
+import { useRecipeList } from "../../context/RecipeListContext";
 
 interface RecipeListProps {
   title: string;
-  firebaseRef: CollectionReference<DocumentData>;
-  filter?: RecipeFilter;
   skeletonItemsAmount?: number;
 }
 
-const RecipeList = ({
-  title,
-  firebaseRef,
-  filter,
-  skeletonItemsAmount,
-}: RecipeListProps) => {
-  const { actions, list } = useRecipeListController({
-    firebaseRef,
-    filter,
-  });
+const RecipeList = ({ title, skeletonItemsAmount }: RecipeListProps) => {
+  const { actions, list } = useRecipeList();
 
   if (list.errorMessage) {
     return (
@@ -63,6 +51,7 @@ const RecipeList = ({
               options={list.options}
               showTitle={!list.isRecipeOpen}
               title={title}
+              sortValue={list.sortValue}
               onSort={actions.sortBySelection}
             />
           )}

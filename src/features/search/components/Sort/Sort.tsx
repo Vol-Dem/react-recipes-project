@@ -1,15 +1,13 @@
-import { useSelector } from "react-redux";
 import classes from "./Sort.module.scss";
-import { selectRecipeOrderValue } from "../../../recipes/store/recipesSelectors";
 import type { ChangeEventHandler } from "react";
 
 const Sort = ({
   onSort,
+  value,
 }: {
   onSort: ChangeEventHandler<HTMLSelectElement>;
+  value: string;
 }) => {
-  const orderBy = useSelector(selectRecipeOrderValue);
-
   return (
     <div className={classes["search-result__sort"]}>
       <label htmlFor="sort">Sort&nbsp;by</label>
@@ -17,7 +15,7 @@ const Sort = ({
         className={classes["search-result__select"]}
         name="sort"
         id="sort"
-        value={orderBy}
+        value={value}
         onChange={onSort}
       >
         <option value="-">-</option>

@@ -9,33 +9,39 @@ import {
   ANIMATION_SLIDE_IN_INITIAL,
 } from "../../../../shared/constants";
 import { useFavoriteRecipes } from "../../hooks/useFavoriteRecipes";
+import { useRecipeListController } from "../../../recipes/hooks/useRecipeListController";
+import { RecipeListContext } from "../../../recipes/context/RecipeListContext";
 import type { PropsWithChildren } from "react";
 
 const FavoritesPage = ({ children }: PropsWithChildren) => {
   const { favoriteIds, favoritesReference, filter, isAuthenticated } =
     useFavoriteRecipes();
+  const controller = useRecipeListController({
+    firebaseRef: favoritesReference,
+    filter,
+  });
   const { recipeId } = useParams<{ recipeId?: string }>() ?? {};
   const recipeIsOpen = !!recipeId;
 
   return (
-    <motion.div
-      initial={ANIMATION_SLIDE_IN_INITIAL}
-      animate={ANIMATION_SLIDE_IN}
-      className={`${classes["section-favorites"]} ${
-        recipeIsOpen ? classes["recipe-columns"] : ""
-      }`}
-    >
-      {isAuthenticated && (
-        <RecipeList
-          title="Favorites"
-          firebaseRef={favoritesReference}
-          filter={filter}
-          skeletonItemsAmount={favoriteIds.length}
-        />
-      )}
+    <RecipeListContext value={controller}>
+      <motion.div
+        initial={ANIMATION_SLIDE_IN_INITIAL}
+        animate={ANIMATION_SLIDE_IN}
+        className={`${classes["section-favorites"]} ${
+          recipeIsOpen ? classes["recipe-columns"] : ""
+        }`}
+      >
+        {isAuthenticated && (
+          <RecipeList
+            title="Favorites"
+            skeletonItemsAmount={favoriteIds.length}
+          />
+        )}
 
-      {children}
-    </motion.div>
+        {children}
+      </motion.div>
+    </RecipeListContext>
   );
 };
 

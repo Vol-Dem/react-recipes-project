@@ -1,19 +1,11 @@
-import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useDispatch, useSelector } from "react-redux";
-import { notificationActions } from "../../notifications/store/notificationSlice";
-import { RECIPE_DAILY_LIMIT_NOTIFICATION } from "../constants/messages";
+import { useSelector } from "react-redux";
 import { recipeDetailsQueryOptions } from "../queries/recipeDetailsQuery";
 import { selectRecipeDailyLimitIsReached } from "../store/recipesSelectors";
-import { recipeActions } from "../store/recipesSlice";
-import {
-  getRecipeErrorMessage,
-  isRecipeApiLimitError,
-} from "../utils/recipeErrors";
-import type { AppDispatch } from "../../../app/store";
+import { getRecipeErrorMessage } from "../utils/recipeErrors";
+import { useRecipeApiFallback } from "./useRecipeApiFallback";
 
 export const useRecipeDetails = (recipeId: string) => {
-  const dispatch = useDispatch<AppDispatch>();
   const dailyLimitIsReached = useSelector(selectRecipeDailyLimitIsReached);
   const query = useQuery(
     recipeDetailsQueryOptions(
@@ -21,22 +13,7 @@ export const useRecipeDetails = (recipeId: string) => {
       dailyLimitIsReached ? "firestore" : "api",
     ),
   );
-  const shouldUseFallback =
-    !dailyLimitIsReached && isRecipeApiLimitError(query.error);
-
-  useEffect(() => {
-    if (!shouldUseFallback) return;
-
-    dispatch((dispatch, getState) => {
-      // Multiple observers (or Strict Mode) must announce the quota switch once.
-      if (selectRecipeDailyLimitIsReached(getState())) return;
-
-      dispatch(recipeActions.setDailyLimitIsReached());
-      dispatch(
-        notificationActions.showNotification(RECIPE_DAILY_LIMIT_NOTIFICATION),
-      );
-    });
-  }, [dispatch, shouldUseFallback]);
+  const shouldUseFallback = useRecipeApiFallback(query.error);
 
   if (query.error && !shouldUseFallback && !query.data) {
     throw new Error(getRecipeErrorMessage(query.error), { cause: query.error });

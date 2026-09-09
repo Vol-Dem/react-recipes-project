@@ -1,198 +1,138 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
-import RecipesPage from "./RecipesPage";
+import {
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from "@testing-library/react";
+import { QueryClientProvider, type QueryClient } from "@tanstack/react-query";
 import { Provider } from "react-redux";
-import configureStore from "redux-mock-store";
-import { thunk } from "redux-thunk";
+import { makeQueryClient } from "../../../../app/queryClient";
+import { makeStore } from "../../../../app/store";
 import { fetchRecipesFromApi } from "../../api/recipeApi";
-import { recipeActions } from "../../store/recipesSlice";
+import { useRecipeList } from "../../context/RecipeListContext";
+import RecipesPage from "./RecipesPage";
 
 vi.mock("../../api/recipeApi");
 const mockedFetchRecipes = vi.mocked(fetchRecipesFromApi);
+const { params } = vi.hoisted(() => ({ params: {} as { recipeId?: string } }));
 vi.mock("next/navigation", () => ({
-  useParams: () => ({}),
+  useParams: () => params,
   usePathname: () => "/",
   useRouter: () => ({ push: vi.fn(), replace: vi.fn() }),
 }));
-const middlewares = [thunk] as unknown as NonNullable<
-  Parameters<typeof configureStore>[0]
->;
-const mockStore = configureStore(middlewares);
-const expectedResult = [
-  {
-    id: 152,
-    title: "Pizza",
-    img: "",
-    readyInMinutes: 35,
-    calories: 237,
-    servings: 4,
-  },
-];
-const initialState = {
-  searchResult: [],
-  orderBy: {},
-  recipesIsLoading: false,
-  currentPage: 1,
-  isLastPage: false,
-  dailyLimitIsReached: false,
-  title: "",
-  emptyMessage: "",
-  errorMessage: "",
-  options: [],
+const ListProbe = () => {
+  const { list } = useRecipeList();
+  return (
+    <output data-testid="list-context">
+      {String(list.hasRecipes)}:{String(list.isRecipeOpen)}
+    </output>
+  );
 };
 
 describe("RecipesPage component", () => {
+  const clients: QueryClient[] = [];
+  const setup = () => {
+    const client = makeQueryClient();
+    clients.push(client);
+    const store = makeStore();
+    return {
+      store,
+      ...render(
+        <Provider store={store}>
+          <QueryClientProvider client={client}>
+            <RecipesPage>
+              <ListProbe />
+            </RecipesPage>
+          </QueryClientProvider>
+        </Provider>,
+      ),
+    };
+  };
+  const submit = (query: string) => {
+    fireEvent.change(screen.getByTestId("search-input"), {
+      target: { value: query },
+    });
+    fireEvent.click(screen.getByTestId("search-submit"));
+  };
   beforeEach(() => {
+    delete params.recipeId;
     mockedFetchRecipes.mockResolvedValue({
       results: [
         {
           id: 152,
           title: "Pizza",
-          image: "",
+          image: "/test-recipe.jpg",
           readyInMinutes: 35,
-
+          servings: 4,
           nutrition: {
             nutrients: [{ name: "Calories", amount: 237, unit: "kcal" }],
           },
-
-          servings: 4,
         },
       ],
     });
   });
-
   afterEach(() => {
+    cleanup();
+    clients.splice(0).forEach((client) => client.clear());
     vi.clearAllMocks();
   });
 
-  it("sends request with correct URL and dispatches actions on form submission", async () => {
-    const store = mockStore({
-      recipe: initialState,
-      auth: { isLoggedIn: false },
-      fav: { favList: [] },
-    });
-    render(
-      <Provider store={store}>
-        <RecipesPage />
-      </Provider>,
-    );
-    const inputQuery = "pasta";
-    const expectedUrl = `/api/recipes/search?query=${inputQuery}&cuisine=&diet=&intolerance=&type=`;
-    const searchInput = screen.getByTestId("search-input");
-    const submitBtn = screen.getByTestId("search-submit");
-
-    fireEvent.change(searchInput, { target: { value: inputQuery } });
-    const user = userEvent.setup();
-    await user.click(submitBtn);
-
-    await waitFor(() => {
-      const dispatchedActions = store.getActions();
-      expect(fetchRecipesFromApi).toBeCalledWith(expectedUrl);
-      expect(dispatchedActions).toContainEqual(recipeActions.setCurrentPage(1));
-      expect(dispatchedActions).toContainEqual(
-        recipeActions.setEmptyMessage(
-          'No results for "pasta". Try checking your spelling',
-        ),
-      );
-      expect(dispatchedActions).toContainEqual(recipeActions.setOrderBy({}));
-      expect(dispatchedActions).toContainEqual(
-        recipeActions.setSearchResult(expectedResult),
-      );
-    });
+  it("renders the initial search page without making a request", () => {
+    setup();
+    expect(screen.getByText("Your recipe book")).toBeInTheDocument();
+    expect(screen.getByTestId("search-input")).toBeInTheDocument();
+    expect(screen.queryByTestId("recipe-item-list")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("error-message")).not.toBeInTheDocument();
+    expect(fetchRecipesFromApi).not.toHaveBeenCalled();
   });
 
-  it("renders h1 'Your recipe book', SearchBox and no RecipeList, RecipeDetailsPage, or error", () => {
-    expect.assertions(6);
-
-    const store = mockStore({
-      recipe: initialState,
-      auth: { isLoggedIn: false },
-      fav: { favList: [] },
-    });
-    render(
-      <Provider store={store}>
-        <RecipesPage />
-      </Provider>,
+  it("renders query-owned results and shares list presence with detail children", async () => {
+    const { store } = setup();
+    submit("pasta");
+    expect(
+      await screen.findByText("Pizza", {}, { timeout: 5000 }),
+    ).toBeInTheDocument();
+    expect(fetchRecipesFromApi).toHaveBeenCalledWith(
+      "/api/recipes/search?query=pasta&cuisine=&diet=&intolerance=&type=",
+      expect.any(AbortSignal),
     );
-    const h1El = screen.getByText("Your recipe book");
-    const searchInputEl = screen.getByTestId("search-input");
-    const recipeItemListEl = screen.queryByTestId("recipe-item-list");
-    const recipeEl = screen.queryByTestId("recipe");
-    const errorEl = screen.queryByTestId("error-message");
-    const sectionSearchEl = screen.queryByTestId("section-search");
-
-    expect(h1El).toBeInTheDocument();
-    expect(searchInputEl).toBeInTheDocument();
-    expect(recipeItemListEl).not.toBeInTheDocument();
-    expect(recipeEl).not.toBeInTheDocument();
-    expect(errorEl).not.toBeInTheDocument();
-    expect(sectionSearchEl).not.toHaveClass("mt0");
-  });
-  it("renders RecipeList results without RecipeDetailsPage, an error, or the heading", async () => {
-    expect.assertions(7);
-
-    const currentState = {
-      ...initialState,
-      searchResult: expectedResult,
-    };
-    const store = mockStore({
-      recipe: currentState,
-      auth: { isLoggedIn: false },
-      fav: { favList: [] },
-    });
-    render(
-      <Provider store={store}>
-        <RecipesPage />
-      </Provider>,
+    expect(store.getState().recipe.searchResult).toEqual([]);
+    expect(screen.getByTestId("recipe-item-list")).toBeInTheDocument();
+    expect(screen.getByTestId("list-context")).toHaveTextContent("true:false");
+    await waitFor(() =>
+      expect(screen.queryByText("Your recipe book")).not.toBeInTheDocument(),
     );
-    const h1El = screen.queryByText("Your recipe book");
-    const pizzaEl = await screen.findByText("Pizza", {}, { timeout: 5000 });
-    const searchInputEl = screen.getByTestId("search-input");
-    const recipeItemListEl = screen.queryByTestId("recipe-item-list");
-    const recipeEl = screen.queryByTestId("recipe");
-    const errorEl = screen.queryByTestId("error-message");
-    const sectionSearchEl = screen.queryByTestId("section-search");
-
-    expect(h1El).not.toBeInTheDocument();
-    expect(pizzaEl).toBeInTheDocument();
-    expect(searchInputEl).toBeInTheDocument();
-    expect(recipeItemListEl).toBeInTheDocument();
-    expect(recipeEl).not.toBeInTheDocument();
-    expect(errorEl).not.toBeInTheDocument();
-    expect(sectionSearchEl?.className).toMatch(/_mt0_/);
+    expect(screen.getByTestId("section-search").className).toMatch(/_mt0_/);
+    expect(screen.getByRole("combobox", { name: /Sort\s+by/ })).toHaveValue(
+      "-",
+    );
   });
 
-  it("renders error with expected error message", async () => {
-    expect.assertions(7);
+  it("does not show a back-to-list state when a detail URL loads without a search", () => {
+    params.recipeId = "152";
+    setup();
+    expect(screen.getByTestId("list-context")).toHaveTextContent("false:true");
+    expect(screen.queryByText("Your recipe book")).not.toBeInTheDocument();
+    expect(fetchRecipesFromApi).not.toHaveBeenCalled();
+  });
 
-    const currentState = {
-      ...initialState,
-      errorMessage: "Test error message",
-    };
-    const store = mockStore({
-      recipe: currentState,
-      auth: { isLoggedIn: false },
-      fav: { favList: [] },
-    });
-    render(
-      <Provider store={store}>
-        <RecipesPage />
-      </Provider>,
+  it("shows a safe error and recovers on a later submission", async () => {
+    mockedFetchRecipes.mockRejectedValueOnce(
+      new Error("Internal server details"),
     );
-    const errorEl = screen.queryByTestId("error-message");
-    const errorMessageEl = screen.queryByText("Test error message");
-    const h1El = screen.queryByText("Your recipe book");
-    const searchInputEl = screen.getByTestId("search-input");
-    const recipeItemListEl = screen.queryByTestId("recipe-item-list");
-    const recipeEl = screen.queryByTestId("recipe");
-    const sectionSearchEl = screen.queryByTestId("section-search");
-
-    expect(errorEl).toBeInTheDocument();
-    expect(errorMessageEl).toBeInTheDocument();
-    expect(h1El).not.toBeInTheDocument();
-    expect(searchInputEl).toBeInTheDocument();
-    expect(recipeItemListEl).not.toBeInTheDocument();
-    expect(recipeEl).not.toBeInTheDocument();
-    expect(sectionSearchEl).not.toHaveClass("mt0");
+    setup();
+    submit("pasta");
+    expect(await screen.findByTestId("error-message")).toHaveTextContent(
+      "Unable to load recipes. Please try again",
+    );
+    expect(
+      screen.queryByText("Internal server details"),
+    ).not.toBeInTheDocument();
+    submit("pasta");
+    expect(
+      await screen.findByText("Pizza", {}, { timeout: 5000 }),
+    ).toBeInTheDocument();
+    expect(screen.queryByTestId("error-message")).not.toBeInTheDocument();
   });
 });

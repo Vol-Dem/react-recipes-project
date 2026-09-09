@@ -11,29 +11,25 @@ import { lazy } from "react";
 import { Suspense } from "react";
 import Spinner from "../../../../shared/components/ui/Spinner/Spinner";
 import { useParams } from "next/navigation";
-import { useSelector } from "react-redux";
 import ErrorMessage from "../../../../shared/components/feedback/ErrorMessage/ErrorMessage";
 import Card from "../../../../shared/components/ui/Card/Card";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRecipeSearch } from "../../hooks/useRecipeSearch";
-import {
-  selectHasRecipesPerPage,
-  selectRecipeEmptyMessage,
-  selectRecipeErrorMessage,
-  selectRecipeIsLoading,
-} from "../../store/recipesSelectors";
+import { RecipeListContext } from "../../context/RecipeListContext";
 import type { PropsWithChildren } from "react";
 
 const RecipeList = lazy(() => import("../../components/RecipeList/RecipeList"));
 
 const RecipesPage = ({ children }: PropsWithChildren) => {
-  const { recipeReference, searchTitle, submitSearch } = useRecipeSearch();
+  const { controller, searchTitle, submitSearch } = useRecipeSearch();
   const { recipeId } = useParams<{ recipeId?: string }>() ?? {};
   const recipeIsOpen = !!recipeId;
-  const errorMessage = useSelector(selectRecipeErrorMessage);
-  const emptyMessage = useSelector(selectRecipeEmptyMessage);
-  const recipesIsLoading = useSelector(selectRecipeIsLoading);
-  const hasRecipesPerPage = useSelector(selectHasRecipesPerPage);
+  const {
+    errorMessage,
+    emptyMessage,
+    isLoading: recipesIsLoading,
+    hasRecipes: hasRecipesPerPage,
+  } = controller.list;
   const shouldShowLogo =
     !hasRecipesPerPage &&
     !recipesIsLoading &&
@@ -41,7 +37,7 @@ const RecipesPage = ({ children }: PropsWithChildren) => {
     !errorMessage &&
     !emptyMessage;
   const shouldShowRecipeList =
-    recipesIsLoading || hasRecipesPerPage || emptyMessage;
+    !errorMessage && (recipesIsLoading || hasRecipesPerPage || emptyMessage);
   const searchSectionClassName = `${classes["section-search"]} ${
     hasRecipesPerPage || recipesIsLoading || recipeIsOpen ? classes.mt0 : ""
   }`;
@@ -50,29 +46,34 @@ const RecipesPage = ({ children }: PropsWithChildren) => {
   }`;
 
   return (
-    <motion.div
-      initial={ANIMATION_SLIDE_IN_INITIAL}
-      animate={ANIMATION_SLIDE_IN}
-    >
-      <section data-testid="section-search" className={searchSectionClassName}>
-        <AnimatePresence>{shouldShowLogo && <Logo />}</AnimatePresence>
-        <SearchBox getFormData={submitSearch} />
-      </section>
-      {errorMessage && (
-        <Card>
-          <ErrorMessage>{errorMessage}</ErrorMessage>
-        </Card>
-      )}
-      <section className={contentSectionClassName}>
-        {shouldShowRecipeList && (
-          <Suspense fallback={<Spinner />}>
-            <RecipeList title={searchTitle} firebaseRef={recipeReference} />
-          </Suspense>
+    <RecipeListContext value={controller}>
+      <motion.div
+        initial={ANIMATION_SLIDE_IN_INITIAL}
+        animate={ANIMATION_SLIDE_IN}
+      >
+        <section
+          data-testid="section-search"
+          className={searchSectionClassName}
+        >
+          <AnimatePresence>{shouldShowLogo && <Logo />}</AnimatePresence>
+          <SearchBox getFormData={submitSearch} />
+        </section>
+        {errorMessage && (
+          <Card>
+            <ErrorMessage>{errorMessage}</ErrorMessage>
+          </Card>
         )}
+        <section className={contentSectionClassName}>
+          {shouldShowRecipeList && (
+            <Suspense fallback={<Spinner />}>
+              <RecipeList title={searchTitle} />
+            </Suspense>
+          )}
 
-        {children}
-      </section>
-    </motion.div>
+          {children}
+        </section>
+      </motion.div>
+    </RecipeListContext>
   );
 };
 

@@ -4,8 +4,9 @@ import type { RecipeApiResponse, RecipeDetails } from "../types";
 
 export const fetchRecipesFromApi = async (
   requestUrl: string,
+  signal?: AbortSignal,
 ): Promise<RecipeApiResponse> =>
-  requestRecipeJson<RecipeApiResponse>(requestUrl);
+  requestRecipeJson<RecipeApiResponse>(requestUrl, { signal });
 
 export const fetchRecipeDetailsFromApi = (
   recipeId: string,

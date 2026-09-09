@@ -1,20 +1,21 @@
 "use client";
 
 import { useParams, usePathname, useRouter } from "next/navigation";
-import { useSelector } from "react-redux";
 import RecipeDetails from "../../components/RecipeDetails/RecipeDetails";
 import RecipeDetailsLoading from "../../components/RecipeDetailsLoading/RecipeDetailsLoading";
 import RecipeDetailsShell from "../../components/RecipeDetailsShell/RecipeDetailsShell";
 import RecipeHeader from "../../components/RecipeHeader/RecipeHeader";
 import { useRecipeDetails } from "../../hooks/useRecipeDetails";
-import { selectHasRecipesPerPage } from "../../store/recipesSelectors";
+import { useRecipeList } from "../../context/RecipeListContext";
 
 const RecipeDetailsPage = () => {
   const pathname = usePathname() ?? "";
   const router = useRouter();
   const { recipeId } = useParams<{ recipeId: string }>() ?? { recipeId: "" };
   const { isLoading: recipeIsLoading, recipe } = useRecipeDetails(recipeId);
-  const hasRecipesPerPage = useSelector(selectHasRecipesPerPage);
+  const {
+    list: { hasRecipes: hasRecipesPerPage },
+  } = useRecipeList();
 
   const backToListHandler = () => {
     router.push(pathname.startsWith("/favorites") ? "/favorites" : "/");

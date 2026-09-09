@@ -8,6 +8,7 @@ import {
   selectRecipeIsLastPage,
   selectRecipeIsLoading,
   selectRecipeOptions,
+  selectRecipeOrderValue,
   selectRecipesPerPage,
 } from "../store/recipesSelectors";
 import { recipeActions } from "../store/recipesSlice";
@@ -19,6 +20,7 @@ import type {
   RecipeFilter,
   RecipeSortDirection,
   RecipeSortKey,
+  RecipeListController,
 } from "../types";
 
 interface RecipeListControllerOptions {
@@ -29,7 +31,7 @@ interface RecipeListControllerOptions {
 export const useRecipeListController = ({
   firebaseRef,
   filter,
-}: RecipeListControllerOptions) => {
+}: RecipeListControllerOptions): RecipeListController => {
   const dispatch = useDispatch<AppDispatch>();
   const { recipeId } = useParams<{ recipeId?: string }>() ?? {};
   const recipes = useSelector(selectRecipesPerPage);
@@ -40,6 +42,7 @@ export const useRecipeListController = ({
   const options = useSelector(selectRecipeOptions);
   const emptyMessage = useSelector(selectRecipeEmptyMessage);
   const errorMessage = useSelector(selectRecipeErrorMessage);
+  const sortValue = useSelector(selectRecipeOrderValue) || "-";
 
   const goToNextPage = () => {
     dispatch(nextPage(firebaseRef, filter));
@@ -77,6 +80,7 @@ export const useRecipeListController = ({
       isRecipeOpen: Boolean(recipeId),
       options,
       recipes,
+      sortValue,
     },
   };
 };

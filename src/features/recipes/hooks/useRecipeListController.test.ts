@@ -73,6 +73,7 @@ describe("useRecipeListController", () => {
       isRecipeOpen: true,
       options: ["vegan"],
       recipes: [{ id: 1 }],
+      sortValue: "-",
     });
   });
 

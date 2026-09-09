@@ -1,4 +1,5 @@
 import type { QueryConstraint } from "firebase/firestore";
+import type { ChangeEventHandler } from "react";
 
 export interface Nutrient {
   name: string;
@@ -85,3 +86,23 @@ export interface RecipeState {
 }
 
 export type RecipeFilter = QueryConstraint | undefined;
+
+export interface RecipeListController {
+  list: {
+    currentPage: number;
+    emptyMessage: string;
+    errorMessage: string;
+    hasRecipes: boolean;
+    isLastPage: boolean;
+    isLoading: boolean;
+    isRecipeOpen: boolean;
+    options: string[];
+    recipes: RecipeSummary[];
+    sortValue: string;
+  };
+  actions: {
+    goToNextPage: () => void;
+    goToPreviousPage: () => void;
+    sortBySelection: ChangeEventHandler<HTMLSelectElement>;
+  };
+}
