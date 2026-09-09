@@ -12,6 +12,7 @@ import { makeStore } from "../../../../app/store";
 import { fetchRecipesFromApi } from "../../api/recipeApi";
 import { useRecipeList } from "../../context/RecipeListContext";
 import RecipesPage from "./RecipesPage";
+import { FavoritesProvider } from "../../../favorites/context/FavoritesContext";
 
 vi.mock("../../api/recipeApi");
 const mockedFetchRecipes = vi.mocked(fetchRecipesFromApi);
@@ -41,9 +42,11 @@ describe("RecipesPage component", () => {
       ...render(
         <Provider store={store}>
           <QueryClientProvider client={client}>
-            <RecipesPage>
-              <ListProbe />
-            </RecipesPage>
+            <FavoritesProvider>
+              <RecipesPage>
+                <ListProbe />
+              </RecipesPage>
+            </FavoritesProvider>
           </QueryClientProvider>
         </Provider>,
       ),

@@ -9,17 +9,6 @@ const authApiMocks = vi.hoisted(() => ({
 }));
 
 vi.mock("../api/authApi", () => authApiMocks);
-vi.mock("../../favorites/store/favoritesSlice", () => ({
-  favoritesActions: {
-    clearFavorites: () => ({ type: "favorites/clear" }),
-  },
-}));
-vi.mock("../../favorites/store/favoritesThunks", () => ({
-  loadFavorites: (userId: string) => ({
-    type: "favorites/load",
-    payload: userId,
-  }),
-}));
 
 import {
   authRequest,
@@ -55,7 +44,7 @@ describe("auth thunks", () => {
     vi.clearAllMocks();
   });
 
-  it("initializes the authenticated user and their favorites", () => {
+  it("initializes the authenticated user", () => {
     const unsubscribe = vi.fn();
     const dispatch = vi.fn();
     authApiMocks.subscribeToAuthChanges.mockImplementation((callback) => {
@@ -67,10 +56,6 @@ describe("auth thunks", () => {
     expect(dispatch).toHaveBeenCalledWith(
       expect.objectContaining({ type: "auth/login" }),
     );
-    expect(dispatch).toHaveBeenCalledWith({
-      type: "favorites/load",
-      payload: "user-id",
-    });
     expect(dispatch).toHaveBeenLastCalledWith({
       type: "auth/completeAuthInitialization",
       payload: undefined,
@@ -96,6 +81,18 @@ describe("auth thunks", () => {
     });
     expect(dispatch).toHaveBeenNthCalledWith(2, {
       type: "auth/completeAuthInitialization",
+      payload: undefined,
+    });
+  });
+
+  it("clears local authentication when the observer reports a signed-out user", () => {
+    const dispatch = vi.fn();
+    authApiMocks.subscribeToAuthChanges.mockImplementation((callback) =>
+      callback(null),
+    );
+    executeThunk(initAuth(), dispatch);
+    expect(dispatch).toHaveBeenCalledWith({
+      type: "auth/logout",
       payload: undefined,
     });
   });
@@ -203,7 +200,6 @@ describe("auth thunks", () => {
       type: "auth/logout",
       payload: undefined,
     });
-    expect(dispatch).toHaveBeenCalledWith({ type: "favorites/clear" });
     expect(authApiMocks.signOutUser).toHaveBeenCalledOnce();
   });
 

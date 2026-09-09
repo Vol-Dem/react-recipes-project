@@ -1,5 +1,3 @@
-import { favoritesActions } from "../../favorites/store/favoritesSlice";
-import { loadFavorites } from "../../favorites/store/favoritesThunks";
 import {
   authenticateWithEmail,
   authenticateWithGoogle,
@@ -37,7 +35,8 @@ export const initAuth = (): AppThunk<
       (user) => {
         if (user) {
           dispatch(authActions.login(createUserPayload(user)));
-          dispatch(loadFavorites(user.uid));
+        } else {
+          dispatch(authActions.logout());
         }
 
         dispatch(authActions.completeAuthInitialization());
@@ -77,7 +76,6 @@ export const authRequest = (
 export const logoutUser = (): AppThunk<Promise<void>> => {
   return (dispatch) => {
     dispatch(authActions.logout());
-    dispatch(favoritesActions.clearFavorites());
 
     return signOutUser();
   };

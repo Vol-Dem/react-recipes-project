@@ -7,13 +7,13 @@ import { MESSAGE_EMPTY_FAVORITES } from "../../../shared/constants";
 import { authActions } from "../../auth/store/authSlice";
 import { recipeActions } from "../../recipes/store/recipesSlice";
 import { RecipeHttpError } from "../../recipes/api/requestRecipeJson";
-import { favoritesActions } from "../store/favoritesSlice";
-import { toggleFavorite } from "../store/favoritesThunks";
+import { favoriteKeys } from "../constants/queryKeys";
+import { FavoritesProvider, useFavorites } from "../context/FavoritesContext";
 import {
   fetchFavoriteRecipes,
   fetchFavoriteRecipePage,
 } from "../api/favoriteRecipesApi";
-import { updateFavorite } from "../api/favoritesApi";
+import { updateFavorite, fetchFavoriteIds } from "../api/favoritesApi";
 import { useFavoriteRecipes } from "./useFavoriteRecipes";
 import type { RecipeSummary } from "../../recipes/types";
 import type { RecipePageCursor } from "../../recipes/api/recipePagination";
@@ -69,11 +69,14 @@ describe("useFavoriteRecipes", () => {
     const client = makeQueryClient();
     clients.push(client);
     if (authenticated) store.dispatch(authActions.login(user()));
-    store.dispatch(favoritesActions.setFavoriteIds(ids));
+    client.setQueryData(favoriteKeys.ids("user-a"), ids);
+    vi.mocked(fetchFavoriteIds).mockResolvedValue(ids);
     if (fallback) store.dispatch(recipeActions.setDailyLimitIsReached());
     const wrapper = ({ children }: PropsWithChildren) => (
       <Provider store={store}>
-        <QueryClientProvider client={client}>{children}</QueryClientProvider>
+        <QueryClientProvider client={client}>
+          <FavoritesProvider>{children}</FavoritesProvider>
+        </QueryClientProvider>
       </Provider>
     );
     return { store, client, wrapper };
@@ -98,10 +101,9 @@ describe("useFavoriteRecipes", () => {
       expect(first.result.current.controller.list.recipes).toHaveLength(8),
     );
     expect(store.getState().recipe).toEqual({ dailyLimitIsReached: false });
-    first.unmount();
-    const second = renderHook(useFavoriteRecipes, { wrapper });
-    expect(second.result.current.controller.list.isLoading).toBe(false);
-    expect(second.result.current.controller.list.recipes).toHaveLength(8);
+    first.rerender();
+    expect(first.result.current.controller.list.isLoading).toBe(false);
+    expect(first.result.current.controller.list.recipes).toHaveLength(8);
     expect(fetchFavoriteRecipes).toHaveBeenCalledOnce();
   });
 
@@ -155,7 +157,7 @@ describe("useFavoriteRecipes", () => {
   });
 
   it("resets sorting and pagination when membership changes", async () => {
-    const { wrapper, store } = setup();
+    const { wrapper, client } = setup();
     const { result } = renderHook(useFavoriteRecipes, { wrapper });
     await waitFor(() =>
       expect(result.current.controller.list.hasRecipes).toBe(true),
@@ -166,7 +168,7 @@ describe("useFavoriteRecipes", () => {
       ),
     );
     act(() => result.current.controller.actions.goToNextPage());
-    act(() => store.dispatch(favoritesActions.setFavoriteIds([2])));
+    act(() => client.setQueryData(favoriteKeys.ids("user-a"), [2]));
     await waitFor(() =>
       expect(
         result.current.controller.list.recipes.map(({ id }) => id),
@@ -185,21 +187,27 @@ describe("useFavoriteRecipes", () => {
         }),
     );
     const { wrapper, store } = setup([1]);
-    const { result } = renderHook(useFavoriteRecipes, { wrapper });
+    const { result } = renderHook(
+      () => ({
+        ...useFavoriteRecipes(),
+        toggleFavorite: useFavorites().toggleFavorite,
+      }),
+      { wrapper },
+    );
     await waitFor(() =>
       expect(result.current.controller.list.hasRecipes).toBe(true),
     );
-    let pending!: Promise<void>;
     act(() => {
-      pending = store.dispatch(toggleFavorite(1));
+      result.current.toggleFavorite(1);
     });
-    expect(result.current.controller.list.recipes).toEqual([]);
+    await waitFor(() =>
+      expect(result.current.controller.list.recipes).toEqual([]),
+    );
     expect(result.current.controller.list.emptyMessage).toBe(
       MESSAGE_EMPTY_FAVORITES,
     );
     await act(async () => {
       fail(new Error("Write failed"));
-      await pending;
     });
     await waitFor(() =>
       expect(result.current.controller.list.recipes[0].id).toBe(1),

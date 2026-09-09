@@ -8,6 +8,7 @@ import { initAuth } from "../features/auth/store/authThunks";
 import ErrorBoundary from "../shared/components/feedback/ErrorBoundary/ErrorBoundary";
 import { makeStore } from "./store";
 import { makeQueryClient } from "./queryClient";
+import { FavoritesProvider } from "../features/favorites/context/FavoritesContext";
 import type { AppDispatch } from "./store";
 import type { PropsWithChildren } from "react";
 
@@ -32,7 +33,9 @@ const AppProviders = ({ children }: PropsWithChildren) => {
       <Provider store={store}>
         <QueryClientProvider client={queryClient}>
           <MotionConfig reducedMotion="user">
-            <AuthInitializer>{children}</AuthInitializer>
+            <AuthInitializer>
+              <FavoritesProvider>{children}</FavoritesProvider>
+            </AuthInitializer>
           </MotionConfig>
         </QueryClientProvider>
       </Provider>

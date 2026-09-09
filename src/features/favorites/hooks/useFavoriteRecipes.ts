@@ -16,7 +16,7 @@ import {
   favoriteRecipesQueryOptions,
   fallbackFavoriteRecipesQueryOptions,
 } from "../queries/favoriteRecipesQuery";
-import { selectFavoriteIds } from "../store/favoritesSelectors";
+import { useFavorites } from "../context/FavoritesContext";
 import type {
   RecipeListController,
   RecipeSort,
@@ -27,7 +27,11 @@ import type {
 export const useFavoriteRecipes = () => {
   const isAuthenticated = useSelector(selectAuthIsLoggedIn);
   const userId = useSelector(selectAuthUserId);
-  const favoriteIds = useSelector(selectFavoriteIds);
+  const {
+    favoriteIds,
+    isLoading: idsIsLoading,
+    errorMessage: idsError,
+  } = useFavorites();
   const dailyLimitIsReached = useSelector(selectRecipeDailyLimitIsReached);
   const { recipeId } = useParams<{ recipeId?: string }>() ?? {};
   const identity = JSON.stringify([userId, favoriteIds, dailyLimitIsReached]);
@@ -53,12 +57,14 @@ export const useFavoriteRecipes = () => {
   );
   const activeQuery = dailyLimitIsReached ? fallbackQuery : apiQuery;
   const isLoading =
-    enabled &&
-    (activeQuery.isPending || activeQuery.isFetching || shouldUseFallback);
+    idsIsLoading ||
+    (enabled &&
+      (activeQuery.isPending || activeQuery.isFetching || shouldUseFallback));
   const errorMessage =
-    enabled && activeQuery.error && !shouldUseFallback
+    idsError ||
+    (enabled && activeQuery.error && !shouldUseFallback
       ? getRecipeErrorMessage(activeQuery.error)
-      : "";
+      : "");
   const apiRecipes = apiQuery.data ?? [];
   const sortedRecipes =
     order.sortBy && order.sortType

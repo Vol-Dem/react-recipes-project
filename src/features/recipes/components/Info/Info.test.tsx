@@ -3,7 +3,8 @@ import { Provider } from "react-redux";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import authSlice from "../../../auth/store/authSlice";
-import favoritesSlice from "../../../favorites/store/favoritesSlice";
+import { FavoritesProvider } from "../../../favorites/context/FavoritesContext";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Info from "./Info";
 
 describe("Info", () => {
@@ -12,13 +13,17 @@ describe("Info", () => {
     const store = configureStore({
       reducer: {
         auth: authSlice.reducer,
-        fav: favoritesSlice.reducer,
       },
     });
 
-    render(
+    const client = new QueryClient();
+    const { unmount } = render(
       <Provider store={store}>
-        <Info readyInMinutes={30} servings={2} recipeId="42" />
+        <QueryClientProvider client={client}>
+          <FavoritesProvider>
+            <Info readyInMinutes={30} servings={2} recipeId="42" />
+          </FavoritesProvider>
+        </QueryClientProvider>
       </Provider>,
     );
 
@@ -32,5 +37,7 @@ describe("Info", () => {
     await user.keyboard("{Enter}");
 
     expect(store.getState().auth.authFormIsOpen).toBe(true);
+    unmount();
+    client.clear();
   });
 });

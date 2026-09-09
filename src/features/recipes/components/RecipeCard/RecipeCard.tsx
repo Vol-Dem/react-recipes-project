@@ -14,8 +14,7 @@ import {
   RECIPE_CARD_VARIANTS,
 } from "../../constants/animations";
 import { selectAuthIsLoggedIn } from "../../../auth/store/authSelectors";
-import { selectIsFavorite } from "../../../favorites/store/favoritesSelectors";
-import type { RootState } from "../../../../app/store";
+import { useFavorites } from "../../../favorites/context/FavoritesContext";
 import type { RecipeSummary } from "../../types";
 import {
   RECIPE_CARD_IMAGE_HEIGHT,
@@ -34,9 +33,8 @@ const RecipeCard = ({ recipe, shouldPrefetch }: RecipeCardProps) => {
   const pathname = usePathname() ?? "";
   const recipeIsOpen = !!recipeId;
   const isAuth = useSelector(selectAuthIsLoggedIn);
-  const isFavorite = useSelector((state: RootState) =>
-    selectIsFavorite(state, recipe.id),
-  );
+  const { favoriteIds } = useFavorites();
+  const isFavorite = favoriteIds.includes(recipe.id);
   const isFav = isAuth && isFavorite;
   const classSide = recipeIsOpen ? classes["recipe-card--side"] : "";
   const isActive = recipe.id === Number(recipeId);
