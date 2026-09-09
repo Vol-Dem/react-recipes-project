@@ -7,11 +7,14 @@ import { recipeActions } from "../store/recipesSlice";
 import { isRecipeApiLimitError } from "../utils/recipeErrors";
 import type { AppDispatch } from "../../../app/store";
 
-export const useRecipeApiFallback = (error: unknown) => {
+export const useRecipeApiFallback = (
+  error: unknown,
+  knownLimitReached = false,
+) => {
   const dispatch = useDispatch<AppDispatch>();
   const dailyLimitIsReached = useSelector(selectRecipeDailyLimitIsReached);
   const shouldUseFallback =
-    !dailyLimitIsReached && isRecipeApiLimitError(error);
+    !dailyLimitIsReached && (knownLimitReached || isRecipeApiLimitError(error));
 
   useEffect(() => {
     if (!shouldUseFallback) return;

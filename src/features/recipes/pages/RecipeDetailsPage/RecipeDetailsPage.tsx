@@ -8,10 +8,19 @@ import RecipeHeader from "../../components/RecipeHeader/RecipeHeader";
 import { useRecipeDetails } from "../../hooks/useRecipeDetails";
 import { useRecipeList } from "../../context/RecipeListContext";
 
-const RecipeDetailsPage = () => {
+interface RecipeDetailsPageProps {
+  initialApiLimitReached?: boolean;
+}
+
+const RecipeDetailsPage = ({
+  initialApiLimitReached = false,
+}: RecipeDetailsPageProps) => {
   const router = useRouter();
   const { recipeId } = useParams<{ recipeId: string }>() ?? { recipeId: "" };
-  const { isLoading: recipeIsLoading, recipe } = useRecipeDetails(recipeId);
+  const { isLoading: recipeIsLoading, recipe } = useRecipeDetails(
+    recipeId,
+    initialApiLimitReached,
+  );
   const {
     listHref,
     list: { hasRecipes: hasRecipesPerPage },

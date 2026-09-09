@@ -3,18 +3,20 @@ import { fetchRecipeDetailsFromApi } from "../api/recipeApi";
 import { fetchRecipeFromFirestore } from "../api/recipeRepository";
 import { RecipeHttpError } from "../api/requestRecipeJson";
 import {
+  recipeDetailsQueryKey,
+  type RecipeDetailsSource,
+} from "./recipeDetailsQueryKey";
+import {
   RECIPE_DETAILS_GC_TIME_MS,
   RECIPE_DETAILS_STALE_TIME_MS,
 } from "../constants/queries";
-
-type RecipeDetailsSource = "api" | "firestore";
 
 export const recipeDetailsQueryOptions = (
   recipeId: string,
   source: RecipeDetailsSource,
 ) =>
   queryOptions({
-    queryKey: ["recipes", "detail", source, recipeId],
+    queryKey: recipeDetailsQueryKey(recipeId, source),
     queryFn: async ({ signal }) => {
       if (source === "api") {
         return fetchRecipeDetailsFromApi(recipeId, signal);

@@ -5,15 +5,23 @@ import { selectRecipeDailyLimitIsReached } from "../store/recipesSelectors";
 import { getRecipeErrorMessage } from "../utils/recipeErrors";
 import { useRecipeApiFallback } from "./useRecipeApiFallback";
 
-export const useRecipeDetails = (recipeId: string) => {
+export const useRecipeDetails = (
+  recipeId: string,
+  initialApiLimitReached = false,
+) => {
   const dailyLimitIsReached = useSelector(selectRecipeDailyLimitIsReached);
-  const query = useQuery(
-    recipeDetailsQueryOptions(
+  const query = useQuery({
+    ...recipeDetailsQueryOptions(
       recipeId,
       dailyLimitIsReached ? "firestore" : "api",
     ),
+    // Do not repeat a server request that already exhausted the API quota.
+    enabled: !initialApiLimitReached || dailyLimitIsReached,
+  });
+  const shouldUseFallback = useRecipeApiFallback(
+    query.error,
+    initialApiLimitReached,
   );
-  const shouldUseFallback = useRecipeApiFallback(query.error);
 
   if (query.error && !shouldUseFallback && !query.data) {
     throw new Error(getRecipeErrorMessage(query.error), { cause: query.error });
