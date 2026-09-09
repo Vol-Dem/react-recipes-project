@@ -1,0 +1,2 @@
+export const RECIPE_DETAILS_STALE_TIME_MS = 5 * 60 * 1000;
+export const RECIPE_DETAILS_GC_TIME_MS = 30 * 60 * 1000;

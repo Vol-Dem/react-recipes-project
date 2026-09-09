@@ -1,52 +1,49 @@
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { useThrowAsyncError } from "../../../shared/hooks/useThrowAsyncError";
-import { fetchRecipeFromFirestore } from "../api/recipeRepository";
-import { buildRecipeDetailsUrl } from "../api/recipeUrls";
+import { useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useDispatch, useSelector } from "react-redux";
+import { notificationActions } from "../../notifications/store/notificationSlice";
+import { RECIPE_DAILY_LIMIT_NOTIFICATION } from "../constants/messages";
+import { recipeDetailsQueryOptions } from "../queries/recipeDetailsQuery";
 import { selectRecipeDailyLimitIsReached } from "../store/recipesSelectors";
-import { useGetDataFromHttp } from "./useGetDataFromHttp";
-import type { RecipeDetails } from "../types";
+import { recipeActions } from "../store/recipesSlice";
+import {
+  getRecipeErrorMessage,
+  isRecipeApiLimitError,
+} from "../utils/recipeErrors";
+import type { AppDispatch } from "../../../app/store";
 
 export const useRecipeDetails = (recipeId: string) => {
-  const [recipe, setRecipe] = useState<RecipeDetails | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const dispatch = useDispatch<AppDispatch>();
   const dailyLimitIsReached = useSelector(selectRecipeDailyLimitIsReached);
-  const throwAsyncError = useThrowAsyncError();
-  const getDataFromHttp = useGetDataFromHttp();
+  const query = useQuery(
+    recipeDetailsQueryOptions(
+      recipeId,
+      dailyLimitIsReached ? "firestore" : "api",
+    ),
+  );
+  const shouldUseFallback =
+    !dailyLimitIsReached && isRecipeApiLimitError(query.error);
 
   useEffect(() => {
-    setIsLoading(true);
+    if (!shouldUseFallback) return;
 
-    if (!dailyLimitIsReached) {
-      const setRecipeData = (recipeData: RecipeDetails) => {
-        setRecipe(recipeData);
-        setIsLoading(false);
-      };
+    dispatch((dispatch, getState) => {
+      // Multiple observers (or Strict Mode) must announce the quota switch once.
+      if (selectRecipeDailyLimitIsReached(getState())) return;
 
-      void getDataFromHttp<RecipeDetails>(
-        { url: buildRecipeDetailsUrl(recipeId) },
-        setRecipeData,
+      dispatch(recipeActions.setDailyLimitIsReached());
+      dispatch(
+        notificationActions.showNotification(RECIPE_DAILY_LIMIT_NOTIFICATION),
       );
-      return;
-    }
+    });
+  }, [dispatch, shouldUseFallback]);
 
-    const loadRecipeFromFirestore = async () => {
-      try {
-        const recipeData = await fetchRecipeFromFirestore(recipeId);
+  if (query.error && !shouldUseFallback && !query.data) {
+    throw new Error(getRecipeErrorMessage(query.error), { cause: query.error });
+  }
 
-        if (!recipeData) {
-          throw new Error("Recipe not found");
-        }
-
-        setRecipe(recipeData);
-        setIsLoading(false);
-      } catch (error) {
-        throwAsyncError(error);
-      }
-    };
-
-    void loadRecipeFromFirestore();
-  }, [dailyLimitIsReached, getDataFromHttp, recipeId, throwAsyncError]);
-
-  return { isLoading, recipe };
+  return {
+    isLoading: query.isPending || shouldUseFallback,
+    recipe: query.data ?? null,
+  };
 };

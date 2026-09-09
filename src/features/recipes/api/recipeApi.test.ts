@@ -1,5 +1,4 @@
-import { fetchRecipesFromApi } from "./recipeApi";
-import { requestRecipeJson } from "./requestRecipeJson";
+import { fetchRecipeDetailsFromApi, fetchRecipesFromApi } from "./recipeApi";
 import {
   isRecipeApiLimitError,
   getRecipeErrorMessage,
@@ -81,10 +80,13 @@ describe("recipe HTTP requests", () => {
     await assertion;
   });
 
-  it("forwards caller cancellation for future query consumers", async () => {
+  it("loads details through the local endpoint and forwards cancellation", async () => {
     const controller = new AbortController();
     vi.mocked(fetch).mockResolvedValue(Response.json({}));
-    await requestRecipeJson("/api/recipes/42", { signal: controller.signal });
+    await fetchRecipeDetailsFromApi("42", controller.signal);
+    expect(fetch).toHaveBeenCalledWith("/api/recipes/42", {
+      signal: expect.any(AbortSignal),
+    });
     const signal = vi.mocked(fetch).mock.calls[0][1]!.signal!;
     controller.abort();
     expect(signal.aborted).toBe(true);
