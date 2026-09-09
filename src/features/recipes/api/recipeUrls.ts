@@ -1,10 +1,3 @@
-import {
-  INCLUDE_NUTRITION,
-  INCLUDE_SEARCH_NUTRITION,
-  RESULT_NUM,
-  SPOONACULAR_API_KEY,
-  SPOONACULAR_API_URL,
-} from "../../../shared/constants";
 import type { SearchFilters } from "../types";
 
 type RecipeUrlParameters = Record<
@@ -24,7 +17,7 @@ const createRecipeUrl = (path: string, parameters: RecipeUrlParameters) => {
     ),
   );
 
-  return `${SPOONACULAR_API_URL}${path}?${searchParameters}`;
+  return `/api/recipes${path}?${searchParameters}`;
 };
 
 export const buildRecipeSearchUrl = ({
@@ -38,11 +31,10 @@ export const buildRecipeSearchUrl = ({
   maxCalories = "",
 }: SearchFilters = {}) => {
   const parameters: RecipeUrlParameters = {
-    apiKey: SPOONACULAR_API_KEY,
     query,
     cuisine,
     diet,
-    intolerances: intolerance,
+    intolerance,
     type,
   };
 
@@ -50,21 +42,13 @@ export const buildRecipeSearchUrl = ({
   if (minCalories) parameters.minCalories = minCalories;
   if (maxCalories) parameters.maxCalories = maxCalories;
 
-  parameters.number = RESULT_NUM;
-  parameters.addRecipeNutrition = INCLUDE_SEARCH_NUTRITION;
-
-  return createRecipeUrl("/recipes/complexSearch", parameters);
+  return createRecipeUrl("/search", parameters);
 };
 
 export const buildFavoriteRecipesUrl = (recipeIds: number[]) =>
-  createRecipeUrl("/recipes/informationBulk", {
-    apiKey: SPOONACULAR_API_KEY,
+  createRecipeUrl("/bulk", {
     ids: recipeIds.join(","),
-    includeNutrition: INCLUDE_SEARCH_NUTRITION,
   });
 
 export const buildRecipeDetailsUrl = (recipeId: string | number) =>
-  createRecipeUrl(`/recipes/${recipeId}/information`, {
-    apiKey: SPOONACULAR_API_KEY,
-    includeNutrition: INCLUDE_NUTRITION,
-  });
+  `/api/recipes/${encodeURIComponent(recipeId)}`;

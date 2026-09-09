@@ -4,17 +4,11 @@ import RecipesPage from "./RecipesPage";
 import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
 import { thunk } from "redux-thunk";
-import axios from "axios";
+import { fetchRecipesFromApi } from "../../api/recipeApi";
 import { recipeActions } from "../../store/recipesSlice";
-import {
-  INCLUDE_SEARCH_NUTRITION,
-  RESULT_NUM,
-  SPOONACULAR_API_KEY,
-  SPOONACULAR_API_URL,
-} from "../../../../shared/constants";
 
-vi.mock("axios");
-const mockedAxiosGet = vi.mocked(axios.get);
+vi.mock("../../api/recipeApi");
+const mockedFetchRecipes = vi.mocked(fetchRecipesFromApi);
 vi.mock("next/navigation", () => ({
   useParams: () => ({}),
   usePathname: () => "/",
@@ -49,23 +43,21 @@ const initialState = {
 
 describe("RecipesPage component", () => {
   beforeEach(() => {
-    mockedAxiosGet.mockResolvedValue({
-      data: {
-        results: [
-          {
-            id: 152,
-            title: "Pizza",
-            image: "",
-            readyInMinutes: 35,
+    mockedFetchRecipes.mockResolvedValue({
+      results: [
+        {
+          id: 152,
+          title: "Pizza",
+          image: "",
+          readyInMinutes: 35,
 
-            nutrition: {
-              nutrients: [{ name: "Calories", amount: 237, unit: "kcal" }],
-            },
-
-            servings: 4,
+          nutrition: {
+            nutrients: [{ name: "Calories", amount: 237, unit: "kcal" }],
           },
-        ],
-      },
+
+          servings: 4,
+        },
+      ],
     });
   });
 
@@ -85,7 +77,7 @@ describe("RecipesPage component", () => {
       </Provider>,
     );
     const inputQuery = "pasta";
-    const expectedUrl = `${SPOONACULAR_API_URL}/recipes/complexSearch?apiKey=${SPOONACULAR_API_KEY}&query=${inputQuery}&cuisine=&diet=&intolerances=&type=&number=${RESULT_NUM}&addRecipeNutrition=${INCLUDE_SEARCH_NUTRITION}`;
+    const expectedUrl = `/api/recipes/search?query=${inputQuery}&cuisine=&diet=&intolerance=&type=`;
     const searchInput = screen.getByTestId("search-input");
     const submitBtn = screen.getByTestId("search-submit");
 
@@ -95,7 +87,7 @@ describe("RecipesPage component", () => {
 
     await waitFor(() => {
       const dispatchedActions = store.getActions();
-      expect(axios.get).toBeCalledWith(expectedUrl);
+      expect(fetchRecipesFromApi).toBeCalledWith(expectedUrl);
       expect(dispatchedActions).toContainEqual(recipeActions.setCurrentPage(1));
       expect(dispatchedActions).toContainEqual(
         recipeActions.setEmptyMessage(

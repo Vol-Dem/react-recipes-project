@@ -6,14 +6,6 @@ const readEnvironmentValue = (environment: Environment, name: string) =>
 export const getPublicEnvironment = (
   environment: Environment = process.env,
 ) => ({
-  NEXT_PUBLIC_SPOONACULAR_API_URL: readEnvironmentValue(
-    environment,
-    "SPOONACULAR_API_URL",
-  ),
-  NEXT_PUBLIC_SPOONACULAR_API_KEY: readEnvironmentValue(
-    environment,
-    "SPOONACULAR_API_KEY",
-  ),
   NEXT_PUBLIC_FIREBASE_API_KEY: readEnvironmentValue(
     environment,
     "FIREBASE_API_KEY",

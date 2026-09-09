@@ -1,6 +1,7 @@
 import configureStore from "redux-mock-store";
 import { thunk } from "redux-thunk";
-import axios from "axios";
+import { fetchRecipesFromApi } from "../api/recipeApi";
+import { makeStore } from "../../../app/store";
 import type { AppDispatch } from "../../../app/store";
 import { getRecipes, nextPage, prevPage, sortRecipes } from "./recipesThunks";
 
@@ -17,8 +18,8 @@ const repositoryMocks = vi.hoisted(() => ({
   fetchFromFirestore: vi.fn(),
 }));
 
-vi.mock("axios");
-const mockedAxiosGet = vi.mocked(axios.get);
+vi.mock("../api/recipeApi");
+const mockedFetchRecipes = vi.mocked(fetchRecipesFromApi);
 vi.mock("../api/recipeRepository", () => ({
   createNextPageRequest: repositoryMocks.createNextPageRequest,
   createPreviousPageRequest: repositoryMocks.createPreviousPageRequest,
@@ -98,11 +99,11 @@ describe("recipe thunks", () => {
 
     it("stores the canonical API result", async () => {
       const store = mockStore({ recipe: initialState });
-      mockedAxiosGet.mockResolvedValue({ data: responseData });
+      mockedFetchRecipes.mockResolvedValue(responseData);
 
       await store.dispatch(getRecipes(request));
 
-      expect(axios.get).toHaveBeenCalledWith(request.requestUrl);
+      expect(fetchRecipesFromApi).toHaveBeenCalledWith(request.requestUrl);
       expect(store.getActions()).toEqual([
         { type: "recipe/setRecipesIsLoading", payload: true },
         { type: "recipe/setSearchResult", payload: expectedResult },
@@ -112,7 +113,7 @@ describe("recipe thunks", () => {
 
     it("stores bulk API results used by the favorites page", async () => {
       const store = mockStore({ recipe: initialState });
-      mockedAxiosGet.mockResolvedValue({ data: responseData.results });
+      mockedFetchRecipes.mockResolvedValue(responseData.results);
 
       await store.dispatch(getRecipes(request));
 
@@ -154,35 +155,37 @@ describe("recipe thunks", () => {
     });
 
     it("switches to fallback mode when the API limit is reached", async () => {
-      const store = mockStore({ recipe: initialState });
+      const store = makeStore();
       const expectedError = Object.assign(new Error("Payment required"), {
         response: { status: 402 },
       });
-      mockedAxiosGet
-        .mockRejectedValueOnce(expectedError)
-        .mockResolvedValueOnce({ data: responseData });
+      mockedFetchRecipes.mockRejectedValueOnce(expectedError);
+      repositoryMocks.fetchFromFirestore.mockResolvedValue({
+        recipes: responseData.results,
+        isLastPage: true,
+      });
 
       await store.dispatch(getRecipes(request));
 
-      expect(mockedAxiosGet).toHaveBeenCalledTimes(2);
-      expect(store.getActions()).toContainEqual({
-        type: "recipe/setDailyLimitIsReached",
-        payload: undefined,
+      expect(mockedFetchRecipes).toHaveBeenCalledOnce();
+      expect(repositoryMocks.fetchFromFirestore).toHaveBeenCalledOnce();
+      expect(store.getState().recipe).toMatchObject({
+        dailyLimitIsReached: true,
+        searchResult: expectedResult,
+        recipesIsLoading: false,
+        isLastPage: true,
       });
-      expect(store.getActions()).toContainEqual({
-        type: "notification/showNotification",
-        payload: {
-          message:
-            "The application will now enter test mode. Search results will remain the same, and you can still use the other features.",
-          severity: "status",
-          title: "Daily API limit reached",
-        },
+      expect(store.getState().notification).toMatchObject({
+        message:
+          "The application will now enter test mode. Search results will remain the same, and you can still use the other features.",
+        severity: "status",
+        title: "Daily API limit reached",
       });
     });
 
     it("stores request errors", async () => {
       const store = mockStore({ recipe: initialState });
-      mockedAxiosGet.mockRejectedValue(new Error("Error message"));
+      mockedFetchRecipes.mockRejectedValue(new Error("Error message"));
 
       await store.dispatch(getRecipes(request));
 

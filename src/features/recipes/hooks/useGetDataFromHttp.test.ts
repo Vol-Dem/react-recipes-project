@@ -4,7 +4,6 @@ import { useGetDataFromHttp } from "./useGetDataFromHttp";
 const hookMocks = vi.hoisted(() => ({
   dispatch: vi.fn(),
   throwAsyncError: vi.fn(),
-  timeout: vi.fn(),
 }));
 
 vi.mock("react-redux", () => ({
@@ -12,9 +11,6 @@ vi.mock("react-redux", () => ({
 }));
 vi.mock("../../../shared/hooks/useThrowAsyncError", () => ({
   useThrowAsyncError: () => hookMocks.throwAsyncError,
-}));
-vi.mock("../../../shared/utils/async", () => ({
-  timeout: hookMocks.timeout,
 }));
 interface ResponseOptions {
   data: unknown;
@@ -33,7 +29,6 @@ describe("useGetDataFromHttp", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.stubGlobal("fetch", vi.fn());
-    hookMocks.timeout.mockReturnValue(new Promise(() => {}));
   });
 
   afterEach(() => {

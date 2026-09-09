@@ -45,6 +45,7 @@ const isNetworkError = (error: unknown) =>
   error instanceof TypeError;
 
 const isTimeoutError = (error: unknown) =>
+  getErrorStatus(error) === 504 ||
   asRecipeError(error).code === "ECONNABORTED" ||
   asRecipeError(error).code === "ETIMEDOUT" ||
   asRecipeError(error).name === "TimeoutError";

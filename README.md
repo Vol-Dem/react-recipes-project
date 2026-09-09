@@ -6,10 +6,16 @@ favorites, filtering, sorting, pagination, and responsive recipe details.
 ## Local development
 
 1. Install dependencies with `npm install`.
-2. Copy `.env.example` to `.env` and provide the required public Firebase and
-   Spoonacular values.
+2. Copy `.env.example` to `.env` and provide the public Firebase values and
+   server-only `SPOONACULAR_API_URL` and `SPOONACULAR_API_KEY`.
 3. Start the development server with `npm run dev`.
 4. Open `http://localhost:3000`.
+
+Recipe searches, bulk lookups, and details use the local `/api/recipes`
+endpoints. The Next.js server validates requests and calls Spoonacular without
+sending its API key to the browser. When Spoonacular returns its daily quota
+status (402), the existing client-side Firestore fallback remains available.
+Restart the server after changing environment variables.
 
 ## Commands
 

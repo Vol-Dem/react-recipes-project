@@ -1,8 +1,7 @@
 import { useCallback } from "react";
 import { useDispatch } from "react-redux";
-import { TIMEOUT_SEC } from "../../../shared/constants";
 import { useThrowAsyncError } from "../../../shared/hooks/useThrowAsyncError";
-import { timeout } from "../../../shared/utils/async";
+import { requestRecipeJson } from "../api/requestRecipeJson";
 import { notificationActions } from "../../notifications/store/notificationSlice";
 import { RECIPE_DAILY_LIMIT_NOTIFICATION } from "../constants/messages";
 import { recipeActions } from "../store/recipesSlice";
@@ -34,20 +33,15 @@ export const useGetDataFromHttp = () => {
       transformData: (data: Data) => void,
     ) => {
       try {
-        const response = fetch(`${url}`, {
+        const data = await requestRecipeJson<Data>(url, {
           method: method || "GET",
           headers: headers || {},
           body: body ? JSON.stringify(body) : undefined,
         });
 
-        const res = await Promise.race([response, timeout(TIMEOUT_SEC)]);
-        const data = (await res.json()) as Data & { status?: string };
-        const responseError = Object.assign(
-          new Error("Recipe request failed"),
-          { response: { data, status: res.status } },
-        );
-
-        if (isRecipeApiLimitError(responseError)) {
+        transformData(data);
+      } catch (error) {
+        if (isRecipeApiLimitError(error)) {
           dispatch(recipeActions.setDailyLimitIsReached());
           dispatch(
             notificationActions.showNotification(
@@ -57,12 +51,6 @@ export const useGetDataFromHttp = () => {
           return;
         }
 
-        if (!res.ok || data.status === "failure") {
-          throw responseError;
-        }
-
-        transformData(data);
-      } catch (error) {
         throwAsyncError(new Error(getRecipeErrorMessage(error)));
       }
     },

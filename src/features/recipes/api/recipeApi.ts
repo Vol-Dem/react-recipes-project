@@ -1,10 +1,7 @@
-import axios from "axios";
+import { requestRecipeJson } from "./requestRecipeJson";
 import type { RecipeApiResponse } from "../types";
 
 export const fetchRecipesFromApi = async (
   requestUrl: string,
-): Promise<RecipeApiResponse> => {
-  const response = await axios.get<RecipeApiResponse>(requestUrl);
-
-  return response.data;
-};
+): Promise<RecipeApiResponse> =>
+  requestRecipeJson<RecipeApiResponse>(requestUrl);
