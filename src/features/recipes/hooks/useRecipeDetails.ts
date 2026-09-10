@@ -1,8 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { useSelector } from "react-redux";
+import { notFound } from "next/navigation";
 import { recipeDetailsQueryOptions } from "../queries/recipeDetailsQuery";
 import { selectRecipeDailyLimitIsReached } from "../store/recipesSelectors";
-import { getRecipeErrorMessage } from "../utils/recipeErrors";
+import {
+  getRecipeErrorMessage,
+  isRecipeNotFoundError,
+} from "../utils/recipeErrors";
 import { useRecipeApiFallback } from "./useRecipeApiFallback";
 
 export const useRecipeDetails = (
@@ -24,6 +28,7 @@ export const useRecipeDetails = (
   );
 
   if (query.error && !shouldUseFallback && !query.data) {
+    if (isRecipeNotFoundError(query.error)) notFound();
     throw new Error(getRecipeErrorMessage(query.error), { cause: query.error });
   }
 

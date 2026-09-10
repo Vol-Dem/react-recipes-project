@@ -20,6 +20,11 @@ import { recipeDetailsQueryOptions } from "../queries/recipeDetailsQuery";
 import { recipeActions } from "../store/recipesSlice";
 import { useRecipeDetails } from "./useRecipeDetails";
 import type { RecipeDetails } from "../types";
+import { notFound } from "next/navigation";
+
+vi.mock("next/navigation", () => ({
+  notFound: vi.fn(),
+}));
 
 vi.mock("../api/recipeApi", () => ({ fetchRecipeDetailsFromApi: vi.fn() }));
 vi.mock("../api/recipeRepository", () => ({
@@ -80,6 +85,9 @@ describe("useRecipeDetails", () => {
 
   beforeEach(() => {
     vi.resetAllMocks();
+    vi.mocked(notFound).mockImplementation(() => {
+      throw new Error("Recipe not found");
+    });
   });
   afterEach(() => {
     cleanup();
@@ -225,6 +233,7 @@ describe("useRecipeDetails", () => {
       expect(
         fallback ? fetchRecipeFromFirestore : fetchRecipeDetailsFromApi,
       ).toHaveBeenCalledOnce();
+      if (fallback) expect(notFound).toHaveBeenCalled();
     },
   );
 });

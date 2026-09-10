@@ -1,4 +1,5 @@
 import {
+  act,
   cleanup,
   fireEvent,
   render,
@@ -14,6 +15,11 @@ import { useRecipeList } from "../../context/RecipeListContext";
 import RecipesPage from "./RecipesPage";
 import { FavoritesProvider } from "../../../favorites/context/FavoritesContext";
 import { mockNextHistory } from "../../../../test-utils/nextHistory";
+import { fetchRecipePage } from "../../api/recipePagination";
+import { recipeActions } from "../../store/recipesSlice";
+import classes from "./RecipesPage.module.scss";
+
+vi.mock("../../api/recipePagination", () => ({ fetchRecipePage: vi.fn() }));
 
 vi.mock("../../api/recipeApi");
 const mockedFetchRecipes = vi.mocked(fetchRecipesFromApi);
@@ -36,10 +42,11 @@ const ListProbe = () => {
 
 describe("RecipesPage component", () => {
   const clients: QueryClient[] = [];
-  const setup = () => {
+  const setup = (fallback = false) => {
     const client = makeQueryClient();
     clients.push(client);
     const store = makeStore();
+    if (fallback) store.dispatch(recipeActions.setDailyLimitIsReached());
     return {
       store,
       ...render(
@@ -126,6 +133,51 @@ describe("RecipesPage component", () => {
     setup();
     expect(screen.getByTestId("list-context")).toHaveTextContent("false:true");
     expect(screen.queryByText("Your recipe book")).not.toBeInTheDocument();
+    expect(fetchRecipesFromApi).not.toHaveBeenCalled();
+    expect(
+      screen.getByTestId("list-context").closest("section"),
+    ).not.toHaveClass(classes["recipe-columns"]);
+  });
+
+  it("keeps the detail columns while a new Firestore sort order is loading", async () => {
+    params.recipeId = "152";
+    window.history.replaceState(null, "", "/recipe/152?query=pasta");
+    const page = {
+      recipes: [
+        {
+          id: 152,
+          title: "Saved pizza",
+          img: "",
+          readyInMinutes: 35,
+          servings: 4,
+          calories: 237,
+        },
+      ],
+      isLastPage: true,
+      nextCursor: undefined,
+    };
+    let resolveSorted!: (value: typeof page) => void;
+    vi.mocked(fetchRecipePage)
+      .mockResolvedValueOnce(page)
+      .mockImplementationOnce(
+        () =>
+          new Promise((resolve) => {
+            resolveSorted = resolve;
+          }),
+      );
+    setup(true);
+    await screen.findByText("Saved pizza", {}, { timeout: 5000 });
+    const content = screen.getByTestId("list-context").closest("section");
+    expect(content).toHaveClass(classes["recipe-columns"]);
+    fireEvent.change(screen.getByRole("combobox", { name: /Sort\s+by/ }), {
+      target: { value: "calories-desc" },
+    });
+    await waitFor(() => expect(fetchRecipePage).toHaveBeenCalledTimes(2));
+    expect(screen.getByTestId("list-context")).toHaveTextContent("false:true");
+    expect(content).toHaveClass(classes["recipe-columns"]);
+    await act(async () => resolveSorted(page));
+    await screen.findByText("Saved pizza");
+    expect(content).toHaveClass(classes["recipe-columns"]);
     expect(fetchRecipesFromApi).not.toHaveBeenCalled();
   });
 

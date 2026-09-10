@@ -7,6 +7,49 @@ describe("Image", () => {
     vi.restoreAllMocks();
   });
 
+  it.each([undefined, null, "", "   "])(
+    "shows only the fallback for a missing image URL: %s",
+    (src) => {
+      const consoleError = vi.spyOn(console, "error");
+      render(
+        <Image
+          src={src}
+          width={312}
+          height={231}
+          alt="Recipe"
+          fallback={<span>No image</span>}
+        />,
+      );
+      expect(screen.getByText("No image")).toBeInTheDocument();
+      expect(screen.queryByRole("img")).not.toBeInTheDocument();
+      expect(consoleError).not.toHaveBeenCalled();
+    },
+  );
+
+  it("renders safely without either a source or a fallback", () => {
+    const { container } = render(
+      <Image alt="Recipe" width={312} height={231} />,
+    );
+    expect(container).toBeEmptyDOMElement();
+  });
+
+  it("handles a missing source being supplied and removed again", async () => {
+    const props = {
+      width: 312,
+      height: 231,
+      fallback: <span>No image</span>,
+    };
+    const { rerender } = render(<Image {...props} alt="Recipe" />);
+    rerender(<Image {...props} alt="Recipe" src="/image.jpg" />);
+    fireEvent.load(screen.getByRole("img"));
+    await waitFor(() =>
+      expect(screen.queryByText("No image")).not.toBeInTheDocument(),
+    );
+    rerender(<Image {...props} alt="Recipe" src={null} />);
+    expect(screen.queryByRole("img")).not.toBeInTheDocument();
+    expect(screen.getByText("No image")).toBeInTheDocument();
+  });
+
   it("shows its fallback until the image loads", async () => {
     const onLoad = vi.fn();
 

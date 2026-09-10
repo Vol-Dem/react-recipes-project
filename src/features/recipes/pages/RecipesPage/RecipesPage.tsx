@@ -42,7 +42,7 @@ const RecipesPage = ({ children }: PropsWithChildren) => {
     hasRecipesPerPage || recipesIsLoading || recipeIsOpen ? classes.mt0 : ""
   }`;
   const contentSectionClassName = `${classes["section-content"]} ${
-    recipeIsOpen && hasRecipesPerPage ? classes["recipe-columns"] : ""
+    recipeIsOpen && shouldShowRecipeList ? classes["recipe-columns"] : ""
   }`;
 
   return (

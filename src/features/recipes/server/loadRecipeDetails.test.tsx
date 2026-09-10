@@ -16,9 +16,15 @@ import { recipeDetailsQueryKey } from "../queries/recipeDetailsQueryKey";
 import { recipeActions } from "../store/recipesSlice";
 import { getRecipeDetails } from "./spoonacular";
 import { loadRecipeDetails } from "./loadRecipeDetails";
+import { notFound } from "next/navigation";
 import type { RecipeDetails } from "../types";
 
 vi.mock("server-only", () => ({}));
+vi.mock("next/navigation", () => ({
+  notFound: vi.fn(() => {
+    throw new Error("NEXT_NOT_FOUND");
+  }),
+}));
 vi.mock("./spoonacular", () => ({ getRecipeDetails: vi.fn() }));
 vi.mock("../api/recipeApi", () => ({ fetchRecipeDetailsFromApi: vi.fn() }));
 vi.mock("../api/recipeRepository", () => ({
@@ -64,6 +70,9 @@ describe("server recipe details hydration", () => {
 
   beforeEach(() => {
     vi.resetAllMocks();
+    vi.mocked(notFound).mockImplementation(() => {
+      throw new Error("NEXT_NOT_FOUND");
+    });
     vi.mocked(getRecipeDetails).mockResolvedValue(recipe);
   });
   afterEach(() => {
@@ -116,6 +125,7 @@ describe("server recipe details hydration", () => {
     expect(initial).toEqual({
       state: { mutations: [], queries: [] },
       apiLimitReached: true,
+      recipe: null,
     });
     const { wrapper, store } = setup(initial);
     const { result } = renderHook(
@@ -139,6 +149,7 @@ describe("server recipe details hydration", () => {
     expect(initial).toEqual({
       state: { mutations: [], queries: [] },
       apiLimitReached: false,
+      recipe: null,
     });
     const { wrapper } = setup(initial);
     const { result } = renderHook(
@@ -166,5 +177,21 @@ describe("server recipe details hydration", () => {
       expect(result.current.recipe?.title).toBe("Saved recipe"),
     );
     expect(fetchRecipeDetailsFromApi).not.toHaveBeenCalled();
+  });
+
+  it.each(["abc", "0", "-1", "1.5", "9007199254740992"])(
+    "rejects invalid route ID %s before calling the provider",
+    async (id) => {
+      await expect(loadRecipeDetails(id)).rejects.toThrow("NEXT_NOT_FOUND");
+      expect(notFound).toHaveBeenCalledOnce();
+      expect(getRecipeDetails).not.toHaveBeenCalled();
+    },
+  );
+
+  it("uses Next's not-found boundary for confirmed provider 404s", async () => {
+    vi.mocked(getRecipeDetails).mockRejectedValue(new RecipeHttpError(404));
+    await expect(loadRecipeDetails("42")).rejects.toThrow("NEXT_NOT_FOUND");
+    expect(notFound).toHaveBeenCalledOnce();
+    expect(getRecipeDetails).toHaveBeenCalledOnce();
   });
 });

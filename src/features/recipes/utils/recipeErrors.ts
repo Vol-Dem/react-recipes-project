@@ -53,6 +53,9 @@ const isTimeoutError = (error: unknown) =>
 export const isRecipeApiLimitError = (error: unknown) =>
   getErrorStatus(error) === API_DAILY_LIMIT_STATUS;
 
+export const isRecipeNotFoundError = (error: unknown) =>
+  getErrorStatus(error) === 404;
+
 export const getRecipeErrorMessage = (error: unknown) => {
   if (isTimeoutError(error)) {
     return RECIPE_ERROR_MESSAGE_TIMEOUT;

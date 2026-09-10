@@ -6,7 +6,7 @@ import classes from "./Image.module.scss";
 
 interface ImageProps extends Omit<NextImageProps, "src"> {
   fallback?: ReactNode;
-  src: string;
+  src?: string | null;
 }
 
 const Image = ({
@@ -18,25 +18,28 @@ const Image = ({
   ...imageProps
 }: ImageProps) => {
   const [loadedSource, setLoadedSource] = useState<string | null>(null);
-  const isLoading = loadedSource !== src;
+  const imageSource = src?.trim() || null;
+  const isLoading = !imageSource || loadedSource !== imageSource;
   const imageClassName = `${classes.image} ${
     isLoading ? classes["image--hidden"] : ""
   } ${className || ""}`;
 
   const handleLoad: React.ReactEventHandler<HTMLImageElement> = (event) => {
-    setLoadedSource(src);
+    setLoadedSource(imageSource);
     onLoad?.(event);
   };
 
   return (
     <>
-      <NextImage
-        {...imageProps}
-        alt={alt}
-        className={imageClassName}
-        src={src}
-        onLoad={handleLoad}
-      />
+      {imageSource && (
+        <NextImage
+          {...imageProps}
+          alt={alt}
+          className={imageClassName}
+          src={imageSource}
+          onLoad={handleLoad}
+        />
+      )}
       {isLoading && fallback && (
         <span className={classes.fallback} aria-hidden="true">
           {fallback}
