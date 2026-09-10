@@ -14,7 +14,15 @@ import type { RecipeApiItem, RecipeSort } from "../types";
 
 export type RecipePageCursor = QueryDocumentSnapshot | undefined;
 
-// Cursors belong to individual query pages, not module globals or Redux.
+/**
+ * Reads one Firestore page plus a look-ahead document to detect the final page.
+ * Start a new cursor chain when sorting or filtering changes.
+ *
+ * @param after - Last displayed document from the preceding page, not the look-ahead document.
+ * @param filter - Optional Firestore constraint, such as favorite ID membership.
+ * @returns Mapped recipes and an opaque next-page cursor. Keep cursors in the
+ * browser query cache; they are not safe for Redux or server dehydration.
+ */
 export const fetchRecipePage = async (
   { sortBy, sortType }: RecipeSort,
   after?: RecipePageCursor,

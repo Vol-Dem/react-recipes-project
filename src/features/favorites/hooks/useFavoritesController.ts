@@ -30,6 +30,12 @@ interface FavoriteUpdate {
   session: Session;
 }
 
+/**
+ * Owns account-scoped favorite IDs and optimistic membership mutations.
+ * Rolls back only the failed recipe, guards against stale account sessions, and
+ * clears old account caches on auth changes. Mount once through FavoritesProvider
+ * so consumers share effects, pending updates, and notifications.
+ */
 export const useFavoritesController = () => {
   const isAuthenticated = useSelector(selectAuthIsLoggedIn);
   const authUserId = useSelector(selectAuthUserId);

@@ -13,6 +13,11 @@ interface RecipeRouteErrorProps {
   retry: () => void;
 }
 
+/**
+ * Keeps recipe failures inside the detail panel. Retry removes only this recipe's
+ * failed, data-less queries before asking Next to refresh/reset the route segment.
+ * Successful caches and the surrounding list remain intact.
+ */
 const RecipeRouteError = ({ error, retry }: RecipeRouteErrorProps) => {
   const client = useQueryClient();
   const { recipeId } = useParams<{ recipeId: string }>() ?? {};

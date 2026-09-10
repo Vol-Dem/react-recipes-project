@@ -12,6 +12,7 @@ export const FavoritesProvider = ({ children }: PropsWithChildren) => {
   return <FavoritesContext value={favorites}>{children}</FavoritesContext>;
 };
 
+/** Returns shared favorite membership and actions; throws when used outside FavoritesProvider. */
 export const useFavorites = () => {
   const favorites = useContext(FavoritesContext);
   if (!favorites) throw new Error("Favorites provider is required");

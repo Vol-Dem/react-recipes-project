@@ -3,6 +3,11 @@ type Environment = Record<string, string | undefined>;
 const readEnvironmentValue = (environment: Environment, name: string) =>
   environment[`NEXT_PUBLIC_${name}`] ?? environment[`VITE_${name}`];
 
+/**
+ * Exposes only the Firebase web-app configuration to Next.js and the test runner.
+ * NEXT_PUBLIC_* values take precedence over legacy VITE_* names. Server-only
+ * credentials must never be added to this allowlist.
+ */
 export const getPublicEnvironment = (
   environment: Environment = process.env,
 ) => ({

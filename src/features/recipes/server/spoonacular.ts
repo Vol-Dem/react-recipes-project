@@ -20,6 +20,11 @@ const environmentSchema = z.object({
   key: z.string().min(1),
 });
 
+/**
+ * Makes an uncached server-only provider request and validates its response.
+ * Credentials stay in server environment variables; invalid configuration and
+ * response shapes become safe HTTP errors instead of exposing provider details.
+ */
 const requestSpoonacular = async <Data>(
   path: string,
   parameters: Record<string, string | number | boolean>,
@@ -47,6 +52,7 @@ const requestSpoonacular = async <Data>(
   return result.data;
 };
 
+/** Validates search filters and translates the app's intolerance field to the provider's parameter. */
 export const searchRecipes = (input: unknown) => {
   const { intolerance, ...filters } = recipeSearchSchema.parse(input);
   const parameters: Record<string, string | number | boolean> = {
@@ -65,6 +71,7 @@ export const searchRecipes = (input: unknown) => {
   );
 };
 
+/** Validates a comma-separated `ids` field and loads public recipe summaries, not a user's favorite membership. */
 export const getFavoriteRecipes = (input: unknown) => {
   const { ids } = favoriteRecipesSchema.parse(input);
   return requestSpoonacular(
@@ -77,6 +84,7 @@ export const getFavoriteRecipes = (input: unknown) => {
   );
 };
 
+/** Loads validated public recipe details; rejects invalid IDs before requesting the provider. */
 export const getRecipeDetails = (recipeId: string) => {
   const id = recipeIdSchema.parse(recipeId);
   return requestSpoonacular(

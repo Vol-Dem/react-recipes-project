@@ -7,6 +7,11 @@ import { recipeActions } from "../store/recipesSlice";
 import { isRecipeApiLimitError } from "../utils/recipeErrors";
 import type { AppDispatch } from "../../../app/store";
 
+/**
+ * Schedules the Redux quota flag and notification once, including for concurrent consumers.
+ * Returns true while a quota failure still needs that state transition; callers
+ * use it to keep loading UI visible instead of briefly showing an error.
+ */
 export const useRecipeApiFallback = (
   error: unknown,
   knownLimitReached = false,

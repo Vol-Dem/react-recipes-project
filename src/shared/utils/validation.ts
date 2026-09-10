@@ -1,5 +1,10 @@
 import type { ValidationResult, ValidationRules } from "../types/validation";
 
+/**
+ * Evaluates enabled input rules without changing the original value.
+ * Returns the first failure in rule insertion order. This helper does not trim,
+ * coerce stored values, or enforce server-side authentication policy.
+ */
 export const validateInput = (
   rules: ValidationRules,
   value: string,

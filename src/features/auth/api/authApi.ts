@@ -29,6 +29,7 @@ const getCurrentUser = (): User => {
   return auth.currentUser;
 };
 
+/** Observes Firebase session changes and returns the unsubscribe function for provider cleanup. */
 export const subscribeToAuthChanges = (
   onUserChanged: NextOrObserver<User>,
   onError?: (error: Error) => void,
@@ -71,6 +72,11 @@ const promptForCredentials = (password: string) => {
   return EmailAuthProvider.credential(currentUser.email, password);
 };
 
+/**
+ * Refreshes the current user's credentials before sensitive account operations.
+ * Uses the supplied password for `pass` or Google's popup for `popup`.
+ * Provider reauthentication failures are converted to user-facing messages.
+ */
 export const reauthenticateUser = async (
   type: "pass" | "popup",
   password: string,

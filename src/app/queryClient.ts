@@ -1,4 +1,4 @@
 import { QueryClient } from "@tanstack/react-query";
 
-// Each provider owns its cache; never share a singleton between server requests.
+/** Creates an isolated cache for a provider or server request; never share it across users on the server. */
 export const makeQueryClient = () => new QueryClient();

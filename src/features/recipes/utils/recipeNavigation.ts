@@ -7,6 +7,11 @@ import type { SearchFilters } from "../types";
 
 type SearchParameters = Pick<URLSearchParams, "has" | "get">;
 
+/**
+ * Parses allowlisted URL filters using the shared schema; unrelated parameters are ignored.
+ * A null filter result with no error denotes the landing page, while a nonempty
+ * error denotes invalid filters. An explicit empty query is still a submitted search.
+ */
 export const parseRecipeSearchParams = (
   params: SearchParameters | null,
 ): {
@@ -28,6 +33,10 @@ export const parseRecipeSearchParams = (
     : { filters: null, errorMessage: INVALID_SEARCH_MESSAGE };
 };
 
+/**
+ * Serializes submitted filters for browser navigation, including an empty query marker.
+ * @example buildRecipeSearchHref({ query: "pasta", diet: "vegan" }) // "/?query=pasta&diet=vegan"
+ */
 export const buildRecipeSearchHref = (filters: SearchFilters) => {
   // An empty query marks an intentional unfiltered search, unlike the landing page.
   const params = new URLSearchParams({ query: filters.query ?? "" });
@@ -38,6 +47,7 @@ export const buildRecipeSearchHref = (filters: SearchFilters) => {
   return `/?${params}`;
 };
 
+/** Builds a recipe route from a list href, preserving search context and the favorites route prefix. */
 export const buildRecipeDetailsHref = (
   id: string | number,
   listHref: string,

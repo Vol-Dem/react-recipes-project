@@ -27,6 +27,11 @@ const createUserPayload = (user: User): AuthUser => ({
   emailVerified: user.emailVerified,
 });
 
+/**
+ * Synchronizes Firebase auth with a serializable Redux snapshot and completes
+ * initialization on success or failure. The dispatch result is an unsubscribe
+ * function that the mounting provider must call during cleanup.
+ */
 export const initAuth = (): AppThunk<
   ReturnType<typeof subscribeToAuthChanges>
 > => {

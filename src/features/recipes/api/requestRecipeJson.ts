@@ -1,5 +1,6 @@
 import { TIMEOUT_SEC } from "../../../shared/constants/app";
 
+/** Carries a request's HTTP status without retaining a potentially sensitive response body. */
 export class RecipeHttpError extends Error {
   constructor(public readonly status: number) {
     super("Recipe request failed");
@@ -7,6 +8,13 @@ export class RecipeHttpError extends Error {
   }
 }
 
+/**
+ * Fetches JSON with the shared timeout and optional caller cancellation.
+ * The generic type is a compile-time contract, not runtime schema validation.
+ *
+ * @throws RecipeHttpError for HTTP failures, provider failure envelopes, or
+ * invalid JSON. Network, timeout, and caller-abort errors propagate unchanged.
+ */
 export const requestRecipeJson = async <Data>(
   url: string,
   { signal, ...options }: RequestInit = {},

@@ -9,6 +9,12 @@ interface ImageProps extends Omit<NextImageProps, "src"> {
   src?: string | null;
 }
 
+/**
+ * Wraps next/image with a source-specific reveal transition and decorative fallback.
+ * Missing or blank URLs render no image element; loading a valid source removes
+ * the fallback. Loaded-source tracking survives list reordering and size changes.
+ * The parent supplies image dimensions/sizes and a positioned fallback container.
+ */
 const Image = ({
   alt,
   className,

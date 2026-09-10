@@ -9,6 +9,11 @@ const sanitizeQuery = (value: FormDataEntryValue | null) =>
 const sanitizeNumericFilter = (value: FormDataEntryValue | null) =>
   String(value ?? "").replace(/[^0-9 ]/g, "");
 
+/**
+ * Converts search form controls to API filter names, joining checkbox groups with commas.
+ * Normalizes query text and numeric characters; this is UI normalization, not a
+ * substitute for validation at the server boundary.
+ */
 export const parseSearchFormData = (formData: FormData): SearchFilters => ({
   query: sanitizeQuery(formData.get("query")),
   cuisine: formData.getAll("cuisine").join(","),

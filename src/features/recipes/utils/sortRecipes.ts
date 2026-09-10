@@ -1,5 +1,6 @@
 import type { RecipeSortDirection } from "../types";
 
+/** Returns a numerically sorted copy, leaving the cached source array unchanged. */
 export const sortRecipeCollection = <
   SortKey extends PropertyKey,
   Recipe extends Record<SortKey, number>,

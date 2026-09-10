@@ -20,6 +20,7 @@ const createRecipeUrl = (path: string, parameters: RecipeUrlParameters) => {
   return `/api/recipes${path}?${searchParameters}`;
 };
 
+/** Builds a local API URL, retaining empty text filters and omitting unset numeric limits. */
 export const buildRecipeSearchUrl = ({
   query = "",
   cuisine = "",
@@ -45,10 +46,12 @@ export const buildRecipeSearchUrl = ({
   return createRecipeUrl("/search", parameters);
 };
 
+/** Encodes numeric recipe IDs for the local bulk endpoint; callers handle empty lists. */
 export const buildFavoriteRecipesUrl = (recipeIds: number[]) =>
   createRecipeUrl("/bulk", {
     ids: recipeIds.join(","),
   });
 
+/** Encodes a single path segment for the local API, not the user-facing detail route. */
 export const buildRecipeDetailsUrl = (recipeId: string | number) =>
   `/api/recipes/${encodeURIComponent(recipeId)}`;

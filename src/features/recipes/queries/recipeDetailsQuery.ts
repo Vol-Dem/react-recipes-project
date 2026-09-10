@@ -11,6 +11,11 @@ import {
   RECIPE_DETAILS_STALE_TIME_MS,
 } from "../constants/queries";
 
+/**
+ * Configures a source-specific detail query with freshness and retry policies.
+ * Missing Firestore documents become 404 errors. API requests honor cancellation;
+ * Firestore reads use the SDK directly and are not aborted by the query signal.
+ */
 export const recipeDetailsQueryOptions = (
   recipeId: string,
   source: RecipeDetailsSource,

@@ -12,6 +12,11 @@ interface InputValidationOptions {
   value?: string | number | readonly string[];
 }
 
+/**
+ * Derives validation results for a controlled input and tracks when errors should be shown.
+ * Forwards blur events and passes validity/message arguments to onChange only
+ * when validation is configured. The parent retains ownership of the input value.
+ */
 export const useInputValidation = ({
   onBlur,
   onChange,

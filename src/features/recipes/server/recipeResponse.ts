@@ -3,6 +3,11 @@ import { ZodError } from "zod";
 import { RecipeHttpError } from "../api/requestRecipeJson";
 import { getRecipeErrorMessage } from "../utils/recipeErrors";
 
+/**
+ * Adapts a server loader to an uncached JSON route response.
+ * Maps validation, timeout, network, and HTTP failures to safe status/message
+ * pairs without serializing request URLs, credentials, or raw provider bodies.
+ */
 export const recipeResponse = async (load: () => Promise<unknown>) => {
   const headers = { "Cache-Control": "no-store" };
   try {

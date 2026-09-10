@@ -8,6 +8,7 @@ import { RECIPE_SEARCH_QUERY_OPTIONS } from "../constants/queries";
 import { mapRecipe } from "../utils/mapRecipe";
 import type { RecipeSort } from "../types";
 
+/** Caches mapped API search results by request URL; sorting and pagination happen in the client. */
 export const recipeSearchQueryOptions = (requestUrl: string) =>
   queryOptions({
     ...RECIPE_SEARCH_QUERY_OPTIONS,
@@ -20,6 +21,11 @@ export const recipeSearchQueryOptions = (requestUrl: string) =>
     },
   });
 
+/**
+ * Creates a browser-only cursor query over the saved recipe collection.
+ * The request URL separates cache entries but its search filters are not applied
+ * to Firestore. Opaque SDK snapshots must not be server-dehydrated.
+ */
 export const fallbackRecipeSearchQueryOptions = (
   requestUrl: string,
   order: RecipeSort,

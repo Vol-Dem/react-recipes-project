@@ -9,6 +9,11 @@ import {
   selectAuthIsLoggedIn,
 } from "../../store/authSelectors";
 
+/**
+ * Hides protected UI until Firebase auth initialization completes, then redirects
+ * signed-out users home. This client-only guard does not authorize server requests
+ * or replace Firestore security rules.
+ */
 const ProtectedRoute = ({ children }: PropsWithChildren) => {
   const isInitialized = useSelector(selectAuthIsInitialized);
   const isLoggedIn = useSelector(selectAuthIsLoggedIn);

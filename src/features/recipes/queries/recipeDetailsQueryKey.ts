@@ -1,6 +1,6 @@
 export type RecipeDetailsSource = "api" | "firestore";
 
-// Shared by server hydration and browser queries without importing Firebase.
+/** Shares detail identity between server hydration and browser queries while isolating API and Firestore data. */
 export const recipeDetailsQueryKey = (
   recipeId: string,
   source: RecipeDetailsSource,

@@ -24,6 +24,11 @@ import type {
   RecipeSortDirection,
 } from "../../recipes/types";
 
+/**
+ * Builds the favorites list controller from shared membership and source-specific queries.
+ * API results sort/page locally; Firestore results use cursor pages. Account,
+ * membership, or source changes reset the displayed sort and page defaults.
+ */
 export const useFavoriteRecipes = () => {
   const isAuthenticated = useSelector(selectAuthIsLoggedIn);
   const userId = useSelector(selectAuthUserId);

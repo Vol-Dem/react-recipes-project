@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
 import type { RecipeDetails } from "../types";
 
+/**
+ * Builds public recipe metadata from already-loaded data without additional requests.
+ * Uses a generic title when data is unavailable and only HTTPS social-image URLs.
+ * The root layout applies the site title template.
+ */
 export const buildRecipeMetadata = (recipe: RecipeDetails | null): Metadata => {
   if (!recipe) return { title: "Recipe Details" };
 

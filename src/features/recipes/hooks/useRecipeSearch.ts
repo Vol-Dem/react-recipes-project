@@ -29,6 +29,13 @@ import type {
   SearchFilters,
 } from "../types";
 
+/**
+ * Coordinates submitted URL filters with API or Firestore queries and list actions.
+ * Sorting/page selection stay local; changing the search identity resets their
+ * displayed defaults. Query-only submissions use native history, while searches
+ * submitted from a detail route navigate back to the list.
+ * Requires the app's Redux and QueryClient providers and Next router context.
+ */
 export const useRecipeSearch = () => {
   const searchParams = useSearchParams();
   const { filters, errorMessage: searchError } =

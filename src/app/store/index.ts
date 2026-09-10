@@ -7,6 +7,7 @@ import authSlice from "../../features/auth/store/authSlice";
 import notificationSlice from "../../features/notifications/store/notificationSlice";
 import recipeSlice from "../../features/recipes/store/recipesSlice";
 
+/** Creates provider-owned client state. Fetched collections belong in TanStack Query, not Redux. */
 export const makeStore = () =>
   configureStore({
     reducer: {

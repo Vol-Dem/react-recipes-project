@@ -1,5 +1,10 @@
 import { RECIPES_PER_PAGE } from "../../../shared/constants";
 
+/**
+ * Slices an in-memory collection using one-based page numbers without mutating it.
+ * Callers must supply positive integer page/page-size values and handle empty lists;
+ * this helper does not clamp out-of-range pages.
+ */
 export const paginateRecipes = <Recipe>(
   recipes: Recipe[],
   currentPage: number,

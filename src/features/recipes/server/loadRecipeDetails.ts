@@ -12,7 +12,15 @@ import { getRecipeDetails } from "./spoonacular";
 import { recipeIdSchema } from "./recipeSchemas";
 import type { RecipeDetails } from "../types";
 
-// Request-scoped memoization shares the load between metadata and the page.
+/**
+ * Loads public recipe data and prepares a request-local query cache for hydration.
+ * React memoization shares the result between metadata and page rendering within
+ * a server request; it does not persist data across requests.
+ *
+ * @returns Successful recipe data and dehydrated state, or an empty state with
+ * a quota flag. Non-quota failures are left to the client loader to retry.
+ * @throws Next.js's not-found signal for invalid IDs or confirmed provider 404s.
+ */
 export const loadRecipeDetails = cache(async (recipeId: string) => {
   if (!recipeIdSchema.safeParse(recipeId).success) notFound();
   const queryClient = makeQueryClient();

@@ -5,6 +5,7 @@ import { changeUserName, changeUserPassword } from "../store/authThunks";
 import { selectAuthErrorMessage, selectAuthUser } from "../store/authSelectors";
 import type { AppDispatch } from "../../../app/store";
 
+/** Keeps profile edit modes local and delegates submitted FormData values to auth thunks. */
 export const useProfileController = () => {
   const [editing, setEditing] = useState({
     name: false,

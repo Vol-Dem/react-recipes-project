@@ -9,6 +9,14 @@ import {
 } from "../utils/recipeErrors";
 import { useRecipeApiFallback } from "./useRecipeApiFallback";
 
+/**
+ * Reads cached/hydrated details and switches to the Firestore source on API quota failure.
+ *
+ * @param initialApiLimitReached - A server-observed quota failure; prevents
+ * repeating the failed API request before the client fallback flag is updated.
+ * @throws Next's not-found signal for missing recipes, or a safe error for the
+ * route boundary when a request fails without usable cached data.
+ */
 export const useRecipeDetails = (
   recipeId: string,
   initialApiLimitReached = false,

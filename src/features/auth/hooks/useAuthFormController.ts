@@ -75,6 +75,12 @@ const formReducer = (
   }
 };
 
+/**
+ * Coordinates login, signup, and password-reset form state with auth thunks.
+ * Validity is derived from current values: login requires nonempty fields, while
+ * signup applies stronger rules and requires agreement. Clears shared auth
+ * messages and reset-mode state when the form unmounts.
+ */
 export const useAuthFormController = () => {
   const [formState, updateFormState] = useReducer(
     formReducer,
