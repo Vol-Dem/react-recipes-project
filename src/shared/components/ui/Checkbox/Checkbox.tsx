@@ -1,4 +1,5 @@
 import classes from "./Checkbox.module.scss";
+import { useId } from "react";
 import type { InputHTMLAttributes, ReactNode } from "react";
 
 interface CheckboxProps extends Omit<
@@ -9,12 +10,14 @@ interface CheckboxProps extends Omit<
 }
 
 const Checkbox = ({ className, label, ...checkboxProps }: CheckboxProps) => {
-  const { id } = checkboxProps;
+  const generatedId = useId();
+  const id = checkboxProps.id || generatedId;
 
   return (
     <div className={classes.field}>
       <input
         {...checkboxProps}
+        id={id}
         type="checkbox"
         className={`${classes.checkbox} ${className || ""}`}
       />

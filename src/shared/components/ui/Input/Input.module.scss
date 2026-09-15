@@ -1,6 +1,7 @@
 @use "../../../../styles/_variables.scss" as var;
 
-:where(.input) {
+// Beat the universal reset while allowing consumer classes to override defaults.
+input:where(.input) {
   border-radius: 20px;
   padding: 0.5rem;
   width: 100%;
