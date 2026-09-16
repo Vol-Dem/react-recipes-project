@@ -2,6 +2,10 @@ import { ClockIcon, FireIcon } from "@heroicons/react/24/outline";
 import Skeleton from "../Skeleton/Skeleton";
 import classes from "./RecipeItemSkeleton.module.scss";
 import { useParams } from "next/navigation";
+import {
+  RECIPE_CARD_IMAGE_WIDTH,
+  RECIPE_CARD_IMAGE_HEIGHT,
+} from "../../../constants/images";
 
 const RecipeItemSkeleton = () => {
   const { recipeId } = useParams<{ recipeId?: string }>() ?? {};
@@ -9,8 +13,13 @@ const RecipeItemSkeleton = () => {
   const classSide = recipeIsOpen ? classes["recipe-card--side"] : "";
 
   return (
-    <li id="recipe-item" className={`${classes["recipe-card"]} ${classSide} `}>
-      <div className={classes["recipe-card__img"]}>
+    <li aria-hidden="true" className={`${classes["recipe-card"]} ${classSide}`}>
+      <div
+        className={classes["recipe-card__img"]}
+        style={{
+          aspectRatio: `${RECIPE_CARD_IMAGE_WIDTH} / ${RECIPE_CARD_IMAGE_HEIGHT}`,
+        }}
+      >
         <Skeleton classNames="img" />
       </div>
       <div className={classes["recipe-card__description"]}>
@@ -24,12 +33,16 @@ const RecipeItemSkeleton = () => {
             <Skeleton classNames="text width-40" />
           </span>
         </div>
-        <div>
+        <div className={classes["recipe-card__title"]}>
           <Skeleton classNames="title" />
           <Skeleton classNames="title" />
-          {!recipeIsOpen && <Skeleton classNames="btn" />}
         </div>
       </div>
+      {!recipeIsOpen && (
+        <div className={classes["recipe-card__btn"]}>
+          <Skeleton classNames="btn" />
+        </div>
+      )}
     </li>
   );
 };
