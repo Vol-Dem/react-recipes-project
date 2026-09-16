@@ -17,7 +17,7 @@ import { updateFavorite, fetchFavoriteIds } from "../api/favoritesApi";
 import { useFavoriteRecipes } from "./useFavoriteRecipes";
 import type { RecipeSummary } from "../../recipes/types";
 import type { RecipePageCursor } from "../../recipes/api/recipePagination";
-import type { ChangeEvent, PropsWithChildren } from "react";
+import type { PropsWithChildren } from "react";
 
 vi.mock("next/navigation", () => ({ useParams: () => ({}) }));
 vi.mock("../api/favoriteRecipesApi", () => ({
@@ -44,8 +44,6 @@ const user = (uid = "user-a") => ({
   userName: "User",
   emailVerified: true,
 });
-const sortEvent = (value: string) =>
-  ({ target: { value } }) as ChangeEvent<HTMLSelectElement>;
 const cursor = { id: "cursor" } as RecipePageCursor;
 const firstPage = {
   recipes: recipes.slice(0, 8),
@@ -143,15 +141,11 @@ describe("useFavoriteRecipes", () => {
     ]);
     expect(result.current.controller.list.isLastPage).toBe(true);
     act(() =>
-      result.current.controller.actions.sortBySelection(
-        sortEvent("calories-desc"),
-      ),
+      result.current.controller.actions.sortBySelection("calories-desc"),
     );
     expect(result.current.controller.list.currentPage).toBe(1);
     expect(result.current.controller.list.recipes[0].id).toBe(10);
-    act(() =>
-      result.current.controller.actions.sortBySelection(sortEvent("-")),
-    );
+    act(() => result.current.controller.actions.sortBySelection("-"));
     expect(result.current.controller.list.recipes[0].id).toBe(1);
     expect(fetchFavoriteRecipes).toHaveBeenCalledOnce();
   });
@@ -163,9 +157,7 @@ describe("useFavoriteRecipes", () => {
       expect(result.current.controller.list.hasRecipes).toBe(true),
     );
     act(() =>
-      result.current.controller.actions.sortBySelection(
-        sortEvent("calories-desc"),
-      ),
+      result.current.controller.actions.sortBySelection("calories-desc"),
     );
     act(() => result.current.controller.actions.goToNextPage());
     act(() => client.setQueryData(favoriteKeys.ids("user-a"), [2]));
@@ -302,9 +294,7 @@ describe("useFavoriteRecipes", () => {
       expect(result.current.controller.list.hasRecipes).toBe(true),
     );
     act(() =>
-      result.current.controller.actions.sortBySelection(
-        sortEvent("calories-desc"),
-      ),
+      result.current.controller.actions.sortBySelection("calories-desc"),
     );
     await waitFor(() =>
       expect(result.current.controller.list.isLoading).toBe(false),

@@ -1,31 +1,23 @@
 import classes from "./Sort.module.scss";
-import type { ChangeEventHandler } from "react";
+import Select from "../../../../shared/components/ui/Select/Select";
+import { SORT_OPTIONS } from "../../constants/sortOptions";
 
 const Sort = ({
   onSort,
   value,
 }: {
-  onSort: ChangeEventHandler<HTMLSelectElement>;
+  onSort: (value: string) => void;
   value: string;
-}) => {
-  return (
-    <div className={classes["search-result__sort"]}>
-      <label htmlFor="sort">Sort&nbsp;by</label>
-      <select
-        className={classes["search-result__select"]}
-        name="sort"
-        id="sort"
-        value={value}
-        onChange={onSort}
-      >
-        <option value="-">-</option>
-        <option value="calories-asc">Calories &uarr;</option>
-        <option value="calories-desc">Calories &darr;</option>
-        <option value="readyInMinutes-asc">Time &uarr;</option>
-        <option value="readyInMinutes-desc">Time &darr;</option>
-      </select>
-    </div>
-  );
-};
+}) => (
+  <div className={classes["search-result__sort"]}>
+    <Select
+      label="Sort by"
+      name="sort"
+      options={SORT_OPTIONS}
+      value={value}
+      onChange={onSort}
+    />
+  </div>
+);
 
 export default Sort;

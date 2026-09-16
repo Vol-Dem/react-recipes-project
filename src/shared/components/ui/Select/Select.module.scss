@@ -1,0 +1,118 @@
+@use "../../../../styles/_variables.scss" as var;
+
+.select {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  width: 100%;
+  min-width: 0;
+}
+.label {
+  flex-shrink: 0;
+}
+.control {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+.trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  min-height: 4.4rem;
+  padding: 0.8rem 1.2rem;
+  font: inherit;
+  font-weight: 500;
+  color: var.$color-text-primary;
+  background: var.$color-background-light;
+  border: 2px solid var.$color-border-input;
+  border-radius: 10px;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 160ms ease,
+    background-color 160ms ease;
+  &:hover,
+  &[aria-expanded="true"] {
+    border-color: var.$color-text-orange;
+    background: var.$color-background-muted;
+  }
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+.chevron {
+  width: 0.8rem;
+  height: 0.8rem;
+  flex-shrink: 0;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg);
+  transition: transform 160ms ease;
+  .trigger[aria-expanded="true"] & {
+    transform: rotate(225deg);
+  }
+}
+.options {
+  position: absolute;
+  top: calc(100% + 0.6rem);
+  right: 0;
+  z-index: 50;
+  min-width: 100%;
+  width: max-content;
+  max-width: calc(100vw - 3rem);
+  max-height: 24rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  list-style: none;
+  padding: 0.5rem;
+  margin: 0;
+  background: var.$color-background-light;
+  color: var.$color-text-primary;
+  border: 1px solid var.$color-border-input;
+  border-radius: 10px;
+  box-shadow: var.$box-shadow;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(-0.6rem) scale(0.98);
+  transform-origin: top right;
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease,
+    visibility 160ms;
+  &[data-open="true"] {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+  }
+}
+.option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1rem;
+  min-height: 4rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  &[aria-selected="true"] {
+    color: var.$color-text-orange;
+    font-weight: 700;
+  }
+  &[data-active="true"] {
+    background: var.$color-background-muted;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .trigger,
+  .chevron,
+  .options {
+    transition: none;
+  }
+}

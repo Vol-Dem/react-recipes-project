@@ -1,13 +1,12 @@
 import Sort from "../../../search/components/Sort/Sort";
 import classes from "./RecipeResultsHeader.module.scss";
-import type { ChangeEventHandler } from "react";
 
 interface RecipeResultsHeaderProps {
   options: string[];
   showTitle: boolean;
   title: string;
   sortValue: string;
-  onSort: ChangeEventHandler<HTMLSelectElement>;
+  onSort: (value: string) => void;
 }
 
 const RecipeResultsHeader = ({

@@ -1,5 +1,3 @@
-import type { ChangeEventHandler } from "react";
-
 export interface Nutrient {
   name: string;
   amount: number;
@@ -92,6 +90,6 @@ export interface RecipeListController {
   actions: {
     goToNextPage: () => void;
     goToPreviousPage: () => void;
-    sortBySelection: ChangeEventHandler<HTMLSelectElement>;
+    sortBySelection: (value: string) => void;
   };
 }

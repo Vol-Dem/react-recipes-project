@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent } from "react";
+import { useState } from "react";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { useSelector } from "react-redux";
 import { useParams } from "next/navigation";
@@ -98,8 +98,8 @@ export const useFavoriteRecipes = () => {
   const goToPreviousPage = () => {
     if (enabled && !isLoading && currentPage > 1) setPage(currentPage - 1);
   };
-  const sortBySelection = (event: ChangeEvent<HTMLSelectElement>) => {
-    const [sortBy, sortType] = event.target.value.split("-");
+  const sortBySelection = (value: string) => {
+    const [sortBy, sortType] = value.split("-");
     setView({
       identity,
       page: 1,

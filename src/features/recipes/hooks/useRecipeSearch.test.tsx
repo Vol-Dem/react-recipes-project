@@ -12,7 +12,7 @@ import { useRecipeSearch } from "./useRecipeSearch";
 import { mockNextHistory } from "../../../test-utils/nextHistory";
 import type { RecipeApiItem, RecipeApiResponse } from "../types";
 import type { QueryDocumentSnapshot } from "firebase/firestore";
-import type { ChangeEvent, PropsWithChildren } from "react";
+import type { PropsWithChildren } from "react";
 
 const { push } = vi.hoisted(() => ({ push: vi.fn() }));
 vi.mock("next/navigation", async () => ({
@@ -35,8 +35,6 @@ const recipes: RecipeApiItem[] = Array.from({ length: 10 }, (_, index) => ({
   servings: 2,
   nutrition: { nutrients: [{ name: "Calories", amount: index + 100 }] },
 }));
-const sortEvent = (value: string) =>
-  ({ target: { value } }) as ChangeEvent<HTMLSelectElement>;
 const cursor = { id: "cursor" } as QueryDocumentSnapshot;
 const firstPage = {
   recipes: recipes.slice(0, 8).map(mapRecipe),
@@ -108,16 +106,12 @@ describe("useRecipeSearch", () => {
     ).toEqual([9, 10]);
     expect(result.current.controller.list.isLastPage).toBe(true);
     act(() =>
-      result.current.controller.actions.sortBySelection(
-        sortEvent("calories-desc"),
-      ),
+      result.current.controller.actions.sortBySelection("calories-desc"),
     );
     expect(result.current.controller.list.currentPage).toBe(1);
     expect(result.current.controller.list.recipes[0].id).toBe(10);
     expect(result.current.controller.list.sortValue).toBe("calories-desc");
-    act(() =>
-      result.current.controller.actions.sortBySelection(sortEvent("-")),
-    );
+    act(() => result.current.controller.actions.sortBySelection("-"));
     expect(result.current.controller.list.recipes[0].id).toBe(1);
     expect(fetchRecipesFromApi).toHaveBeenCalledOnce();
   });
@@ -232,9 +226,7 @@ describe("useRecipeSearch", () => {
     );
     expect(result.current.controller.list.options).toEqual([]);
     act(() =>
-      result.current.controller.actions.sortBySelection(
-        sortEvent("calories-desc"),
-      ),
+      result.current.controller.actions.sortBySelection("calories-desc"),
     );
     act(() => result.current.submitSearch({ query: "pasta", diet: "vegan" }));
     expect(result.current.controller.list.currentPage).toBe(1);
@@ -341,9 +333,7 @@ describe("useRecipeSearch", () => {
       expect(result.current.controller.list.hasRecipes).toBe(true),
     );
     act(() =>
-      result.current.controller.actions.sortBySelection(
-        sortEvent("calories-desc"),
-      ),
+      result.current.controller.actions.sortBySelection("calories-desc"),
     );
     await waitFor(() =>
       expect(result.current.controller.list.isLoading).toBe(false),
