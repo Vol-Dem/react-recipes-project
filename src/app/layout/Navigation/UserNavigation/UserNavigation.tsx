@@ -1,7 +1,8 @@
 "use client";
 
+import { UserCircleIcon } from "@heroicons/react/24/outline";
+
 import classes from "./UserNavigation.module.scss";
-import UserIcon from "../../../../assets/icons/user.svg?react";
 import ButtonSecondary from "../../../../shared/components/ui/ButtonSecondary/ButtonSecondary";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -82,7 +83,7 @@ const UserNavigation = () => {
         onClick={handleTriggerClick}
       >
         <span className={classes["nav-profile__name"]}>{userName}</span>
-        <UserIcon aria-hidden="true" focusable="false" />
+        <UserCircleIcon aria-hidden="true" focusable="false" />
       </button>
       <div
         id="user-navigation-menu"

@@ -123,9 +123,9 @@ describe("RecipesPage component", () => {
       expect(screen.queryByText("Your recipe book")).not.toBeInTheDocument(),
     );
     expect(screen.getByTestId("section-search").className).toMatch(/_mt0_/);
-    expect(screen.getByRole("combobox", { name: /Sort\s+by/ })).toHaveValue(
-      "-",
-    );
+    expect(
+      screen.getByRole("combobox", { name: /Sort\s+by/ }),
+    ).toHaveTextContent("-");
   });
 
   it("does not show a back-to-list state when a detail URL loads without a search", () => {
@@ -169,9 +169,8 @@ describe("RecipesPage component", () => {
     await screen.findByText("Saved pizza", {}, { timeout: 5000 });
     const content = screen.getByTestId("list-context").closest("section");
     expect(content).toHaveClass(classes["recipe-columns"]);
-    fireEvent.change(screen.getByRole("combobox", { name: /Sort\s+by/ }), {
-      target: { value: "calories-desc" },
-    });
+    fireEvent.click(screen.getByRole("combobox", { name: /Sort\s+by/ }));
+    fireEvent.click(screen.getByRole("option", { name: /Calories ↓/ }));
     await waitFor(() => expect(fetchRecipePage).toHaveBeenCalledTimes(2));
     expect(screen.getByTestId("list-context")).toHaveTextContent("false:true");
     expect(content).toHaveClass(classes["recipe-columns"]);

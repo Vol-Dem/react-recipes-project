@@ -1,7 +1,7 @@
+import { XMarkIcon } from "@heroicons/react/24/outline";
 import Card from "../Card/Card";
 import classes from "./Modal.module.scss";
 import { createPortal } from "react-dom";
-import CloseIcon from "../../../../assets/icons/CloseIcon";
 import { motion, type Variants } from "framer-motion";
 import {
   useEffect,
@@ -153,7 +153,7 @@ const Modal = ({
             onClick={onClose}
             aria-label="Close dialog"
           >
-            <CloseIcon />
+            <XMarkIcon aria-hidden="true" focusable="false" />
           </button>
         </Card>
       </motion.div>

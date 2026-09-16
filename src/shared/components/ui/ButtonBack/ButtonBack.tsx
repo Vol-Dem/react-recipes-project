@@ -1,5 +1,5 @@
+import { ArrowUturnLeftIcon } from "@heroicons/react/24/outline";
 import classes from "./ButtonBack.module.scss";
-import ArrowBackIcon from "../../../../assets/icons/arrow-back.svg?react";
 import type { MouseEventHandler } from "react";
 
 interface ButtonBackProps {
@@ -9,7 +9,7 @@ interface ButtonBackProps {
 const ButtonBack = ({ onClick }: ButtonBackProps) => {
   return (
     <button type="button" className={classes["btn-back"]} onClick={onClick}>
-      <ArrowBackIcon aria-hidden="true" focusable="false" /> Back
+      <ArrowUturnLeftIcon aria-hidden="true" focusable="false" /> Back
     </button>
   );
 };

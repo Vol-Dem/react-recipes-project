@@ -1,5 +1,5 @@
+import { CheckCircleIcon } from "@heroicons/react/24/outline";
 import classes from "./SuccessMessage.module.scss";
-import SuccessIcon from "../../../../assets/icons/SuccessIcon";
 import type { PropsWithChildren } from "react";
 
 interface SuccessMessageProps extends PropsWithChildren {
@@ -9,7 +9,7 @@ interface SuccessMessageProps extends PropsWithChildren {
 const SuccessMessage = ({ children, className }: SuccessMessageProps) => {
   return (
     <div role="status" className={`${classes["success"]} ${className || ""}`}>
-      <SuccessIcon />
+      <CheckCircleIcon aria-hidden="true" focusable="false" />
       <span>{children}</span>
     </div>
   );

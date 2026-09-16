@@ -1,3 +1,4 @@
+import { FunnelIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import {
   useState,
   type ChangeEvent,
@@ -5,8 +6,6 @@ import {
   type MouseEvent,
 } from "react";
 import classes from "./SearchBox.module.scss";
-import FilterIcon from "../../../../assets/icons/filter.svg?react";
-import SearchIcon from "../../../../assets/icons/search.svg?react";
 import Filter from "../Filter/Filter";
 import Tags from "../Tags/Tags";
 import { motion } from "framer-motion";
@@ -94,7 +93,7 @@ const SearchBox = ({ getFormData }: SearchBoxProps) => {
           aria-expanded={filterIsOpen}
           aria-controls="search-filters"
         >
-          <FilterIcon aria-hidden="true" focusable="false" />
+          <FunnelIcon aria-hidden="true" focusable="false" />
         </motion.button>
         <button
           type="submit"
@@ -102,7 +101,7 @@ const SearchBox = ({ getFormData }: SearchBoxProps) => {
           className={classes["search__form-btn"]}
           aria-label="Search recipes"
         >
-          <SearchIcon aria-hidden="true" focusable="false" />
+          <MagnifyingGlassIcon aria-hidden="true" focusable="false" />
           <span className={classes["hidden-xs"]}>Search</span>
         </button>
       </form>

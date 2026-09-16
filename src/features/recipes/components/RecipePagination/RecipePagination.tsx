@@ -1,5 +1,4 @@
-import ArrowLeftIcon from "../../../../assets/icons/arrow-left.svg?react";
-import ArrowRightIcon from "../../../../assets/icons/arrow-right.svg?react";
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import classes from "./RecipePagination.module.scss";
 
 interface RecipePaginationProps {
@@ -29,7 +28,7 @@ const RecipePagination = ({
           aria-label="Previous results page"
           onClick={onPreviousPage}
         >
-          <ArrowLeftIcon aria-hidden="true" focusable="false" />
+          <ChevronLeftIcon aria-hidden="true" focusable="false" />
         </button>
       </div>
     )}
@@ -42,7 +41,7 @@ const RecipePagination = ({
           aria-label="Next results page"
           onClick={onNextPage}
         >
-          <ArrowRightIcon aria-hidden="true" focusable="false" />
+          <ChevronRightIcon aria-hidden="true" focusable="false" />
         </button>
       </div>
     )}

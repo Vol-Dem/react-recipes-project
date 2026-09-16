@@ -1,7 +1,7 @@
+import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import Button from "../../../../shared/components/ui/Button/Button";
 import Card from "../../../../shared/components/ui/Card/Card";
 import classes from "./Notification.module.scss";
-import TriangleIcon from "../../../../assets/icons/triangle.svg?react";
 import { createPortal } from "react-dom";
 import { useDispatch } from "react-redux";
 import { notificationActions } from "../../store/notificationSlice";
@@ -48,7 +48,7 @@ const Notification = ({
       className={classes["notification-container"]}
     >
       <Card className={classes.notification}>
-        <TriangleIcon aria-hidden="true" focusable="false" />
+        <ExclamationTriangleIcon aria-hidden="true" focusable="false" />
         <div>
           <h4 className={classes["notification__title"]}>{title}</h4>
           <p className={classes["notification__text"]}>{message}</p>

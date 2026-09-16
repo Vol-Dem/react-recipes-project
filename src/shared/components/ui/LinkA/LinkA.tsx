@@ -1,5 +1,5 @@
+import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 import classes from "./LinkA.module.scss";
-import ExternalLinkIcon from "../../../../assets/icons/ExternalLinkIcon";
 import type { MouseEvent, MouseEventHandler, PropsWithChildren } from "react";
 
 interface LinkAProps extends PropsWithChildren {
@@ -73,7 +73,9 @@ const LinkA = ({
       onClick={clickHandler}
     >
       {children}
-      {external && <ExternalLinkIcon />}
+      {external && (
+        <ArrowTopRightOnSquareIcon aria-hidden="true" focusable="false" />
+      )}
     </a>
   );
 };

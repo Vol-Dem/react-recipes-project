@@ -1,9 +1,10 @@
 "use client";
 
+import { UserCircleIcon } from "@heroicons/react/24/outline";
+
 import Card from "../../../../shared/components/ui/Card/Card";
 import classes from "./Profile.module.scss";
 import ErrorMessage from "../../../../shared/components/feedback/ErrorMessage/ErrorMessage";
-import UserIcon from "../../../../assets/icons/user.svg?react";
 import { motion } from "framer-motion";
 import {
   ANIMATION_SLIDE_IN,
@@ -24,7 +25,7 @@ const Profile = () => {
       <Card>
         <div className={classes["profile__container"]}>
           <div className={classes["profile__img"]}>
-            <UserIcon aria-hidden="true" focusable="false" />
+            <UserCircleIcon aria-hidden="true" focusable="false" />
           </div>
           <div>
             <h1 className={classes["profile__title"]}>Profile</h1>

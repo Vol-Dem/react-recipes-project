@@ -1,10 +1,8 @@
+import { ClockIcon, UsersIcon, StarIcon } from "@heroicons/react/24/outline";
 import classes from "./Info.module.scss";
-import ClockIcon from "../../../../assets/icons/clock.svg?react";
-import ServingsIcon from "../../../../assets/icons/servings.svg?react";
 import { useDispatch, useSelector } from "react-redux";
 import { useFavorites } from "../../../favorites/context/FavoritesContext";
 import { authActions } from "../../../auth/store/authSlice";
-import StarIcon from "../../../../assets/icons/star.svg?react";
 import { selectAuthIsLoggedIn } from "../../../auth/store/authSelectors";
 import type { AppDispatch } from "../../../../app/store";
 
@@ -36,8 +34,7 @@ const Info = ({ readyInMinutes, servings, recipeId }: InfoProps) => {
           min
         </div>
         <div className={classes["recipe__param"]}>
-          <ServingsIcon aria-hidden="true" focusable="false" /> {servings}{" "}
-          servings
+          <UsersIcon aria-hidden="true" focusable="false" /> {servings} servings
         </div>
       </div>
       <div className={classes["recipe__actions"]}>

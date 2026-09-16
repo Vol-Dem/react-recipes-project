@@ -1,7 +1,5 @@
+import { ClockIcon, FireIcon, StarIcon } from "@heroicons/react/24/outline";
 import classes from "./RecipeCard.module.scss";
-import ClockIcon from "../../../../assets/icons/clock.svg?react";
-import CaloriesIcon from "../../../../assets/icons/calories.svg?react";
-import StarIcon from "../../../../assets/icons/star.svg?react";
 import FoodIcon from "../../../../assets/icons/food.svg?react";
 import { useSelector } from "react-redux";
 import Link from "next/link";
@@ -90,7 +88,7 @@ const RecipeCard = ({ recipe, shouldPrefetch }: RecipeCardProps) => {
         <div className={classes["recipe-card__description"]}>
           <div className={classes["recipe-card__info"]}>
             <span className={classes["recipe-card__param"]}>
-              <CaloriesIcon aria-hidden="true" focusable="false" />{" "}
+              <FireIcon aria-hidden="true" focusable="false" />{" "}
               {recipe.calories.toFixed()} kcal
             </span>
             <span className={classes["recipe-card__param"]}>
