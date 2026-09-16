@@ -1,5 +1,7 @@
 # Your Recipe Book
 
+[Live demo — Your Recipe Book](https://yr-recipe-book--yr-recipe-book.us-central1.hosted.app/)
+
 A recipe discovery application built with Next.js, React, and TypeScript.
 Search for recipes, refine the results, explore cooking instructions, and save
 favorites to a Firebase account.
@@ -221,16 +223,19 @@ source of truth for parameter and return types.
 - **Navigation seems slower in development:** test a production build separately;
   development includes on-demand compilation.
 
-## Deployment status
+## Deployment
 
-Deployment is deferred while localhost development continues. The current app
-requires a server-capable Next.js runtime for its dynamic routes and API handlers;
-uploading `.next` as static Firebase Hosting content is not supported.
+The application is deployed on Firebase App Hosting:
+[Your Recipe Book](https://yr-recipe-book--yr-recipe-book.us-central1.hosted.app/).
+It uses a server-capable Next.js runtime for dynamic routes and API handlers,
+rather than a static Firebase Hosting deployment.
 
-Before a public deployment, configure server secrets and public environment values,
+For your own deployment, configure server secrets and public environment values,
 verify Firestore rules/indexes and auth domains, and review API abuse/quota controls.
-Server-side authentication and deployment configuration are follow-up work, not
-features already implemented by the client route guards.
+Public Firebase configuration must be available during the build; a local `.env`
+is not automatically transferred to GitHub-connected builds.
+Server-side authentication remains follow-up work; client route guards are not
+an authorization boundary.
 
 Recipe data and photography are provided by
 [Spoonacular](https://spoonacular.com/food-api). The detail view displays source
